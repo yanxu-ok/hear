@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-image": "/components/u-image/u-image",
+    "jishi": "/components/mehaotian-numled/mehaotian-numled",
+    "chun-lei-modal": "/components/chunLei-modal/chunLei-modal"
+  }
+}

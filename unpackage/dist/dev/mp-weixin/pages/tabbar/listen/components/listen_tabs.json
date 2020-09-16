@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "read": "/pages/tabbar/listen/components/read",
+    "zuopin": "/pages/tabbar/listen/components/zuopin"
+  }
+}

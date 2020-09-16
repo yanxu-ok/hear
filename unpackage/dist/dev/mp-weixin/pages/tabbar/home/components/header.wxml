@@ -1,0 +1,1 @@
+<view class="header"><view>{{title}}</view><view data-event-opts="{{[['tap',[['quanbu',['$0'],['title']]]]]}}" bindtap="__e">全部></view></view>

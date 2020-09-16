@@ -1,0 +1,1 @@
+<view class="haibao"><u-navbar vue-id="5bcd3c00-1" background title-color="#000000" back-icon-color="#000000" bind:__l="__l"></u-navbar><block wx:if="{{isShowPainter}}"><haibao vue-id="5bcd3c00-2" isRenderImage="{{true}}" custom-style="left: 95rpx ;" board="{{base}}" data-event-opts="{{[['^success',[['e0']]]]}}" bind:success="__e" bind:__l="__l"></haibao></block></view>

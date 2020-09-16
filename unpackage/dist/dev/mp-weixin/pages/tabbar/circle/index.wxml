@@ -1,0 +1,1 @@
+<view><view>圈子</view><tabbar vue-id="ab3edf2a-1" list="{{tabbarData}}" height="55px" mid-button="{{true}}" inactive-color="#cbcedd" active-color="#fe9503" bind:__l="__l"></tabbar></view>

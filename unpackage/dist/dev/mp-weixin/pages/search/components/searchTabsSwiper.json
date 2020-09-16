@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "u-bodan": "/components/u-bodan/u-bodan",
+    "u-empty": "/components/u-empty/u-empty"
+  }
+}

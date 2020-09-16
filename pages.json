@@ -1,0 +1,178 @@
+{
+	"pages": [ //pages数组中第一项表示应用启动页，参考：https://uniapp.dcloud.io/collocation/pages
+		{
+			"path": "pages/tabbar/home/index",
+			"style": {
+				"disableScroll": true
+			}
+		}, {
+			"path": "pages/tabbar/listen/index",
+			"style": {
+				"navigationBarTitleText": "互听",
+				"disableScroll": true,
+				"enablePullDownRefresh": false
+			}
+		},
+		{
+			"path": "pages/tabbar/midbutton/index",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar/circle/index",
+			"style": {}
+		},
+		{
+			"path": "pages/tabbar/my/index",
+			"style": {}
+		},
+		{
+			"path": "pages/search/search",
+			"style": {
+				"navigationBarTitleText": "搜索",
+				"disableScroll": true
+			}
+		},
+		{
+			"path": "pages/playPage/playPage",
+			"style": {
+				"navigationBarTitleText": "播放"
+			}
+		},
+		{
+			"path": "pages/shudan/shudan",
+			"style": {
+				"navigationBarTitleText": "书单页"
+			}
+		},
+		{
+			"path": "pages/shudan-zhang/shudan-zhang",
+			"style": {
+				"navigationBarTitleText": "书单列表",
+				"disableScroll": true
+			}
+		},
+		{
+			"path": "pages/listpage/listpage",
+			"style": {
+				"navigationBarTitleText": "列表页",
+				"disableScroll": true
+			}
+		},
+		{
+			"path": "pages/listen_nei/listen_nei",
+			"style": {
+				"navigationBarTitleText": "互听内页",
+				"disableScroll": true
+			}
+		},
+		// {
+		// 	"path": "pages/listen_nei/components/listen_huting",
+		// 	"style": {
+		// 		"navigationBarTitleText": "互听播放页"
+		// 	}
+		// },
+		{
+			"path": "pages/setup/setup",
+			"style": {
+				"navigationBarTitleText": "设置"
+			}
+		},
+		{
+			"path": "pages/myinfo/myinfo",
+			"style": {
+				"navigationBarTitleText": "个人信息"
+			}
+		},
+		{
+			"path": "pages/login/login",
+			"style": {
+				"navigationBarTitleText": "登录"
+			}
+		},
+		{
+			"path": "pages/shangchuan/shangchuan",
+			"style": {
+				"navigationBarTitleText": "上传"
+			}
+		},
+		{
+			"path": "pages/haibao/haibao",
+			"style": {
+				"navigationBarTitleText": "海报"
+			}
+		}
+	],
+	"subPackages": [{
+		"root": "pagesA",
+		"pages": [{
+				"path": "zuopin/zuopin",
+				"style": {
+					"navigationBarTitleText": "作品",
+					"disableScroll": true
+				}
+			}, {
+				"path": "guanzhu/guanzhu",
+				"style": {
+					"navigationBarTitleText": "关注",
+					"disableScroll": true
+				}
+			}, {
+				"path": "myindex/myindex",
+				"style": {
+					"navigationBarTitleText": "个人主页"
+				}
+			},
+			{
+				"path": "huiyuan/huiyuan",
+				"style": {
+					"navigationBarTitleText": "会员"
+				}
+			},
+			{
+				"path": "huiyuan/components/shouru",
+				"style": {
+					"navigationBarTitleText": "收支明细"
+				}
+			}
+		]
+	}],
+	"globalStyle": {
+		"navigationStyle": "custom",
+		"navigationBarTextStyle": "black",
+		"navigationBarTitleText": "uni-app",
+		"navigationBarBackgroundColor": "#F8F8F8",
+		"backgroundColor": "#F8F8F8"
+	},
+	"tabBar": {
+		"color": "#7A7E83",
+		"selectedColor": "#3cc51f",
+		"borderStyle": "black",
+		"backgroundColor": "#ffffff",
+		"list": [{
+				"pagePath": "pages/tabbar/home/index"
+			}, {
+				"pagePath": "pages/tabbar/listen/index"
+			},
+			{
+				"pagePath": "pages/tabbar/midbutton/index"
+			},
+			{
+				"pagePath": "pages/tabbar/circle/index"
+			},
+			{
+				"pagePath": "pages/tabbar/my/index"
+			}
+		]
+	},
+	"mp-weixin": {
+		"requiredBackgroundModes": ["audio"],
+		"appid": "",
+		"setting": {
+			"urlCheck": false
+		},
+		"usingComponents": true
+	},
+	"ios": {
+		"UIBackgroundModes": ["audio"]
+	}
+}

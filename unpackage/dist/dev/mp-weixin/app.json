@@ -1,0 +1,64 @@
+{
+  "pages": [
+    "pages/tabbar/home/index",
+    "pages/tabbar/listen/index",
+    "pages/tabbar/midbutton/index",
+    "pages/tabbar/circle/index",
+    "pages/tabbar/my/index",
+    "pages/search/search",
+    "pages/playPage/playPage",
+    "pages/shudan/shudan",
+    "pages/shudan-zhang/shudan-zhang",
+    "pages/listpage/listpage",
+    "pages/listen_nei/listen_nei",
+    "pages/setup/setup",
+    "pages/myinfo/myinfo",
+    "pages/login/login",
+    "pages/shangchuan/shangchuan",
+    "pages/haibao/haibao"
+  ],
+  "subPackages": [
+    {
+      "root": "pagesA",
+      "pages": [
+        "zuopin/zuopin",
+        "guanzhu/guanzhu",
+        "myindex/myindex",
+        "huiyuan/huiyuan",
+        "huiyuan/components/shouru"
+      ]
+    }
+  ],
+  "window": {
+    "navigationStyle": "custom",
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "uni-app",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#7A7E83",
+    "selectedColor": "#3cc51f",
+    "borderStyle": "black",
+    "backgroundColor": "#ffffff",
+    "list": [
+      {
+        "pagePath": "pages/tabbar/home/index"
+      },
+      {
+        "pagePath": "pages/tabbar/listen/index"
+      },
+      {
+        "pagePath": "pages/tabbar/midbutton/index"
+      },
+      {
+        "pagePath": "pages/tabbar/circle/index"
+      },
+      {
+        "pagePath": "pages/tabbar/my/index"
+      }
+    ]
+  },
+  "usingComponents": {},
+  "sitemapLocation": "sitemap12.json"
+}

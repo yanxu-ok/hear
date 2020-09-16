@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-search": "/components/u-search/u-search",
+    "u-image": "/components/u-image/u-image"
+  }
+}

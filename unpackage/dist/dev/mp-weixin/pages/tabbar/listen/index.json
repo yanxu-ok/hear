@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "互听",
+  "disableScroll": true,
+  "enablePullDownRefresh": false,
+  "usingComponents": {
+    "tabbar": "/components/u-tabbar/u-tabbar",
+    "listenheader": "/pages/tabbar/listen/components/listen_header",
+    "listentabs": "/pages/tabbar/listen/components/listen_tabs"
+  }
+}

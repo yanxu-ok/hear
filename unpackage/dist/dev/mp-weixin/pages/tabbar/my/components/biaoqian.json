@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-popup": "/components/u-popup/u-popup",
+    "u-image": "/components/u-image/u-image",
+    "axb-check-box": "/components/axb-checkbox/axb-checkbox"
+  }
+}

@@ -1,0 +1,1 @@
+<view style="margin-left:20rpx;"><u-image vue-id="8b04fbd2-1" width="35rpx" height="35rpx" src="/static/images/fenlei.png" bind:__l="__l"></u-image></view>

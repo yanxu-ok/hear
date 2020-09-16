@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "关注",
+  "disableScroll": true,
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "guanzhulist": "/pagesA/guanzhu/components/guanzhulist"
+  }
+}

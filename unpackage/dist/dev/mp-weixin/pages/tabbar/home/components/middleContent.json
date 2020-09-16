@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-section": "/components/u-section/u-section",
+    "u-image": "/components/u-image/u-image",
+    "small-content": "/pages/tabbar/home/components/smallContent",
+    "header-title": "/pages/tabbar/home/components/header"
+  }
+}

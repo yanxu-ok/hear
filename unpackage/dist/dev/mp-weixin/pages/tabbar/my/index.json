@@ -1,0 +1,8 @@
+{
+  "usingComponents": {
+    "u-image": "/components/u-image/u-image",
+    "tabbar": "/components/u-tabbar/u-tabbar",
+    "shudan": "/components/u-shudan/u-shudan",
+    "biaoqian": "/pages/tabbar/my/components/biaoqian"
+  }
+}

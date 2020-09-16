@@ -1,0 +1,8 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-image": "/components/u-image/u-image",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "guanzhu": "/components/u-guanzhu/u-guanzhu"
+  }
+}

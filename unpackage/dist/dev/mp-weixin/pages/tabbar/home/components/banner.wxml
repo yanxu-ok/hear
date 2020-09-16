@@ -1,0 +1,1 @@
+<view style="width:710rpx;margin:0 auto;"><u-swiper vue-id="547ed52e-1" list="{{bannerList}}" height="327rpx" mode="round" indicator-pos="bottomLeft" data-event-opts="{{[['^transition',[['transition']]],['^animationfinish',[['animationfinish']]]]}}" bind:transition="__e" bind:animationfinish="__e" bind:__l="__l"></u-swiper></view>
