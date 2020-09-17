@@ -7,7 +7,12 @@
 				<u-image width="29rpx" height="39rpx" src="@/static/images/hot.png"></u-image>
 				<view class="paihang_contain_title">{{type}}榜单</view>
 			</view>
-			<view class="paihang_contain_header_right" @tap="quanbu(type)">全部></view>
+			<view class="paihang_contain_header_right" @tap="quanbu(type)">
+				<view>全部</view>
+				<view class="u-section__right-info__icon-arrow u-flex" style="margin-left: 6rpx;">
+					<u-icon name="arrow-right" size="24" color="#909399"></u-icon>
+				</view>
+			</view>
 		</view>
 
 		<!-- 描述 -->
@@ -18,7 +23,7 @@
 
 		<!-- 主题内容 -->
 		<view class="paihang_contain_content">
-			<template v-for="(item,index) in list">
+			<template v-for="(item,index) in list.slice(0,5)">
 				<block :key="index">
 					<view class="paihang_contain_content_div" @tap="handleClick(item)">
 						<view v-if=" index + 1 == 1 " :class="{ textColor : index + 1 == 1   }">{{ index +1 }}.</view>
@@ -36,23 +41,23 @@
 </template>
 
 <script>
-	export default{
-		props:{
-			list:{
-				type:Array,
-				default:()=>[]
+	export default {
+		props: {
+			list: {
+				type: Array,
+				default: () => []
 			},
-			type:{
-				type:String,
-				default:''
+			type: {
+				type: String,
+				default: ''
 			}
 		},
-		methods:{
-			quanbu(type){
-				this.$emit('quanbu',type)
+		methods: {
+			quanbu(type) {
+				this.$emit('quanbu', type)
 			},
-			handleClick(item){
-				this.$emit('handleClick',item)
+			handleClick(item) {
+				this.$emit('handleClick', item)
 			}
 		}
 	}
@@ -67,6 +72,7 @@
 		border-radius: 10rpx;
 		margin-right: 27rpx;
 		padding: 30rpx 20rpx 45rpx 22rpx;
+		margin-bottom: 10rpx;
 
 		& .paihang_contain_header {
 			display: flex;
@@ -82,10 +88,13 @@
 					font-family: PingFang SC;
 					font-weight: 500;
 					color: #333333;
+					margin-left: 7rpx;
 				}
 			}
 
 			& .paihang_contain_header_right {
+				display: flex;
+				align-items: center;
 				font-size: 24rpx;
 				font-family: PingFang SC;
 				font-weight: 400;

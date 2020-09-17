@@ -6,23 +6,30 @@
 			</view>
 			<!-- <u-count-down :show-days="false" ref="uCountDown" :timestamp="shijian" :autoplay="false" style="margin-left: 180rpx;"></u-count-down> -->
 			<!-- <jishi :mode="1"></jishi> -->
-			{{time}}
+			<!-- {{time}} -->
 		</view>
 		<!-- {{shijian}} -->
 
 		<!-- #ifdef H5 -->
 		<view style="margin-top: 100rpx;display: flex; justify-content: space-around;padding: 0 107rpx;">
-			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="endRecord"></u-image>
-			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="handleStartClick"></u-image>
-			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="handleRecord"></u-image>
+			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/quxiao.png" @click="endRecord"></u-image>
+			<!-- <u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="handleStartClick"></u-image> -->
+			<view style="position: relative;">
+				<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/zhongxin.png" @click="handleStartClick"></u-image>
+				<image :src="luzhiImg" style="position: absolute;left: 0; margin: auto;bottom: 0; top: 0; right: 0;width: 37rpx;height: 57rpx;"></image>
+			</view>
+			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/wancheng.png" @click="handleRecord"></u-image>
 		</view>
 		<!-- #endif -->
 		<!-- #ifdef MP-WEIXIN -->
 
 		<view style="margin-top: 100rpx;display: flex; justify-content: space-around;padding: 0 107rpx;">
-			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="endRecord"></u-image>
-			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="startRecord"></u-image>
-			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="handleRecord"></u-image>
+			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/quxiao.png" @click="endRecord"></u-image>
+			<view style="position: relative;">
+				<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/zhongxin.png" @click="startRecord"></u-image>
+				<image :src="luzhiImg" style="position: absolute;left: 0; margin: auto;bottom: 0; top: 0; right: 0;width: 37rpx;height: 57rpx;"></image>
+			</view>
+			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/wancheng.png" @click="handleRecord"></u-image>
 		</view>
 
 		<!-- #endif -->
@@ -79,11 +86,14 @@
 				timer: null // 定时器
 			}
 		},
+
 		components: {
 			jishi,
 			chunLeiModal
 		},
+
 		computed: {
+			
 			...mapState({
 				audioInfo: state => state.huting.audioInfo,
 				audioOrActicle: state => state.huting.audioOrActicle,
@@ -97,7 +107,13 @@
 					return 600
 				}
 				// #endif
+			},
+			// 录制的图片
+			luzhiImg() {
+				let result = this.luzhi ?   require('@/static/listen/tingzhi.png') : require('@/static/listen/jixuluzhi.png')
+				return result
 			}
+			
 		},
 
 		async mounted() {
@@ -189,7 +205,7 @@
 				// document.getElementById("TopCurrentTime").innerHTML = timestr;
 				return timestr
 			},
-			...mapMutations(['setVoicePath', 'setLocalId','setFlag']),
+			...mapMutations(['setVoicePath', 'setLocalId', 'setFlag']),
 			// ...mapActions(['getWeinConfig']),
 			handleHuting() {
 				uni.navigateTo({
@@ -399,7 +415,7 @@
 						err,
 						result
 					}) => {
-						
+
 					});
 				}
 				// #endif

@@ -8,18 +8,18 @@
 					</view>
 					<view class="bianji_content_div_neirong">
 						<view class="bianji_content_div_neirong_title">{{item.topicName | titleFilter(10)}}</view>
-						<view style="margin-top: 23rpx;margin-bottom: 23rpx;">
+						<view style="margin-bottom: 23rpx;height: 72rpx;margin-top: 23rpx;">
 							<view class="bianji_content_div_neirong_desc">{{item.topicDescribe | titleFilter(20)}}</view>
 						</view>
 						<view class="bianji_content_author">
 							<view class="bianji_content_author_color">
 								<image style="width:19rpx; height:20rpx" src="@/static/images/author.png"></image>
-								<view style="margin-left: 20rpx;">{{item.topicAuthorName}}</view>
+								<view style="margin-left: 10rpx;">{{item.topicAuthorName ? item.topicAuthorName : '无名氏' | titleFilter(5) }}</view>
 							</view>
-							<view class="bianji_content_author_color">
+							<view class="bianji_content_author_color1">
 								<image style="width:17rpx; height:20rpx" src="@/static/images/play.png"></image>
 								<!-- <u-image width="17rpx" height="20rpx" src="@/static/images/play.png"></u-image> -->
-								<view style="margin-left: 20rpx;">{{item.topicReadAmount}}播放</view>
+								<view style="margin-left: 10rpx;">{{item.topicReadAmount}}播放</view>
 							</view>
 						</view>
 					</view>
@@ -65,6 +65,7 @@
 
 			& .bianji_content_div_neirong {
 				width: 445rpx;
+				height: 208rpx;
 				margin-left: 19rpx;
 
 				& .bianji_content_div_neirong_title {
@@ -88,6 +89,7 @@
 				display: flex;
 				flex-direction: row;
 				margin-bottom: 30rpx;
+				align-items: center;
 
 				& .bianji_content_author_color {
 					display: flex;
@@ -95,6 +97,20 @@
 					align-items: center;
 					margin-right: 30rpx;
 					font-size: 24rpx;
+					width: 140rpx;
+					font-family: PingFang SC;
+					font-weight: 400;
+					color: #999999;
+					line-height: 37rpx;
+				}
+				
+				& .bianji_content_author_color1 {
+					display: flex;
+					flex-direction: row;
+					align-items: center;
+					margin-right: 30rpx;
+					font-size: 24rpx;
+					width: 170rpx;
 					font-family: PingFang SC;
 					font-weight: 400;
 					color: #999999;

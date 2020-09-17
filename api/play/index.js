@@ -130,3 +130,32 @@ export const delete_collect_chapter = ({
 		collectChapterId
 	})
 }
+
+// 新增历史数据   topicId  专题id
+// chapterId  章节id
+// radioType  音频类型  1-章节 2-互听
+// listenProgress  收听进度 秒
+export const insert_history = ({
+	topicId,
+	chapterId,
+	radioType
+}) => {
+	return http.post('/history/insert_history', {
+		topicId,
+		chapterId,
+		radioType
+	})
+}
+
+// 更新历史数据    listenProgress  收听进度  topicId专题id   chapterId  章节id
+export const update_history = ({
+	topicId,
+	chapterId,
+	listenProgress,
+}) => {
+	return http.put('/history/update_history', {
+		topicId,
+		chapterId,
+		listenProgress
+	})
+}

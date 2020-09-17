@@ -42,7 +42,7 @@
 		<indexdrawer></indexdrawer>
 
 	</view>
-	
+
 </template>
 
 <script>
@@ -94,17 +94,26 @@
 		},
 		data() {
 			return {
-				audiolist: {},
-				show: false,
+				audiolist: {}, // 音频的信息
+				show: false
 			}
 		},
 		watch: {
-			currectPlayIndex(newValue, oldValue) {
+			async currectPlayIndex(newValue, oldValue) {
 				if (this.zhangjieList.length != 0) {
-					console.log(this.zhangjieList[newValue], newValue, '索引一边音频播放');
-					this.zuhe(newValue)
+					console.log(this.zhangjieList[newValue], newValue, '索引一遍音频播放');
+					let data = {
+						topicId: this.zhangjieList[newValue].topicId,
+						chapterId: this.zhangjieList[newValue].chapterId,
+						radioType: 1
+					}
+					let result = await this.insert_history(data) // 插入历史记录 并且判断返回的是否有进度，在当前进度播放
+					this.setAudioType('zhangjie') // 播放的类型是章节
+					this.zuhe(newValue, result.data)
 				}
-			}
+			},
+
+			// 监听 全局的
 		},
 		methods: {
 			back() {
@@ -113,8 +122,8 @@
 				})
 			},
 
-			...mapMutations(['setTopicId', 'setCurrectPlayIndex', 'setPlay', 'setCurrectPlay']),
-			...mapActions(['get_introduction_by_topic_id']),
+			...mapMutations(['setTopicId', 'setCurrectPlayIndex', 'setPlay', 'setCurrectPlay', 'setAudioType', 'setGloalImg']),
+			...mapActions(['get_introduction_by_topic_id', 'insert_history']),
 
 			// 改变播放状态
 			handleBofang() {
@@ -127,6 +136,7 @@
 				}
 			},
 
+
 			// 将专题id存到缓存中
 			setStorage(topicId) {
 				let _this = this
@@ -134,22 +144,23 @@
 					key: 'topicId',
 					data: topicId,
 					success: function() {
-						console.log('success');
+						console.log('success','将专题放到缓存中');
 					}
 				});
 			},
 
 			// 组合数组
-			zuhe(index) {
+			zuhe(index, historyDate) {
 				// console.log(1);
 				if (this.zhangjieList.length != 0) {
 					this.audiolist = {
 						src: this.zhangjieList[index].chapterAudio,
 						title: this.zhangjieList[index].chapterName,
 						singer: this.zhangjieList[index].nickName,
-						coverImgUrl: this.zhangjieList[index].avatar
+						coverImgUrl: this.zhangjieList[index].avatar,
+						historyDate,
 					}
-					console.log(this.audiolist, '组合后的音频');
+					// console.log(this.audiolist, '组合后的音频');
 				}
 			},
 
@@ -160,6 +171,7 @@
 					userId: authorId,
 					loginId: 1
 				})
+				this.setGloalImg(result.topicImage)
 			},
 
 			//下一首

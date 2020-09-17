@@ -22,13 +22,13 @@
 				duration_value: 100, //slider总长度
 				paused: true, //是否处于暂停状态
 				default_cover: 'https://zijing-sz.oss-cn-shenzhen.aliyuncs.com/api_upload/2019-11-06_15_26_32_735247.png', //默认海报
-				hassrc: '' ,//////////////正在播放的音频
-				info:{}
+				hassrc: '', //////////////正在播放的音频
+				info: {}
 			};
 		},
 
 		props: {
-			
+
 			oldinfo: Object
 				/*************
 							info对象 {
@@ -61,13 +61,13 @@
 		// },
 		watch: {
 			oldinfo(newValue, oldValue) {
-				if(!newValue){
+				if (!newValue) {
 					return;
 				}
-			 	this.info = newValue
+				this.info = newValue // 里面有当前时间
 				// this.$audio.src=newValue.src
 				// this.$audio.play();
-				this.audioPlay()
+				this.audioPlay() // 将播放的进度传进去
 			}
 		},
 
@@ -84,14 +84,14 @@
 
 			//对比 新的音频与旧音频 地址  从而渲染 对应进度条
 			// console.log(this.info.src , this.hassrc,'新的和旧的');
-			
+
 			if (this.info.src == this.hassrc) {
 				this.current = current;
 				this.duration_value = duration_value;
 				this.duration = duration;
 				this.current_value = current_value;
 				this.paused = this.$store.state.app.paused;
-			} else if(this.hassrc){
+			} else if (this.hassrc) {
 				this.current = current;
 				this.duration_value = duration_value;
 				this.duration = duration;
@@ -101,14 +101,14 @@
 
 			this.$audio.onCanplay(() => {});
 			this.$audio.onPlay(() => {
-				console.log('++++++++++++++++++',111111111111111111);
-				console.log('++++++++++++++++++', this.$audio.currentTime);
+				// console.log('++++++++++++++++++', 111111111111111111);
+				console.log('++++++++++++++++++', this.$audio.currentTime,'开始播放');
 				this.paused = false;
 				this.saveplay('src', this.info.src);
 				this.$store.commit('setpause', false); //记录音频正常停止 false
 				this.$store.commit('set_n_pause', false); //标记音频异常中断 为false 用于电话来电中断音频的判断
 
-				console.log('onplay');
+				// console.log('onplay');
 				this.duration = this.format(this.$audio.duration);
 				this.duration_value = this.$audio.duration;
 				this.saveplay('duration', this.duration);
@@ -124,6 +124,7 @@
 				this.paused = true;
 				this.$store.commit('setpause', true); //记录音频正常停止 true
 			});
+
 			this.$audio.onEnded(() => {
 				this.paused = true;
 				this.$store.commit('setpause', true); //记录音频正常停止 true
@@ -133,18 +134,20 @@
 				this.saveplay('current', this.current);
 				this.saveplay('current_value', this.current_value);
 			});
+
 			this.$audio.onTimeUpdate(() => {
-				// console.log('-->', this.info.src == this.$store.state.app.playinfo.src);
+
 				// console.log(1,this.info.src,this.$store.state.app.playinfo.src);
 				// if (this.info.src == this.$store.state.app.playinfo.src) {
-					this.current = this.format(this.$audio.currentTime);
-					this.current_value = this.$audio.currentTime;
-					this.saveplay('current', this.current);
-					this.saveplay('current_value', this.$audio.currentTime);
-					this.duration = this.format(this.$audio.duration);
-					this.duration_value = this.$audio.duration;
-					this.saveplay('duration', this.duration);
-					this.saveplay('duration_value', this.duration_value);
+				this.current = this.format(this.$audio.currentTime);
+				this.current_value = this.$audio.currentTime;
+				// console.log(this.current, this.current_value,this.duration_value,this.duration);
+				this.saveplay('current', this.current);
+				this.saveplay('current_value', this.$audio.currentTime);
+				this.duration = this.format(this.$audio.duration);
+				this.duration_value = this.$audio.duration;
+				this.saveplay('duration', this.duration);
+				this.saveplay('duration_value', this.duration_value);
 				// }
 			});
 			this.$audio.onError(() => {
@@ -184,6 +187,7 @@
 			},
 			changing(event) {
 				this.current_value = event.detail.value;
+				console.log(this.current_value);
 				this.current = this.format(event.detail.value);
 			},
 
@@ -227,7 +231,7 @@
 						this.$audio.seek(0);
 						this.hassrc = src;
 						this.paused = false;
-						
+
 					} else {
 						this.$audio.pause();
 						this.paused = true;
@@ -263,15 +267,16 @@
 					}
 				}
 			},
-			
+
 			// 音频源切换事件
-			audioPlay(){
-				if (this.hassrc != this.info.src){
+			audioPlay() {
+				if (this.hassrc != this.info.src) {
 					const {
 						src,
 						title,
 						singer,
-						poster
+						poster,
+						historyDate
 					} = this.info;
 					this.$store.commit('setaudio', {
 						src: src,
@@ -286,13 +291,12 @@
 					this.$audio.singer = singer;
 					this.$audio.coverImgUrl = poster || this.default_cover;
 					this.$audio.play();
-					this.$audio.startTime = 0;
-					this.$audio.seek(0);
+					this.$audio.startTime = historyDate;
+					this.$audio.seek(historyDate);
 					this.hassrc = src;
 					this.paused = false;
 					this.$store.commit('setpause', false);
-				}
-				else{
+				} else {
 					const {
 						src,
 						title,
@@ -317,28 +321,28 @@
 					this.$store.commit('setpause', false);
 				}
 			},
-			
+
 			// // 音频暂停 
 			// audioStop(){
 			// 	this.$audio.pause()
 			// },
-			
+
 			//完成拖动事件
 			change(e) {
 				this.$audio.seek(e.detail.value);
 			},
-			
+
 			step(type) {
 				var pos = !type ? this.current_value - 15 : this.current_value + 15;
 				this.$audio.seek(pos);
 			},
-			
+
 			// // 播放还是暂停
 			// playOrPause(){
 			// 	if()
 			// 	this.$audio.stop()
 			// }
-			
+
 		}
 	};
 </script>

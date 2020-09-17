@@ -6,7 +6,9 @@ import {
 	insert_collect_chapter,
 	insert_collect,
 	delete_collect,
-	delete_collect_chapter
+	delete_collect_chapter,
+	insert_history,
+	update_history
 } from '@/api/play/index.js'
 
 import {
@@ -56,7 +58,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				get_chapter_list_by_topic(obj).then(res => {
 					// console.log(res.data.data, "章节列表");
-					commit("setZhangjieList",res.data.data.list)
+					// commit("setZhangjieList",res.data.data.list)
 					resolve(res.data.data)
 				})
 			})
@@ -70,7 +72,7 @@ export default {
 		}, id) {
 			return new Promise((resolve, reject) => {
 				get_introduction_by_topic_id(id).then(res => {
-					console.log(res.data.data, "获取简介");
+					// console.log(res.data.data, "获取简介");
 					commit("setZhangjieObj", res.data.data)
 					resolve(res.data.data)
 				})
@@ -161,6 +163,33 @@ export default {
 			})
 		},
 		
+		// 新增历史数据
+		insert_history({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				insert_history(obj).then(res => {
+					// console.log(res.data, "新增历史数据");
+					resolve(res.data)
+				})
+			})
+		},
+		
+		//更新历史数据
+		update_history({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				update_history(obj).then(res => {
+					console.log(res.data, "更新历史数据");
+					resolve(res.data)
+				})
+			})
+		},
 		
 	},
 }

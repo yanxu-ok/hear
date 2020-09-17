@@ -1,8 +1,9 @@
 <template>
 	<view @tap="imgClick" style="margin-top: 20rpx;">
-		<u-circle-progress active-color="#fe7e00" :percent="30" duration="0" width="90" border-width="6">
+		<u-circle-progress active-color="#fe7e00" :percent="currect" duration="0" width="90" border-width="6">
 			<!-- <u-image src="@/static/images/video.png" class="cover" :class="{ on: !pause }" width="76" height="76" shape="circle"></u-image> -->
-			<image src="@/static/images/video.png" mode="aspectFill" class="cover" :class="{ on: !paused }"></image>
+			<image :src="playImg" mode="aspectFill" class="cover" :class="{ on: !paused }"></image>
+			<image :src="iszanting" style="width: 26rpx;height: 28rpx;position: absolute;left: 10rpx;right: 0;bottom: 0;top: 0;margin: auto;"></image>
 		</u-circle-progress>
 	</view>
 </template>
@@ -25,8 +26,42 @@
 			...mapState({
 				play: state => state.play.play,
 				topicId: state => state.play.topicId,
-				paused: state => state.app.paused // 全局是否暂停
+				paused: state => state.app.paused, // 全局是否暂停
+				playinfo: state => state.app.playinfo, // 音频的当前值,
+				audioInfo: state => state.huting.audioInfo,
+				currectPlayIndex: state => state.play.currectPlayIndex,
+				zhangjieList: state => state.play.zhangjieList,
+				type: state => state.app.type, // 音频的类型,
+				gloalImg: state => state.app.gloalImg, // 音频的类型,
 			}),
+
+			// 进度值
+			currect() {
+				if (this.playinfo.duration_value == 0) {
+					return 0
+				} else {
+					// console.log(Math.floor(this.playinfo.current_value * 100 / this.playinfo.duration_value),'进度值');
+					return Math.floor(this.playinfo.current_value * 100 / this.playinfo.duration_value)
+				}
+			},
+
+			// 播放的图片
+			playImg() {
+				console.log(this.gloalImg);
+				const user = uni.getStorageSync('user');
+				if (user) {
+					let result = this.gloalImg
+					return result
+				} else {
+					return require('@/static/images/video.png')
+				}
+			},
+
+			//是否暂停
+			iszanting() {
+				let result = this.paused ? require('@/static/images/allPlay.png') : require('@/static/images/allzanting.png')
+				return result
+			}
 
 		},
 		created() {
@@ -60,12 +95,11 @@
 				// 	console.log(value);
 				// }
 				console.log(this.topicId);
-				if (this.topicId) {  // 判断vuex中有没有topicId
+				if (this.topicId) { // 判断vuex中有没有topicId
 					uni.navigateTo({
 						url: '/pages/playPage/playPage?topicId=' + this.topicId
 					})
-				}
-				else{
+				} else {
 					uni.navigateTo({
 						url: '/pages/playPage/playPage?topicId=23'
 					})

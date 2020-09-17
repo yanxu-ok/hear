@@ -32,6 +32,7 @@
   border-radius: 10rpx;
   margin-right: 27rpx;
   padding: 30rpx 20rpx 45rpx 22rpx;
+  margin-bottom: 10rpx;
 }
 .paihang_contain .paihang_contain_header {
   display: -webkit-box;
@@ -57,8 +58,15 @@
   font-family: PingFang SC;
   font-weight: 500;
   color: #333333;
+  margin-left: 7rpx;
 }
 .paihang_contain .paihang_contain_header .paihang_contain_header_right {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
   font-size: 24rpx;
   font-family: PingFang SC;
   font-weight: 400;

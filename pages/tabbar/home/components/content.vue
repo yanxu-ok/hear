@@ -9,9 +9,9 @@
 
 		<!-- 编辑力荐 -->
 		<view class="bianjiHeader">
-			<u-section title="编辑力荐" :show-line="false"  font-size="36" sub-title="全部" @click="quanbu('编辑力荐')"></u-section>
+			<u-section title="编辑力荐" :show-line="false" font-size="36" sub-title="全部" @click="quanbu('编辑力荐')"></u-section>
 		</view>
-		
+
 		<!-- 编辑力荐内容 -->
 		<bianji :list="bianjiList" @handleBianjiClick="handleContentClick"></bianji>
 
@@ -167,6 +167,10 @@
 			font-size: $uni-font-size-sm;
 			color: $uni-tit-99;
 		}
+	}
+
+	.paihangbang {
+		margin-bottom: 20rpx;
 	}
 
 	.homescroll {

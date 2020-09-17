@@ -57,7 +57,7 @@
 	.new_contain {
 		width: 710rpx;
 		// height: 816rpx;
-		margin: 30rpx auto auto auto;
+		margin: 30rpx auto 30rpx auto;
 		border-radius: 10rpx;
 		box-shadow: 0px 0px 32rpx 0px rgba(3, 22, 38, 0.08);
 		padding: 30rpx 26rpx 30rpx 24rpx;

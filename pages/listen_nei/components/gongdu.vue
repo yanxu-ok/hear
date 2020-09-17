@@ -52,7 +52,7 @@
 			console.log(this.audioInfo, '当前文稿信息');
 		},
 		methods: {
-			...mapActions(['get_reading_together']),
+			...mapActions(['get_reading_together','insert_focus','delete_focus']),
 
 			mescrollInit(mescroll) {
 				this.mescroll = mescroll;
@@ -91,8 +91,29 @@
 			},
 
 			// 关注点击事件
-			handleGuanzhu() {
-
+			async handleGuanzhu(item) {
+				console.log(item,'关注的当前项');
+				if (item.isFocus == 0) { // 说明是没有关注他  要调用关注接口
+					let result = await this.insert_focus(item.userId)
+					if (result.success) {
+						// this.fensiList = await this.getFensiList()
+						this.downCallback()
+						uni.showToast({
+							title: '关注成功',
+							icon: 'none'
+						})
+					}
+				} else { // 说明已经关注 要调用取消关注接口
+					let result = await this.delete_focus(item.fansId)
+					if (result.success) {
+						// this.fensiList = await this.getFensiList()
+						this.downCallback()
+						uni.showToast({
+							title: '取消成功',
+							icon: 'none'
+						})
+					}
+				}
 			}
 
 		},

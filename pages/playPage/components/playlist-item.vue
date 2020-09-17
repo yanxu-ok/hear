@@ -1,9 +1,9 @@
 <template>
 	<view style="height: 100%;">
 		<!-- <scroll-view scroll-y @scrolltolower="onreachBottom" class="play_swiper_scroll"> -->
-		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" class="play_swiper_scroll" @down="downCallback" @up="upCallback" :down="downOption"
-		 :up="upOption" >
-			<template v-for="(item,index) in zhangjieList">
+		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" class="play_swiper_scroll" @down="downCallback"
+		 @up="upCallback" :down="downOption" :up="upOption">
+			<template v-for="(item,index) in dataList">
 				<view class="jiemu_contain" :key="index" @tap="handleZhangjie(index,item)">
 					<u-image width="39rpx" height="40rpx" src="@/static/images/zhibo.png" v-if="currectPlayIndex == index"></u-image>
 					<view v-else>{{index+1}}</view>
@@ -62,20 +62,21 @@
 				},
 				// pageNum: 1,
 				// pageSize: 10,
-				dataList: [] // 数据
+				dataList: [], // 数据,
+				isFirst: true // 用来标识是否是第一次进入 ，是则把第一个索引放入vuex中
 			}
 		},
 		components: {
 			MescrollUni
 		},
 		async mounted() {
-			// let list = await this.getZlist()
-			// this.setZhangjieList(list) // 列表存到vuex中  并且请求道得列表都请求到vuex中
-			if (this.currectPlayIndex) {
+			// this.setZhangjieList(result.list) // 列表存到vuex中  并且请求道得列表都请求到vuex中
+			// this.setCurrectPlayIndex(0)
+			// if (this.currectPlayIndex) {
 
-			} else {
-				
-			}
+			// } else {
+
+			// }
 		},
 		methods: {
 			...mapActions(['get_chapter_list_by_topic']),
@@ -132,8 +133,12 @@
 				if (page.num == 1) this.dataList = []; //如果是第一页需手动置空列表
 				this.dataList = this.dataList.concat(curPageData); //追加新数据
 				this.setZhangjieList(this.dataList) // 列表存到vuex中  并且请求道得列表都请求到vuex中
-				this.setCurrectPlayIndex(0)
+				if (this.isFirst) { // 符合 则是第一次刷新 
+					this.setCurrectPlayIndex(0)
+					this.isFirst = false
+				}
 				this.mescroll.endByPage(curPageLen, totalPage);
+				
 			},
 		}
 	}

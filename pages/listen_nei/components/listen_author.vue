@@ -2,11 +2,11 @@
 	<view>
 		<view class="wenzhang_contain">
 			<view style="width: 88rpx;height: 90rpx;">
-				<u-image width="88rpx" height="90rpx" :src="audioInfo.avatar" shape="circle" class="play_contain_right"></u-image>
+				<u-image width="88rpx" height="90rpx" :src="audioInfo ? audioInfo.avatar : '' " shape="circle" class="play_contain_right"></u-image>
 			</view>
 			<view style="margin-left: 21rpx;">
 				<view class="wenzhang_contain_author">
-					<view class="wenzhang_contain_author_name" @tap="handleGuanzhu">{{audioInfo.nickName}}</view>
+					<view class="wenzhang_contain_author_name" @tap="handleGuanzhu">{{audioInfo ? audioInfo.nickName : '暂无作者名字'}}</view>
 					<!-- <u-button :custom-style="customStyle" @tap="handleGuanzhu" type="error">{{isGuanzhu}}</u-button> -->
 				</view>
 				<view class="wenzhang_contain_author_text">文章作者</view>
@@ -143,7 +143,7 @@
 						title: 'h5暂时无法录制,请到小程序或微信中录制',
 						icon: 'none'
 					})
-					return;
+					// return;
 				// }
 				// #endif
 				this.height = '500rpx'

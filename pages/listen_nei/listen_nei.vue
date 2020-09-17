@@ -12,10 +12,10 @@
 		</u-navbar>
 
 		<!-- 标题 -->
-		<view class="listen_nei_title">{{audioInfo.articleTitle}}</view>
+		<view class="listen_nei_title">{{audioInfo ? audioInfo.articleTitle : '暂无标题'}}</view>
 
 		<!-- 作者 -->
-		<view class="listen_nei_author">作者：{{audioInfo.articleUserName}}·{{audioInfo.audioReadAmount}}人看过·预计3分钟</view>
+		<view class="listen_nei_author">作者：{{audioInfo ? audioInfo.articleUserName : '暂无作者名字'}}·{{audioInfo ? audioInfo.audioReadAmount : '暂无'}}人看过·预计3分钟</view>
 
 		<!-- 歌词 -->
 		<geci @gongdu="handleGongdu"></geci>
@@ -87,6 +87,7 @@
 				type: state => state.huting.type
 			})
 		},
+
 		async onLoad(option) {
 			this.setType(option.type)
 			this.authorId = option.authorId // 作者的id
@@ -94,18 +95,30 @@
 				this.audioId = option.audioId // 音频的id
 				this.setAudioOrActicle(this.audioId)
 				let audioinfo = await this.getAudioInfo()
+				if (!audioinfo) {
+					return;
+				}
 				this.setAudioInfo(audioinfo) // 音频信息放到vuex中
-				this.audio = this.startPlay(audioinfo) // 开始播放音频	
+				this.setAudioType('huting') // 播放的类型是章节
+				this.setGloalImg(audioinfo.cover)
+				console.log(audioinfo);
+				let data = {
+					topicId: audioinfo.articleId,
+					chapterId: audioinfo.audioId,
+					radioType: 2
+				}
+				let result = await this.insert_history(data)
+				this.audio = this.startPlay(audioinfo, result) // 开始播放音频	
 			} else {
 				const item = JSON.parse(decodeURIComponent(option.item));
 				this.setAudioInfo(item)
 			}
-
 		},
+
 		methods: {
-			...mapActions(['get_audio_by_id']),
-			...mapMutations(['setAudioInfo', 'setAudioOrActicle','setType']),
-			
+			...mapActions(['get_audio_by_id', 'insert_history']),
+			...mapMutations(['setAudioInfo', 'setAudioOrActicle', 'setType', 'setAudioType', 'setGloalImg']),
+
 			// 获取互听音频简介信息
 			async getAudioInfo() {
 				const data = {
@@ -117,7 +130,7 @@
 			},
 
 			// 进来 之后要开始播放
-			startPlay(audioinfo) {
+			startPlay(audioinfo, historyValue) {
 				return {
 					src: audioinfo.audioAddress,
 					title: audioinfo.articleTitle,

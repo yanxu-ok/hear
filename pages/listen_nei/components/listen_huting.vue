@@ -3,14 +3,14 @@
 		<image src="@/static/listen/listennei.jpg" class="listen_nei_img" style="z-index: 0;"></image>
 		<view class="baoliu"></view>
 
-		<view class="author_name title" style="margin-top: 80rpx;">{{audioInfo.articleTitle}}</view>
-		<view class="author_name author">读者:{{audioInfo.nickName}}</view>
+		<view class="author_name title" style="margin-top: 80rpx;">{{audioInfo ? audioInfo.articleTitle : '暂无标题'}}</view>
+		<view class="author_name author">读者:{{audioInfo ? audioInfo.nickName : '暂无作者名字'}}</view>
 
 		<view class="wenzhang_img">
-			<u-image width="559rpx" height="560rpx" :src="audioInfo.cover" class="play_contain_right"></u-image>
+			<u-image width="559rpx" height="560rpx" :src="audioInfo ? audioInfo.cover : ''" class="play_contain_right"></u-image>
 			<view class="play_img_bofang">
-				<u-image width="22rpx" height="26rpx" :src="audioInfo.cover"></u-image>
-				<view class="play_img_count">{{audioInfo.audioReadAmount}}播放</view>
+				<u-image width="22rpx" height="26rpx" :src="audioInfo ? audioInfo.cover : ''"></u-image>
+				<view class="play_img_count">{{audioInfo ? audioInfo.audioReadAmount : '暂无'}}播放</view>
 			</view>
 		</view>
 

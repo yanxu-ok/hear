@@ -1,5 +1,5 @@
 <template>
-	
+
 	<view class="shudan">
 		<view class="shudan_list">
 			<u-image width="120rpx" height="120rpx" :src="item.avatar" shape="circle"></u-image>
@@ -16,12 +16,13 @@
 
 				<view class="count" :style="{desccolor: desccolor  }">用一句话介绍一下你自己吧～</view>
 			</view>
-			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 109rpx;" v-if="item.flag == 1" @tap="handleGuanzhu(item)">+关注</u-button>
+			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 109rpx;" v-if="item.flag == 1 || item.isFocus == 0"
+			 @tap="handleGuanzhu(item)">+关注</u-button>
 			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 109rpx;" v-else @tap="handleGuanzhu(item)">已关注</u-button>
 		</view>
 		<u-line color="#E6E6E6" style="margin-left: 178rpx;" v-if="noline" />
 	</view>
-	
+
 </template>
 
 <script>
@@ -55,15 +56,15 @@
 				type: String,
 				default: "rgba(153, 153, 153, 1)",
 			},
-			type:{
+			type: {
 				type: String,
 				default: "zhubo",
 			},
-			item:{
+			item: {
 				type: Object
 			},
-			rindex:{
-				type:Number
+			rindex: {
+				type: Number
 			}
 		},
 		data() {
@@ -72,12 +73,12 @@
 					width: '113rpx',
 					height: '48rpx'
 				},
-				show:true
+				show: true
 			}
 		},
-		methods:{
-			handleGuanzhu(item){	
-				this.$emit('handleGuanzhu',item)
+		methods: {
+			handleGuanzhu(item) {
+				this.$emit('handleGuanzhu', item)
 			}
 		}
 	}

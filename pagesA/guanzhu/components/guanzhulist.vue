@@ -79,7 +79,7 @@
 
 			// //点击关注的事件
 			async handleGuanzhu(item) {
-				console.log(item);
+				console.log(item,'关注的当前项');
 
 				if (this.type == 'fensi') { // 这些是粉丝
 					if (item.flag == 1) { // 说明是没有关注他  要调用关注接口 
@@ -99,7 +99,8 @@
 							// this.fensiList = await this.getFensiList()
 							this.downCallback()
 							uni.showToast({
-								title: '取消成功'
+								title: '取消成功',
+								icon: 'none'
 							})
 						}
 					}
@@ -109,7 +110,8 @@
 						// this.fensiList = await this.getFensiList()
 						this.downCallback()
 						uni.showToast({
-							title: '取消成功'
+							title: '取消成功',
+							icon: 'none'
 						})
 					}
 				}

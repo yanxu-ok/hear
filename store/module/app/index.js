@@ -15,7 +15,9 @@ export default {
 			src: ""
 		},
 		paused: true, // 是否是暂停
-		n_pause: false //意外断开状态 
+		n_pause: false, //意外断开状态
+		type: '' ,// 音频的类型
+		gloalImg:'' // 全局的图片
 	},
 	mutations: {
 		setaudio(state, data) {
@@ -34,7 +36,7 @@ export default {
 			if (data.duration_value) {
 				state.playinfo.duration_value = data.duration_value;
 			}
-			if (data.current_value)  {
+			if (data.current_value) {
 				state.playinfo.current_value = data.current_value;
 			}
 			if (data.current_value) {
@@ -49,7 +51,13 @@ export default {
 		},
 		set_n_pause(state, data) {
 			state.n_pause = data
-		}
+		},
+		setAudioType(state, data) {
+			state.type = data
+		},
+		setGloalImg(state, data) {
+			state.gloalImg = data
+		},
 	},
 	actions: {},
 }

@@ -5,7 +5,8 @@
 			color: color,
 			fontSize: fontSize + 'rpx',
 			paddingLeft: showLine ? (fontSize * 0.7) + 'rpx' : 0
-		}" :class="{
+		}"
+		 :class="{
 			'u-section--line': showLine
 		}">
 			<view class="u-section__title__icon-wrap u-flex" :style="[lineStyle]" v-if="showLine">
@@ -15,10 +16,12 @@
 		</view>
 		<view class="u-section__right-info" v-if="right || $slots.right" :style="{
 			color: subColor
-		}" @tap="rightClick"> 
+		}" @tap="rightClick">
 			<slot name="right" v-if="$slots.right" />
 			<block v-else>
-				{{subTitle}}
+				<view style="font-size: 24rpx;">
+					{{subTitle}}
+				</view>
 				<view class="u-section__right-info__icon-arrow u-flex">
 					<u-icon name="arrow-right" size="24" :color="subColor"></u-icon>
 				</view>
@@ -111,35 +114,35 @@
 
 <style lang="scss" scoped>
 	@import "../../libs/css/style.components.scss";
-	
+
 	.u-section {
 		display: flex;
 		justify-content: space-between;
 		align-items: center;
 		width: 100%;
-		
+
 		&__title {
 			position: relative;
 			font-size: 28rpx;
 			padding-left: 20rpx;
 			display: flex;
 			align-items: center;
-			
+
 			&__icon-wrap {
 				position: absolute;
 			}
-			
+
 			&__text {
 				line-height: 1;
 			}
 		}
-		
+
 		&__right-info {
 			color: $u-tips-color;
 			font-size: 26rpx;
 			display: flex;
 			align-items: center;
-			
+
 			&__icon-arrow {
 				margin-left: 6rpx;
 			}

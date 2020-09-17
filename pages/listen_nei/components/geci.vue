@@ -4,7 +4,7 @@
 		<view class="geci_contain_right">
 			<view class="geci_contain_right_img" v-if="type == 'audio' ">
 				<u-image width="69rpx" height="68rpx" :src="dianzan" @click="handleDianzan"></u-image>
-				<view class="geci_contain_right_count">{{audioInfo.praiseNum}}</view>
+				<view class="geci_contain_right_count">{{audioInfo ? audioInfo.praiseNum : '暂无点赞数'}}</view>
 			</view>
 			<view class="geci_contain_right_img" v-if="type == 'audio' ">
 				<u-image width="55rpx" height="54rpx" src="@/static/listen/pinglun.png"></u-image>

@@ -10,8 +10,8 @@ const http = new Request({
 http.interceptors.request.use((config) => { // 可使用async await 做异步操作
   config.header = {
 	token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuaWNrbmFtZSI6IuWtn-WHoeW5syIsImlkIjoiMSIsImF2YXRhciI6Imh0dHBzOi8vaW1nMTEuaXFpbHUuY29tLzIwMjAvMDcvMjIvNjU2MjZjOTZhZjY2ZjIzMWE4NTY4ZTU4N2VkMzUwZTQucG5nIiwiaWF0IjoxNTk5NzMxMDU1LCJvcmdpZCI6IjI5In0.giDy7TF5qtCu5mgLm8P5-Su-m5-dMTaOLQl8FLhn9rI'
+	// token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE2Iiwib3JnaWQiOiIyOSIsIm5pY2tuYW1lIjoiXHU0ZjYwXHU1OTdkIiwiYXZhdGFyIjoiaHR0cHM6XC9cL2ltZzExLmlxaWx1LmNvbVwvMjAyMFwvMDZcLzA3XC8xMjJjYjNhOGZkZjc3ZDZiZTYxZjBiZWViYTdhZDhmNC5wbmcifQ.zBZk4iHTU35Zbh8dbmzWJ5Awc2-nsiVM_qm5PSvTg5A'
   }
-   console.log(config);
 
   return config
 }, config => { // 可使用async await 做异步操作
@@ -25,7 +25,9 @@ const http1 = new Request({
 
 http1.interceptors.request.use((config) => { // 可使用async await 做异步操作
   config.header = {
-	token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuaWNrbmFtZSI6IuWtn-WHoeW5syIsImlkIjoiMSIsImF2YXRhciI6Imh0dHBzOi8vaW1nMTEuaXFpbHUuY29tLzIwMjAvMDcvMjIvNjU2MjZjOTZhZjY2ZjIzMWE4NTY4ZTU4N2VkMzUwZTQucG5nIiwiaWF0IjoxNTk5NzMxMDU1LCJvcmdpZCI6IjI5In0.giDy7TF5qtCu5mgLm8P5-Su-m5-dMTaOLQl8FLhn9rI'
+	token:'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE2Iiwib3JnaWQiOiIyOSIsIm5pY2tuYW1lIjoiXHU0ZjYwXHU1OTdkIiwiYXZhdGFyIjoiaHR0cHM6XC9cL2ltZzExLmlxaWx1LmNvbVwvMjAyMFwvMDZcLzA3XC8xMjJjYjNhOGZkZjc3ZDZiZTYxZjBiZWViYTdhZDhmNC5wbmcifQ.zBZk4iHTU35Zbh8dbmzWJ5Awc2-nsiVM_qm5PSvTg5A'
+	
+	// token: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJuaWNrbmFtZSI6IuWtn-WHoeW5syIsImlkIjoiMSIsImF2YXRhciI6Imh0dHBzOi8vaW1nMTEuaXFpbHUuY29tLzIwMjAvMDcvMjIvNjU2MjZjOTZhZjY2ZjIzMWE4NTY4ZTU4N2VkMzUwZTQucG5nIiwiaWF0IjoxNTk5NzMxMDU1LCJvcmdpZCI6IjI5In0.giDy7TF5qtCu5mgLm8P5-Su-m5-dMTaOLQl8FLhn9rI'
   }
   // console.log(config);
 
