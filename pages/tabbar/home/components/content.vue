@@ -9,7 +9,7 @@
 
 		<!-- 编辑力荐 -->
 		<view class="bianjiHeader">
-			<u-section title="编辑力荐" :show-line="false" font-size="36" sub-title="全部" @click="quanbu('编辑力荐')"></u-section>
+			<u-section title="编辑力荐" style="width: 100%;" :show-line="false" font-size="36" sub-title="全部" @click="quanbu('编辑力荐')"></u-section>
 		</view>
 
 		<!-- 编辑力荐内容 -->
@@ -59,7 +59,7 @@
 				jinqiListCurrect: 1, // 近期新增当前页
 				pageSize: 6, //请求的总数
 				mianfeiListCurrect: 1, // 免费当前页
-				mianfeiList: [], // 免费当前页
+				mianfeiList: [], // 免费
 				bianjiList: [], // 编辑力荐
 				reqiList: [], // 人气榜单
 				xiaoliangList: [], //销量榜单
@@ -119,7 +119,17 @@
 					}
 					let result = await this.get_recently_topic(data)
 					console.log(result);
+					if (result.list.length == 0) {
+						this.jinqiListCurrect = 1
+						let data = {
+							pageNum: this.jinqiListCurrect,
+							pageSize: this.pageSize
+						}
+						result = await this.get_recently_topic(data)
+						console.log(result);
+					}
 					this.jinqiList = result.list
+
 					return;
 				} else {
 					this.mianfeiListCurrect++;
@@ -127,23 +137,29 @@
 						pageNum: this.mianfeiListCurrect,
 						pageSize: this.pageSize
 					}
-					let result = await this.get_recently_topic(data)
-					this.jinqiList = result.list
+					let result = await this.get_limited_time_free_topic(data)
+					if (result.list.length == 0) {
+						this.mianfeiListCurrect = 1
+						let data = {
+							pageNum: this.mianfeiListCurrect,
+							pageSize: this.pageSize
+						}
+						result = await this.get_limited_time_free_topic(data)
+						console.log(result);
+					}
+					this.mianfeiList = result.list
 					return;
 				}
 				console.log(type, "点击了哪个换一批");
 			},
+
 			// 点击全部事件
 			quanbu(type) {
 				console.log(type);
 				uni.navigateTo({
 					url: '/pages/listpage/listpage?name=' + type
 				})
-			},
-			upper: function(e) {},
-			lower: function(e) {},
-			scroll: function(e) {},
-			goTop: function(e) {}
+			}
 		}
 	}
 </script>

@@ -31,7 +31,6 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  margin-bottom: 25rpx;
 }
 .shudan_list .shudan_list_title {
   margin-left: 23rpx;

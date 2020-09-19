@@ -1,4 +1,5 @@
 {
+  "disableScroll": true,
   "usingComponents": {
     "u-image": "/components/u-image/u-image",
     "tabbar": "/components/u-tabbar/u-tabbar",

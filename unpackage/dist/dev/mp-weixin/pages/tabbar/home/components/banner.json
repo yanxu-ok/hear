@@ -1,6 +1,6 @@
 {
+  "component": true,
   "usingComponents": {
     "u-swiper": "/components/u-swiper/u-swiper"
-  },
-  "component": true
+  }
 }

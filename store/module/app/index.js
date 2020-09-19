@@ -16,7 +16,7 @@ export default {
 		},
 		paused: true, // 是否是暂停
 		n_pause: false, //意外断开状态
-		type: '' ,// 音频的类型
+		type: 'zhangjie' ,// 音频的类型
 		gloalImg:'' // 全局的图片
 	},
 	mutations: {

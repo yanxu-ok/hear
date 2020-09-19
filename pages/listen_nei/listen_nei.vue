@@ -89,6 +89,11 @@
 		},
 
 		async onLoad(option) {
+			// audioId=787a5410f7fe11eaa577005056a8394c&type=audio&authorId=1 需要将音频id和 读的作者存到 vuex中
+			this.setAudioOrauthor({
+				audioId: option.audioId,
+				authorId: option.authorId
+			})
 			this.setType(option.type)
 			this.authorId = option.authorId // 作者的id
 			if (this.type == 'audio') {
@@ -101,14 +106,15 @@
 				this.setAudioInfo(audioinfo) // 音频信息放到vuex中
 				this.setAudioType('huting') // 播放的类型是章节
 				this.setGloalImg(audioinfo.cover)
-				console.log(audioinfo);
+				console.log(audioinfo, '音频信息');
 				let data = {
 					topicId: audioinfo.articleId,
 					chapterId: audioinfo.audioId,
 					radioType: 2
 				}
 				let result = await this.insert_history(data)
-				this.audio = this.startPlay(audioinfo, result) // 开始播放音频	
+				console.log(result, '历史进度');
+				this.audio = this.startPlay(audioinfo, result.data) // 开始播放音频	
 			} else {
 				const item = JSON.parse(decodeURIComponent(option.item));
 				this.setAudioInfo(item)
@@ -117,7 +123,7 @@
 
 		methods: {
 			...mapActions(['get_audio_by_id', 'insert_history']),
-			...mapMutations(['setAudioInfo', 'setAudioOrActicle', 'setType', 'setAudioType', 'setGloalImg']),
+			...mapMutations(['setAudioInfo', 'setAudioOrActicle', 'setType', 'setAudioType', 'setGloalImg', 'setAudioOrauthor']),
 
 			// 获取互听音频简介信息
 			async getAudioInfo() {
@@ -135,7 +141,8 @@
 					src: audioinfo.audioAddress,
 					title: audioinfo.articleTitle,
 					singer: audioinfo.nickName,
-					coverImgUrl: audioinfo.cover
+					coverImgUrl: audioinfo.cover,
+					historyDate: historyValue
 				}
 			},
 

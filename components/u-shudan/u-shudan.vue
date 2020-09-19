@@ -1,5 +1,5 @@
 <template>
-	<view class="shudan_list" :style="{marginLeft:left}" @tap="handle(item)">
+	<view class="shudan_list" :style="{marginLeft:left,	marginBottom: bottom}" @tap="handle(item)">
 		<view style="width: 120rpx; height: 120rpx;">
 			<u-image width="120rpx" height="120rpx" :src="image"></u-image>
 		</view>
@@ -31,7 +31,7 @@
 			},
 			left: {
 				type: String,
-				default: '25rpx'
+				default: '0'
 			},
 			title: {
 				type: String,
@@ -52,9 +52,13 @@
 				type: String,
 				default: ''
 			},
-			length:{
+			length: {
 				type: Number,
 				default: 10
+			},
+			bottom: {
+				type: String,
+				default: '0'
 			}
 		},
 		methods: {
@@ -72,7 +76,6 @@
 	.shudan_list {
 		display: flex;
 		align-items: center;
-		margin-bottom: 25rpx;
 
 		& .shudan_list_title {
 			margin-left: 23rpx;

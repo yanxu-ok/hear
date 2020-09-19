@@ -31,13 +31,17 @@
   display: flex;
   -webkit-flex-wrap: wrap;
           flex-wrap: wrap;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+          justify-content: flex-start;
+}
+.content_contain .content_contain_view:nth-child(3n) {
+  margin-right: 0;
 }
 .content_contain .content_contain_view {
   width: 204rpx;
   margin-bottom: 32rpx;
+  margin-right: 24rpx;
 }
 .content_contain .content_contain_view .content_contain_view_text {
   margin-top: 20rpx;

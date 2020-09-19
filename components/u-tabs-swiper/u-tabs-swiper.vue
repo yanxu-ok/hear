@@ -208,11 +208,13 @@
 						color: this.tabsInfo.length > 0 ? (this.tabsInfo[index] ? this.tabsInfo[index].color : this.activeColor) : this
 							.inactiveColor,
 						color: this.inactiveColor,
-						fontSize: index == this.getCurrent ? '38rpx' : this.fontSize + 'rpx',
+						// fontSize: (index == this.getCurrent) ? '38rpx' : this.fontSize + 'rpx',
+						fontSize:  this.fontSize + 'rpx',
 						zIndex: this.zIndex + 2,
 						fontWeight: (index == this.getCurrent && this.bold) ? 'bold' : '400'
 					};
 					if (index == this.getCurrent) {
+						// console.log(index,this.getCurrent,this.fontSize);
 						// 给选中的tab item添加外部自定义的样式
 						style = Object.assign(style, this.activeItemStyle);
 					}

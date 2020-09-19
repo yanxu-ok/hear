@@ -19,11 +19,12 @@ export default {
 		type: null, // 当前是音频 还是文稿
 		voicePath: '', // 录制的音频 
 		localId: null, // 微信录制完的音频id
-		flag: false // 录制上传的音频
+		flag: false, // 录制上传的音频
+		audioOrauthor: null // 全局保存音频id和读的作者
 	},
 	getter: {
-		getFlag(state){
-			return  state.flag
+		getFlag(state) {
+			return state.flag
 		}
 	},
 	mutations: {
@@ -67,6 +68,10 @@ export default {
 			state.flag = value
 		},
 
+		// 全局设置音频的id
+		setAudioOrauthor(state, value) {
+			state.audioOrauthor = value
+		}
 	},
 	actions: {
 		// 前端-获取大家在读列表

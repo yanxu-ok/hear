@@ -1,6 +1,6 @@
 <template>
 	<view @tap="imgClick" style="margin-top: 20rpx;">
-		<u-circle-progress active-color="#fe7e00" :percent="currect" duration="0" width="90" border-width="6">
+		<u-circle-progress active-color="#fe7e00" :percent="currect" duration="0" width="90" border-width="4">
 			<!-- <u-image src="@/static/images/video.png" class="cover" :class="{ on: !pause }" width="76" height="76" shape="circle"></u-image> -->
 			<image :src="playImg" mode="aspectFill" class="cover" :class="{ on: !paused }"></image>
 			<image :src="iszanting" style="width: 26rpx;height: 28rpx;position: absolute;left: 10rpx;right: 0;bottom: 0;top: 0;margin: auto;"></image>
@@ -33,6 +33,7 @@
 				zhangjieList: state => state.play.zhangjieList,
 				type: state => state.app.type, // 音频的类型,
 				gloalImg: state => state.app.gloalImg, // 音频的类型,
+				audioOrauthor: state => state.huting.audioOrauthor //互听音频id
 			}),
 
 			// 进度值
@@ -95,14 +96,29 @@
 				// 	console.log(value);
 				// }
 				console.log(this.topicId);
-				if (this.topicId) { // 判断vuex中有没有topicId
-					uni.navigateTo({
-						url: '/pages/playPage/playPage?topicId=' + this.topicId
-					})
+				if (this.type == 'zhangjie') {
+					if (this.topicId) { // 判断vuex中有没有topicId
+						uni.navigateTo({
+							url: '/pages/playPage/playPage?topicId=' + this.topicId
+						})
+					} else {
+						uni.navigateTo({
+							url: '/pages/playPage/playPage?topicId=23'
+						})
+					}
 				} else {
-					uni.navigateTo({
-						url: '/pages/playPage/playPage?topicId=23'
-					})
+					// audioId=787a5410f7fe11eaa577005056a8394c&type=audio&authorId=1
+					if (this.audioOrauthor) { // 判断vuex中有没有topicId
+						uni.navigateTo({
+							url: '/pages/listen_nei/listen_nei?audioId=' + this.audioOrauthor.audioId + '&type=audio&authorId=' + this.audioOrauthor
+								.authorId
+						})
+					} else {
+						uni.navigateTo({
+							url: '/pages/listen_nei/listen_nei?audioId=' + '787a5410f7fe11eaa577005056a8394c' + '&type=audio&authorId=' +
+								1
+						})
+					}
 				}
 				if (this.paused) { // 现在是暂停状态  则开始播放
 					this.$audio.play()

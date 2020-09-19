@@ -7,7 +7,7 @@
 			</view>
 		</u-navbar>
 
-		<view style="height: 150rpx;"  v-if="leixing === 'lishi' " >
+		<view style="height: 150rpx;" v-if="leixing === 'lishi' ">
 			<u-search placeholder="" v-model="content" class="search_c" margin="35rpx auto 0 auto" @search="custom"></u-search>
 		</view>
 		<!-- <scroll-view scroll-y class="list_search_scroll" refresher-enabled="true" :refresher-triggered="shuaxin"
@@ -134,6 +134,12 @@
 							url: '/pages/listen_nei/listen_nei?audioId=' + item.chapterId + '&type=audio' + '&authorId=' + item.userId
 						})
 					}
+				} else if (this.title == LiShi) { // 如果是历史的话 需要判断是否是互听还是音频
+					let url = item.radioType == 1 ? '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId :
+						'/pages/listen_nei/listen_nei?audioId=' + item.chapterId + '&type=audio&authorId=' + item.userId
+					uni.navigateTo({
+						url
+					})
 				} else {
 					uni.navigateTo({
 						url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId

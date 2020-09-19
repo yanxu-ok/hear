@@ -32,9 +32,9 @@
 						<template v-if=" leixing == 'lishi' ">
 							<view class="bodan_content_author">
 								<u-image width="19rpx" height="20rpx" src="@/static/images/shijian.png"></u-image>
-								<view class="bodan_content_author_name">{{item.chapterTime}}</view>
+								<view class="bodan_content_author_name">{{item.chapterTime | s_to_hs}}</view>
 								<u-image width="17rpx" height="20rpx" src="@/static/images/shijian.png" style="margin-left: 20rpx;"></u-image>
-								<view class="bodan_content_author_count">已播:{{item.percent}}</view>
+								<view class="bodan_content_author_count">已播:{{item.listenProgress | s_to_hs}}</view>
 							</view>
 						</template>
 						<template v-if=" leixing == 'zj' ">
@@ -44,7 +44,7 @@
 								</view>
 								<view class="bodan_content_author_name" style="color: #999999;">{{item.chapterReadAmount + '播放'}}</view>
 								<u-image width="17rpx" height="20rpx" src="@/static/images/shijian.png" style="margin-left: 20rpx;"></u-image>
-								<view class="bodan_content_author_count">{{item.chapterTime}}</view>
+								<view class="bodan_content_author_count">{{item.chapterTime | s_to_hs}}</view>
 								<view style="color: #F8A11F;margin-left:auto;">{{item.radioType==2? '互听':'章节'}}</view>
 							</view>
 						</template>

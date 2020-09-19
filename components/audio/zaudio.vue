@@ -28,7 +28,6 @@
 		},
 
 		props: {
-
 			oldinfo: Object
 				/*************
 							info对象 {
@@ -271,6 +270,7 @@
 			// 音频源切换事件
 			audioPlay() {
 				if (this.hassrc != this.info.src) {
+					console.log('音频不一样');
 					const {
 						src,
 						title,
@@ -297,26 +297,27 @@
 					this.paused = false;
 					this.$store.commit('setpause', false);
 				} else {
-					const {
-						src,
-						title,
-						singer,
-						coverImgUrl
-					} = this.$store.state.app.audio;
-					this.$audio.src = src;
-					this.$audio.title = title;
-					this.$audio.singer = singer;
-					this.$audio.coverImgUrl = coverImgUrl || this.default_cover;
-					this.$audio.play();
-					this.$audio.startTime = parseFloat(this.$store.state.app.playinfo.current_value);
-					this.$audio.seek(parseFloat(this.$store.state.app.playinfo.current_value));
-					this.$store.commit('setaudio', {
-						src: src,
-						title: title,
-						singer: singer,
-						coverImgUrl: coverImgUrl || this.default_cover
-					});
-					this.hassrc = src;
+					console.log('音频相同');
+					// const {
+					// 	src,
+					// 	title,
+					// 	singer,
+					// 	coverImgUrl
+					// } = this.$store.state.app.audio;
+					// this.$audio.src = src;
+					// this.$audio.title = title;
+					// this.$audio.singer = singer;
+					// this.$audio.coverImgUrl = coverImgUrl || this.default_cover;
+					// this.$audio.play();
+					// this.$audio.startTime = parseFloat(this.$store.state.app.playinfo.current_value);
+					// this.$audio.seek(parseFloat(this.$store.state.app.playinfo.current_value));
+					// this.$store.commit('setaudio', {
+					// 	src: src,
+					// 	title: title,
+					// 	singer: singer,
+					// 	coverImgUrl: coverImgUrl || this.default_cover
+					// });
+					// this.hassrc = src;
 					this.paused = false;
 					this.$store.commit('setpause', false);
 				}

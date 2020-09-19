@@ -22,7 +22,7 @@
 				<view style="font-size: 24rpx;">
 					{{subTitle}}
 				</view>
-				<view class="u-section__right-info__icon-arrow u-flex">
+				<view class="u-section__right-info__icon-arrow u-flex" v-if="arrow">
 					<u-icon name="arrow-right" size="24" :color="subColor"></u-icon>
 				</view>
 			</block>
@@ -91,6 +91,10 @@
 			lineColor: {
 				type: String,
 				default: ''
+			},
+			arrow: {
+				type: Boolean,
+				default: true
 			}
 		},
 		computed: {

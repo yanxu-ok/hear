@@ -15,16 +15,16 @@
 </template>
 
 <script>
-	export default{
-		props:{
-			list:{
-				type:Array,
-				default:()=>[]
+	export default {
+		props: {
+			list: {
+				type: Array,
+				default: () => []
 			}
 		},
-		methods:{
-			handleClick(item){
-				this.$emit('handleClick',item)
+		methods: {
+			handleClick(item) {
+				this.$emit('handleClick', item)
 			}
 		}
 	}
@@ -35,11 +35,16 @@
 		margin-top: 45rpx;
 		display: flex;
 		flex-wrap: wrap;
-		justify-content: space-between;
+		justify-content: flex-start;
+
+		& .content_contain_view:nth-child(3n) {
+			margin-right: 0;
+		}
 
 		& .content_contain_view {
 			width: 204rpx;
 			margin-bottom: 32rpx;
+			margin-right: 24rpx;
 
 			& .content_contain_view_text {
 				margin-top: 20rpx;

@@ -1,37 +1,38 @@
 <template>
 	<view class="my_contain">
-		<view class="my_img">
-			<view :style="{background:'url(' + userInfo.avatar + ') 0 / cover'}" class="my_img_1"></view>
-			<view class="my_header">
-				<view>
-					<view class="my_header_name" @tap="handleAgou">{{userInfo.nickName}}</view>
-					<view class="my_header_desc" @tap="handleBiaoqian">{{userInfo.userDescribe | titleFilter(39)}}</view>
-					<view class="my_guanzhu">
-						<view @tap="handleClick(0)">
-							<view class="fensi">{{fensiCount}}</view>
-							<view class="fensi_name">粉丝</view>
-						</view>
-						<view @tap="handleClick(1)">
-							<view class="fensi">{{guanzhuCount}}</view>
-							<view class="fensi_name">关注</view>
-						</view>
-						<view @tap="handleClick(2)">
-							<view class="fensi">{{zuoPinCount}}</view>
-							<view class="fensi_name">作品</view>
-						</view>
-					</view>
+		<view class="my_contain_beijing">
+			<view class="baoliu"></view>
+			<view class="my_contain_touxiang">
+				<view style="display: flex;flex-direction: column;width: 490rpx;">
+					<view class="my_header_name">{{userInfo.nickName}}</view>
+					<view class="my_header_desc">{{userInfo.userDescribe | titleFilter(39)}}</view>
 				</view>
-				<view style="width: 171rpx;height: 171rpx;">
-					<u-image width="171rpx" height="171rpx" :src="userInfo.avatar" shape="circle" style="margin-top: 30rpx;" @click="handleImg"></u-image>
+				<view style="width: 171rpx;height: 171rpx;position: relative">
+					<u-image width="171rpx" height="171rpx" :src="userInfo.avatar" shape="circle" @click="handleImg" style="box-shadow:0 0 3px #AAA;"></u-image>
+					<image src="@/static/my/xiugai.png" class="my_contain_touxiang_edit"></image>
+				</view>
+			</view>
+			<view class="my_guanzhu">
+				<view @tap="handleClick(0)">
+					<view class="fensi">{{fensiCount}}</view>
+					<view class="fensi_name">粉丝</view>
+				</view>
+				<view @tap="handleClick(1)">
+					<view class="fensi">{{guanzhuCount}}</view>
+					<view class="fensi_name">关注</view>
+				</view>
+				<view @tap="handleClick(2)">
+					<view class="fensi">{{zuoPinCount}}</view>
+					<view class="fensi_name">作品</view>
 				</view>
 			</view>
 			<view class="vip" @tap="handleHuiyuan">
 				<view>
 					<u-image width="95rpx" height="31rpx" src="@/static/my/vip.png"></u-image>
 					<view style="font-size:20rpx;
-font-family:PingFang SC;
-font-weight:300;
-color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
+			font-family:PingFang SC;
+			font-weight:300;
+			color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 				</view>
 				<view class="vip_xufei">
 					续费
@@ -59,31 +60,33 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 			</view>
 		</view>
 
-		<view style="display: flex;">
+		<view style="display: flex;margin-top: 84rpx;">
 			<view class="my_shoucang" :class="{on:shudanIndex==index}" v-for="(item,index) in shudanList" :key="index" @tap="handle(index)">{{item}}</view>
 		</view>
 
-		<view class="shudan_content" v-if="showShudan">
-			<template v-for="(item,index) in bodanList">
-				<block :key="index">
-					<shudan :titleWidth="width" :size="size" type="bodan" :length="9" :count="item.chapterCount" :title="item.topicName"
-					 :item="item" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
-				</block>
-			</template>
-			<view class="addshudan" @tap="handleAddshudan">
-				<u-image width="120rpx" height="120rpx" src=""></u-image>
-				<view class="addshudan_text">创建播单</view>
+		<scroll-view scroll-y="true" style="flex: 1;margin-top: 34rpx;overflow: hidden;">
+			<view class="shudan_content" v-if="showShudan">
+				<template v-for="(item,index) in bodanList">
+					<block :key="index">
+						<shudan width="165rpx" :titleWidth="width" :size="size" type="bodan" :length="9" :count="item.chapterCount"
+						 :title="item.topicName" :item="item" bottom="35rpx" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
+					</block>
+				</template>
+				<view class="addshudan" @tap="handleAddshudan">
+					<u-image width="120rpx" height="120rpx" src=""></u-image>
+					<view class="addshudan_text">创建播单</view>
+				</view>
 			</view>
-		</view>
 
-		<view class="shudan_content" v-else>
-			<template v-for="(item,index) in zhuantiList">
-				<block :key="index">
-					<shudan :titleWidth="width" :size="size" :length="9" type="zhuanti" :count="item.chapterCount" :item="item" :title="item.topicName"
-					 :image="item.topicImage" @handleClickList="handleClickList"></shudan>
-				</block>
-			</template>
-		</view>
+			<view class="shudan_content" v-else>
+				<template v-for="(item,index) in zhuantiList">
+					<block :key="index">
+						<shudan width="165rpx" :titleWidth="width" :size="size" :length="9" type="zhuanti" :count="item.chapterCount"
+						 :item="item" :title="item.topicName" bottom="35rpx" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
+					</block>
+				</template>
+			</view>
+		</scroll-view>
 
 		<biaoqian ref="biaoqian"></biaoqian>
 
@@ -237,7 +240,7 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 					})
 				}
 			},
-			
+
 			handleMyClick(index) {
 				console.log(this.userInfo);
 				if (index == 0) {
@@ -287,6 +290,15 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 		right: 0;
 		bottom: 0;
 		top: 0;
+		display: flex;
+		flex-direction: column;
+
+		& .my_contain_beijing {
+			height: 579rpx;
+			background: url('@/static/my/beijing.png');
+			position: relative;
+			width: 100%;
+		}
 
 		& .my_img {
 			height: 500rpx;
@@ -308,14 +320,10 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 		}
 	}
 
-	.my_header {
+	.my_contain_touxiang {
 		display: flex;
-		justify-content: space-between;
-		margin: 0 45rpx;
-
-		& .my_header_img {
-			width: 100%;
-		}
+		margin-top: 90rpx;
+		padding: 0 46rpx 0 45rpx;
 
 		& .my_header_name {
 			font-size: 42rpx;
@@ -328,30 +336,50 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 			font-size: 24rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
-			color: rgba(153, 153, 153, 1);
+			color: #9A9A9A;
 			margin-top: 27rpx;
-			color: #EEEEEE;
 		}
 
-		& .my_guanzhu {
-			display: flex;
-			margin-top: 50rpx;
-			justify-content: space-between;
-			text-align: center;
+		& .my_contain_touxiang_edit {
+			width: 53rpx;
+			height: 53rpx;
+			position: absolute;
+			right: 0;
+			bottom: 0;
 		}
+	}
+
+	.my_guanzhu {
+		display: flex;
+		margin-top: 12rpx;
+		justify-content: space-between;
+		text-align: center;
+		width: 450rpx;
+		margin-left: 45rpx;
 
 		& .fensi {
 			font-size: 36rpx;
 			font-family: PingFang SC;
 			font-weight: bold;
-			color: rgba(51, 51, 51, 1);
+			color: #343434;
 		}
 
 		& .fensi_name {
 			font-size: 24rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
-			color: #EEEEEE;
+			color: #9A9A9A;
+			margin-top: 4rpx;
+		}
+	}
+
+	.my_header {
+		display: flex;
+		justify-content: space-between;
+		margin: 0 45rpx;
+
+		& .my_header_img {
+			width: 100%;
 		}
 	}
 
@@ -360,15 +388,13 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 		bottom: 0;
 		width: 663rpx;
 		height: 137rpx;
-		margin: 0 auto;
 		background: black;
 		left: 44rpx;
 		border-radius: 20px 20px 0px 0px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
-		padding-left: 44rpx;
-		padding-right: 38rpx;
+		padding: 40rpx 38rpx 30rpx 43px;
 
 		& .vip_xufei {
 			width: 157rpx;
@@ -382,9 +408,10 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 
 	.my_caozuo {
 		display: flex;
-		padding: 0 79rpx 0 55rpx;
 		margin-top: 84rpx;
 		justify-content: space-between;
+		padding: 0 79rpx 0 55rpx;
+		height: 82rpx;
 
 		& .my_caozuo_div {
 			text-align: center;
@@ -404,29 +431,32 @@ color:rgba(255,255,255,1);">开通会员享受全场尽情阅读！</view>
 
 	.my_shoucang {
 		margin-left: 45rpx;
-		margin-top: 30rpx;
 		font-size: 36rpx;
 		font-family: PingFang SC;
+		color: #9A9A9A;
 	}
 
 	.on {
-		color: rgba(51, 51, 51, 1);
+		color: #343434;
 		font-weight: bold;
 	}
 
 	.shudan_content {
 		display: flex;
 		flex-wrap: wrap;
-		margin-top: 20rpx;
+		padding: 0 0 0 44rpx;
 
 		& .addshudan {
 			display: flex;
 			align-items: center;
-			margin-left: 30rpx;
 
 			& .addshudan_text {
 				margin-left: 19rpx;
 			}
 		}
+	}
+
+	.baoliu {
+		height: var(--status-bar-height);
 	}
 </style>

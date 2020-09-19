@@ -19,11 +19,15 @@
 		},
 		{
 			"path": "pages/tabbar/circle/index",
-			"style": {}
+			"style": {
+
+			}
 		},
 		{
 			"path": "pages/tabbar/my/index",
-			"style": {}
+			"style": {
+				"disableScroll": true
+			}
 		},
 		{
 			"path": "pages/search/search",

@@ -15,7 +15,8 @@
 			}">
 				<view :class="[
 					midButton && item.midButton ? 'u-tabbar__content__circle__button' : 'u-tabbar__content__item__button'
-				]">
+				]"
+				 :style="{top: midButton && item.midButton ? '' : '20rpx'}">
 					<u-icon :size="midButton && item.midButton ? midButtonSize : iconSize" :name="elIconPath(index)" img-mode="scaleToFill"
 					 :color="elColor(index)" :custom-prefix="item.customIcon ? 'custom-icon' : 'uicon'"></u-icon>
 					<!-- <u-badge :count="item.count" :is-dot="item.isDot" v-if="item.count > 0" :offset="[-2, getOffsetRight(item.count, item.isDot)]"></u-badge> -->
@@ -27,7 +28,7 @@
 				<view class="u-tabbar__content__item__text" :style="{
 					color: elColor(index)
 				}">
-					<text class="u-line-1">{{item.text}}</text>
+					<text class="u-line-1" style="font-size: 20rpx;">{{item.text}}</text>
 				</view>
 
 			</view>
@@ -50,7 +51,7 @@
 <script>
 	import transtion from '@/pages/tabbar/components/transtion.vue'
 	export default {
-		components:{
+		components: {
 			transtion
 		},
 		props: {
@@ -77,7 +78,7 @@
 			// 非凸起图标的大小，单位任意，数值默认rpx
 			iconSize: {
 				type: [String, Number],
-				default: 40
+				default: 45
 			},
 			// 凸起的图标的大小，单位任意，数值默认rpx
 			midButtonSize: {

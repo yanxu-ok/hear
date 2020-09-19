@@ -31,12 +31,18 @@
 			</view>
 			<view style="flex:1;flex-direction: column;display: flex;">
 				<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="swiper">
-					<swiper-item class="swiper-item" v-for="(item, index) in tabList" :key="index" @touchmove.stop="hadnleFalse">
-						<scroll-view class="scroll" scroll-y="true" @scroll="scroll" show-scrollbar="false" refresher-enabled="true"
+					<swiper-item class="swiper-item" v-for="(item, index) in tabList" :key="index">
+						<!-- <scroll-view class="scroll" scroll-y="true" @scroll="scroll" show-scrollbar="false" refresher-enabled="true"
 						 :refresher-triggered="triggered" :refresher-threshold="50" refresher-default-style="black" refresher-background="none"
-						 @refresherrefresh="onRefresh" @refresherrestore="onRestore">
-							<template v-if="item.categoryId == 0">
+						 @refresherrefresh="onRefresh" @refresherrestore="onRestore"> -->
+						<scroll-view class="scroll" scroll-y="true" @scroll="scroll" show-scrollbar="false" :refresher-triggered="triggered"
+						 :refresher-threshold="50" refresher-default-style="black" refresher-background="none" @refresherrefresh="onRefresh"
+						 @refresherrestore="onRestore">
+							<template v-if="index == 0">
 								<indexContent></indexContent>
+							</template>
+							<template v-if="index != 0">
+								<category :categoryId="item.categoryId" :categoryCurrect="item"></category>
 							</template>
 						</scroll-view>
 					</swiper-item>
@@ -51,6 +57,7 @@
 
 <script>
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
+	import category from './components/categoryList.vue'
 	import tabsSwiper from '@/components/u-tabs-swiper/u-tabs-swiper.vue'
 	import tags from './components/tabs.vue'
 	import search from '@/components/u-search/u-search.vue'
@@ -67,7 +74,8 @@
 			tags,
 			search,
 			badge,
-			indexContent
+			indexContent,
+			category
 		},
 		computed: {
 			...mapState({
@@ -137,16 +145,16 @@
 			},
 			// tabs通知swiper切换
 			tabsChange(index) {
-				// this.swiperCurrent = index;
-				let str = this.tabList[index].categoryName
-				let categoryId = this.tabList[index].categoryId
+				this.swiperCurrent = index;
+				// let str = this.tabList[index].categoryName
+				// let categoryId = this.tabList[index].categoryId
 				// console.log(str);
-				if (categoryId == 0) {
-					return;
-				}
-				uni.navigateTo({
-					url: "/pages/listpage/listpage?name=" + str + '&categoryId=' + categoryId,
-				})
+				// if (categoryId == 0) {
+				// 	return;
+				// }
+				// uni.navigateTo({
+				// 	url: "/pages/listpage/listpage?name=" + str + '&categoryId=' + categoryId,
+				// })
 			},
 			// swiper-item左右移动，通知tabs的滑块跟随移动
 			transition(e) {
@@ -160,6 +168,7 @@
 				this.$refs.uTabs.setFinishCurrent(current);
 				this.swiperCurrent = current;
 				this.current = current;
+				// console.log(1);
 			},
 			onLoad() {
 				this.Ani = uni.createAnimation();
@@ -178,7 +187,7 @@
 				})
 			},
 			hadnleFalse() {
-				return false
+				// return false
 			},
 			onUnload() {
 				// 移除监听事件  
@@ -275,7 +284,7 @@
 		/* #ifdef H5 */
 		margin-top: 200rpx;
 		/* #endif */
-		
+
 	}
 
 	.scroll {
