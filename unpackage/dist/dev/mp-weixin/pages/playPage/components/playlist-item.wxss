@@ -74,6 +74,13 @@
           align-items: end;
   margin-top: 22rpx;
 }
+.jiemu_contain .jiemu_content_count .jiemu_content_count_img {
+  margin-left: 10rpx;
+  margin-right: 20rpx;
+  width: 170rpx;
+  font-size: 24rpx;
+  color: #9A9A9A;
+}
 .on {
   color: yellow;
 }

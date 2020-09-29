@@ -35,7 +35,10 @@
   display: -webkit-flex;
   display: flex;
   bottom: 20rpx;
-  left: 260rpx;
+  left: 250rpx;
+  -webkit-box-align: center;
+  -webkit-align-items: center;
+          align-items: center;
 }
 .play_img .play_img_count {
   font-size: 24rpx;

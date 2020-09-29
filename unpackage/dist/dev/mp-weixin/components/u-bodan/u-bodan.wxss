@@ -56,11 +56,11 @@
   -webkit-justify-content: flex-start;
           justify-content: flex-start;
   margin-top: 10rpx;
-  width: 400rpx;
 }
 .bodan .bodan_content_author .bodan_content_author_name {
   margin-left: 10rpx;
   color: #fac882;
+  width: 170rpx;
 }
 .bodan .bodan_content_author .bodan_content_author_count {
   margin-left: 10rpx;

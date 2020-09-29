@@ -10,6 +10,10 @@
 
 <script>
 	import {
+		setCurrectStorg,
+		getCurrectStorg
+	} from '@/libs/hear-util/index.js'
+	import {
 		mapMutations,
 		mapState,
 		mapActions
@@ -33,7 +37,9 @@
 				zhangjieList: state => state.play.zhangjieList,
 				type: state => state.app.type, // 音频的类型,
 				gloalImg: state => state.app.gloalImg, // 音频的类型,
-				audioOrauthor: state => state.huting.audioOrauthor //互听音频id
+				audioOrauthor: state => state.huting.audioOrauthor, //互听音频id
+				chapterId: state => state.play.chapterId,
+				currectPlay: state => state.play.currectPlay,
 			}),
 
 			// 进度值
@@ -48,7 +54,7 @@
 
 			// 播放的图片
 			playImg() {
-				console.log(this.gloalImg);
+				// console.log(this.gloalImg);
 				const user = uni.getStorageSync('user');
 				if (user) {
 					let result = this.gloalImg
@@ -95,20 +101,25 @@
 				// } catch (e) {
 				// 	console.log(value);
 				// }
-				console.log(this.topicId);
+
+				let play = getCurrectStorg('play') // 本地缓存中获取值
+
+				console.log(this.topicId, this.chapterId);
 				if (this.type == 'zhangjie') {
-					if (this.topicId) { // 判断vuex中有没有topicId
+					if (play) { // 判断vuex中有没有topicId
 						uni.navigateTo({
-							url: '/pages/playPage/playPage?topicId=' + this.topicId
+							// url: '/pages/playPage/playPage?topicId=' + this.topicId,
+							url: '/pages/playPage/playPage?topicId=' + play.topicId + '&authorId=' + play.userId + '&chapterId=' + play.chapterId
 						})
 					} else {
 						uni.navigateTo({
-							url: '/pages/playPage/playPage?topicId=23'
+							url: '/pages/playPage/playPage?topicId=23' + '&authorId=' + 1 + '&chapterId=' +
+								'hd129aa803d8dg11eaa577005056584'
 						})
 					}
 				} else {
 					// audioId=787a5410f7fe11eaa577005056a8394c&type=audio&authorId=1
-					if (this.audioOrauthor) { // 判断vuex中有没有topicId
+					if (this.audioOrauthor) { // 
 						uni.navigateTo({
 							url: '/pages/listen_nei/listen_nei?audioId=' + this.audioOrauthor.audioId + '&type=audio&authorId=' + this.audioOrauthor
 								.authorId

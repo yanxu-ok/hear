@@ -11,8 +11,19 @@ export const changeArr = (arr) => {
 }
 
 // 将 数据放入缓存中
-export const setCurrectIndex = (key, value) => {
-	uni.setStorageSync('key', value);
+export const setCurrectStorg = (key, value) => {
+	uni.setStorageSync(key, value);
+}
+
+export const getCurrectStorg = (key) => {
+	const value = uni.getStorageSync(key);
+	return value
+}
+
+export const cleanStorg = () => {
+	// const value = uni.getStorageSync(key);
+	 uni.clearStorageSync();
+	// return value
 }
 
 
@@ -39,13 +50,10 @@ export const formatDate = (key, value) => {
 
 export const isApp = () => {
 	if (navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == 'micromessenger') {
-		console.log('weixin');
 		return 'weixin'
 	} else if (navigator.userAgent.toLowerCase().indexOf("chuangqi") != -1) {
-		console.log('chuangqi');
 		return 'chuangqi'
 	} else {
-		console.log('web');
 		return 'web'
 	}
 }
@@ -101,4 +109,12 @@ export const s_to_hs = (s) => {
 	h = (h.length == 1) ? '0' + h : h;
 	s = (s.length == 1) ? '0' + s : s;
 	return h + ':' + s;
+}
+
+export const isLogin = () => {
+	const token = uni.getStorageSync('token');
+	if (!token) {
+		return false
+	} else
+		return true
 }

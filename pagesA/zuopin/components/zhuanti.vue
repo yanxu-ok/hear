@@ -2,11 +2,14 @@
 	<view style="width: 100%;height: 100%;">
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
 		 :up="upOption" style="height: 100%; ">
-			<template v-for="(item,zhuantiIndex) in dataList">
-				<block :key="zhuantiIndex">
-					<shudan :image="item.topicImage" :item="item" :count="item.chapterCount" @handleClickList="handlePlay" :title="item.topicName"></shudan>
-				</block>
-			</template>
+			<view style="padding-left: 25rpx;">
+				<template v-for="(item,zhuantiIndex) in dataList">
+					<block :key="zhuantiIndex">
+						<shudan bottom="25rpx" :image="item.topicImage" :item="item" :count="item.chapterCount" @handleClickList="handlePlay"
+						 :title="item.topicName"></shudan>
+					</block>
+				</template>
+			</view>
 		</mescroll-uni>
 	</view>
 </template>
@@ -78,11 +81,10 @@
 			async ifType(page) {
 				// if (this.current == 0) {
 				let data = {
-					userAuthorId: this.userInfo.userId,
 					topicType: 1,
 					pageNum: page.num,
 					pageSize: page.size,
-					otherUserId: null
+					otherUserId: this.userInfo.userId
 				}
 				let result = await this.get_user_play_single(data)
 				return result
@@ -103,7 +105,7 @@
 			handlePlay(e) {
 				console.log(e.item);
 				uni.navigateTo({
-					url: '/pages/listpage/listpage?name=专题列表&type=zj&topicId=' + e.item.topicId
+					url: '/pagesA/topic-list-page/topic-list-page?topicId=' + e.item.topicId + '&authorId=' + e.item.userAuthorId
 				})
 			}
 

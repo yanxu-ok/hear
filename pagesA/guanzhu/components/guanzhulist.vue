@@ -4,7 +4,7 @@
 		 :up="upOption" style="height: 100%; ">
 			<template v-for="(item,index) in dataList">
 				<block :key="index">
-					<guanzhu :item="item" :rindex="index" @handleGuanzhu="handleGuanzhu"></guanzhu>
+					<guanzhu @handleAvatar="handleAvatar" :item="item" :rindex="index" @handleGuanzhu="handleGuanzhu"></guanzhu>
 				</block>
 			</template>
 		</mescroll-uni>
@@ -76,10 +76,17 @@
 				}
 			},
 
+			//点击头像要做的事情
+			handleAvatar(item) {
+				// console.log(item);
+				uni.navigateTo({
+					url: '/pagesA/myindex/myindex?priv=' + item.userRole + '&userId=' + item.userFocusId
+				})
+			},
 
 			// //点击关注的事件
 			async handleGuanzhu(item) {
-				console.log(item,'关注的当前项');
+				console.log(item, '关注的当前项');
 
 				if (this.type == 'fensi') { // 这些是粉丝
 					if (item.flag == 1) { // 说明是没有关注他  要调用关注接口 

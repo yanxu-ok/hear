@@ -1,0 +1,28 @@
+/* 宽高百分比 */
+.width_height {
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	top: 0;
+	margin: auto;
+	display: flex;
+	flex-direction: column;
+}
+
+/* disflex 布局 */
+.flex_direction {
+	display: flex;
+	flex-direction: column;
+}
+
+/* 两边 */
+.flex_space_between {
+	display: flex;
+	justify-content: space-between;
+}
+
+/* 自适应布局 */
+.flex_1 {
+	flex: 1;
+}

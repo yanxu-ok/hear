@@ -1,6 +1,7 @@
 <template>
 	<view>
-		<u-popup v-model="show" mode="bottom" border-radius="20" height="500rpx" :closeable="closeable">
+		<u-popup v-model="show" mode="bottom" border-radius="20" height="500rpx" :mask-close-able="false" @close="handleClose"
+		 :closeable="closeable">
 
 			<view style="text-align: center;margin-top: 50rpx;font-size:36rpx;
 			font-family:PingFang SC;
@@ -33,7 +34,8 @@
 				closeable: true,
 				listDatas: [], // 用户标签
 				subXingquList: [], // 提交的兴趣标签
-				count: null
+				count: null,
+				newArr: [] // 需要显示的用户标签
 			}
 		},
 
@@ -46,8 +48,8 @@
 				type: Array,
 				default: () => []
 			},
-			userInfo:{
-				type:Object
+			userInfo: {
+				type: Object
 			}
 		},
 
@@ -58,26 +60,46 @@
 		},
 
 		created() {
-			
+
 		},
 
 		methods: {
 			...mapActions(['get_label', 'insert_user_label', 'get_user_count']),
-			radioChangeStatus1(val) {
-				console.log(val);
-				this.subAgeList = []
-				if (!val) {
+			// radioChangeStatus1(val) {
+			// 	console.log(val);
+			// 	this.subAgeList = []
+			// 	if (!val) {
+			// 		return;
+			// 	}
+			// 	this.subAgeList.push({
+			// 		"labelRelaType": "3",
+			// 		"labelId": val,
+			// 		"typeId": this.userInfo.userId
+			// 	})
+			// },
+			// 弹出层关闭时 开始请求
+			async handleClose() {
+				if (this.subXingquList.legnth == 0) {
 					return;
+				} else {
+					console.log('弹出层关闭时', this.subXingquList);
+					let result = await this.insert_user_label(this.subXingquList)
+					if (result.success) {
+						uni.showToast({
+							title: '保存成功',
+							icon: 'none'
+						})
+						// this.getBiaoqian()
+						this.$emit('getInfo',this.newArr)
+					}
 				}
-				this.subAgeList.push({
-					"labelRelaType": "3",
-					"labelId": val,
-					"typeId": this.userInfo.userId
-				})
+
 			},
+			// 选择标签时请求
 			radioChangeStatus(val) {
 				console.log(val);
 				this.subXingquList = []
+				this.newArr = []
 				if (val.length == 0) {
 					return;
 				}
@@ -87,7 +109,13 @@
 						"labelId": item,
 						"typeId": this.userInfo.userId
 					})
+					this.listDatas.forEach((currect, a) => {
+						if (item == currect.labelId) {
+							this.newArr.push(currect.name)
+						}
+					})
 				})
+				console.log(this.subXingquList, '选择的兴趣标签',this.newArr);
 			},
 			// 点击保存触发  组合在一块
 			async handleSave() {
@@ -116,9 +144,10 @@
 			// 获取标签
 			async getBiaoqian() {
 				let result = await this.get_label({
-					labelType: 1
+					labelType: 1,
+					userId: this.userInfo.userId
 				})
-				console.log(result);
+				// console.log(result);
 				result.forEach((item, index) => {
 					item.name = item.labelName;
 					item.value = item.labelId;
@@ -128,6 +157,7 @@
 						item.checked = 0;
 					}
 				})
+				console.log(result);
 				this.listDatas = result
 			}
 		}

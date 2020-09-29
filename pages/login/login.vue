@@ -1,6 +1,6 @@
 <template>
 	<view class="login">
-		<u-navbar  background="" title-color="#333333" back-icon-color="#333333">
+		<u-navbar background="" title-color="#333333" back-icon-color="#333333">
 		</u-navbar>
 		<view class="login-main">
 			<view class="login-logo">
@@ -22,12 +22,13 @@
 				<view class="codeimg" @click.stop="getCode()">{{getCodeText}}</view>
 			</view>
 			<button class="cu-btn login-btn" @tap="doLogin">登 录</button>
-			<view style="color:rgba(153,153,153,1);text-align: center;margin-top: 47rpx;">密码登录</view>
-<!-- 			<view class="login-tip">点击登录表示同意
+			<view style="color:rgba(153,153,153,1);text-align: center;margin-top: 47rpx;" @tap="handleMima">密码登录</view>
+
+			<!-- 			<view class="login-tip">点击登录表示同意
 				<navigator>软件许可及服务协议</navigator>
 			</view> -->
 		</view>
-		<view class="login-footer">
+		<!-- 		<view class="login-footer">
 			<view class="footer-tip flex">其他登录方式</view>
 			<view class="footer-other flex">
 				<view class="other-list">
@@ -37,18 +38,25 @@
 					<image src="../../static/ic-weixin@2x.png" mode="aspectFill" @tap="login_weixin()"></image>
 				</view>
 			</view>
-		</view>
-		
+		</view> -->
+
 	</view>
 </template>
 
 
 <script>
+	import {
+		setCurrectStorg
+	} from '@/libs/hear-util/index.js'
+	import baseUrl from '@/libs/config/baseUrl.js'
+	import {
+		mapMutations
+	} from 'vuex'
 	export default {
 		data() {
 			return {
 				phone: "",
-				code: '',
+				code: null,
 				key: '',
 				getCodeText: '获取验证码',
 				getCodeBtnColor: "#ffffff",
@@ -59,6 +67,7 @@
 			this.checkGuide();
 		},
 		methods: {
+			...mapMutations(['setPhoneKey', 'setPhoneCode', 'setPhone', 'setToken']),
 			checkGuide() {
 				// 思路： 检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 启动介绍页面
 				const launchFlag = uni.getStorageSync('launchFlag');
@@ -69,6 +78,13 @@
 						url: '/pages/guide/list'
 					});
 				}
+			},
+
+			//跳到密码登录页
+			handleMima() {
+				uni.navigateTo({
+					url: '/pages/login/components/phoneLogin'
+				})
 			},
 
 			isLogin() {
@@ -86,7 +102,6 @@
 
 				}
 			},
-
 
 			Timer() {},
 			getCode() {
@@ -107,21 +122,27 @@
 				_this.getCodeBtnColor = "rgba(255,255,255,0.5)"
 
 				uni.request({
-					url: _this.websiteUrl + '/sms/notification-sms/codes',
+					url: baseUrl.BASE_Url + '/member/phonecode',
 					data: {
-						'phone': _this.phone
+						'phone': _this.phone,
+						'senderName': 'aliyun'
 					},
 					method: 'POST',
 					header: {
-						'Content-Type': 'application/x-www-form-urlencoded',
+						// 'Content-Type': 'application/x-www-form-urlencoded',
 						//自定义请求头信息
 					},
 					success: (res) => {
-						_this.key = res.data.data.key;
+						console.log(res);
+						_this.key = res.data.data;
+						_this.setPhoneKey(res.data.data)
+						_this.setPhone(_this.phone)
 						//TODO 开发模式
-						_this.code = res.data.data.code;
-					}
+						// _this.code = res.data.data.code;
+					},
+
 				});
+
 				//示例用定时器模拟请求效果
 				setTimeout(() => {
 					//uni.showToast({title: '验证码已发送',icon:"none"});
@@ -144,41 +165,82 @@
 					holdTime--;
 				}, 1000)
 			},
+
 			doLogin() {
 				let _this = this;
 				uni.hideKeyboard()
-				//模板示例部分验证规则
-				// if(!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))){ 
-				// 	uni.showToast({title: '请填写正确手机号码',icon:"none"});
-				// 	return false; 
-				// } 
 
+				if (!_this.code) {
+					uni.showToast({
+						title: '请填写正确的验证码',
+						icon: "none"
+					});
+					return false;
+				}
+
+				_this.setPhoneCode(_this.code)
+
+				// 模板示例部分验证规则
+				if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))) {
+					uni.showToast({
+						title: '请填写正确手机号码',
+						icon: "none"
+					});
+					return false;
+				}
 				uni.request({
-					url: _this.websiteUrl + '/token/sys/login-sms',
+					url: baseUrl.BASE_Url + '/member/login?_orgid_=' + baseUrl.orgid,
 					data: {
-						'key': _this.key,
+						'phone': _this.phone,
 						'code': _this.code,
-						'phone': _this.phone
+						'key': _this.key,
+						'captcha': _this.code,
+						'captchaKey': _this.key
 					},
 					method: 'POST',
 					header: {
-						'Content-Type': 'application/x-www-form-urlencoded',
+						// 'Content-Type': 'application/x-www-form-urlencoded',
 					},
 					success: (res) => {
-						if (res.data.code == 200) {
-							_this.login(true, res.data.data, function() {
-								_this.getRongyToken();
-							});
+						console.log(res, '登录返回的信息');
+						if (res.data.code) {
+							if (res.data.data.needPassword) {
+								console.log(res.data.data.token);
+								this.setToken(res.data.data.token)
+								uni.navigateTo({
+									url: '/pages/login/components/password'
+								})
+							} else {
+								setCurrectStorg('token', res.data.data.token)
+								uni.switchTab({
+									url: '/pages/tabbar/my/index'
+								})
+							}
 						} else {
 							uni.showToast({
-								title: '验证码不正确',
-								icon: "none"
-							});
-							return false;
+								title: '登录失败',
+								icon: 'none'
+							})
 						}
+
+						// if (res.data.code) {
+						// 	_this.login(true, res.data.data, function() {
+						// 		_this.getRongyToken();
+						// 	});
+						// 	if (res.data.data.needPassword) {
+
+						// 	}
+						// } else {
+						// 	uni.showToast({
+						// 		title: '验证码不正确',
+						// 		icon: "none"
+						// 	});
+						// 	return false;
+						// }
 					}
 				});
 			},
+
 			//QQ登录
 			login_qq() {
 				let _this = this;
@@ -195,6 +257,7 @@
 					}
 				});
 			},
+
 			//微信登录
 			login_weixin() {
 				let _this = this;
@@ -211,6 +274,7 @@
 					}
 				});
 			},
+
 			//授权登录
 			other_login(loginRes, infoRes, type) {
 				let _this = this;
@@ -264,7 +328,8 @@
 				});
 
 			},
-			async getRongyToken() { 
+
+			async getRongyToken() {
 				let _this = this,
 					url = '/app/api/v1.0/rongy/getRongyToken',
 					param = {},
@@ -282,7 +347,8 @@
 						data: data
 					});
 				});
-			},
+			}
+
 		}
 	}
 </script>
@@ -290,14 +356,14 @@
 
 
 <style lang="scss">
-	
 	page {
 		background-color: #FFFFFF;
-
 	}
-	.flex{
+
+	.flex {
 		display: flex;
 	}
+
 	.login {
 		position: absolute;
 		top: 0;
@@ -318,10 +384,10 @@
 			width: 248rpx;
 			padding-bottom: 50rpx;
 			margin: 100rpx 0 0 0;
-			font-size:48rpx;
-			font-family:PingFang;
-			font-weight:bold;
-			color:rgba(51,51,51,1);
+			font-size: 48rpx;
+			font-family: PingFang;
+			font-weight: bold;
+			color: rgba(51, 51, 51, 1);
 
 			image {
 				width: 100%;

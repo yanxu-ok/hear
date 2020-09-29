@@ -71,15 +71,6 @@
 			})
 		},
 
-		async created() {
-			this.count = await this.get_user_count()
-			console.log(this.count, '用户登录的次数');
-			if (this.count == 0) {
-				this.show = true
-			} else {
-				return;
-			}
-		},
 
 		methods: {
 			...mapActions(['get_label', 'insert_user_label', 'get_user_count']),

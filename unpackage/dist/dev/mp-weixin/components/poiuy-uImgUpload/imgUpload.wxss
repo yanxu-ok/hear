@@ -1,6 +1,6 @@
 
-.w-100.data-v-07490a3e {
-	width: 100%;
+.w-100.data-v-07490a3e {/* 
+	width: 100%; */
 }
 .flex.data-v-07490a3e {
 	/* 转为弹性盒模型*/

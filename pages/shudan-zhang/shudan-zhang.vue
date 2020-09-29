@@ -6,13 +6,15 @@
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
 		 :up="upOption" style="flex: 1; ">
 
+			<view style="padding-left: 25rpx;">
 			<!-- 书单 -->
 			<template v-for="(item,index) in dataList">
 				<block :key="index">
-					<shudan :image="item.topicImage" :length="31" :count="item.chapterCount" :title="item.topicName" :item="item"
+					<shudan bottom="25rpx" :image="item.topicImage" :length="10" :count="item.chapterCount" :title="item.topicName" :item="item"
 					 @handleClickList="handleClickList"></shudan>
 				</block>
 			</template>
+			</view>
 
 		</mescroll-uni>
 
@@ -126,11 +128,11 @@
 				console.log(item, '点击单行显示');
 				if (this.type == 'bodan') { // 播单要跳的页
 					uni.navigateTo({
-						url: '/pages/listpage/listpage?name=播单列表&type=zj&topicId=' + item.item.topicId
+						url: '/pages/list_page_zhang/list_page_zhang?name=播单列表&type=zj&topicId=' + item.item.topicId
 					})
 				} else {
 					uni.navigateTo({
-						url: '/pages/listpage/listpage?name=专题列表&type=zj&topicId=' + item.item.topicId
+						url: '/pagesA/topic-list-page/topic-list-page?topicId=' + item.item.topicId + '&authorId=' + item.item.userAuthorId
 					})
 				}
 			},

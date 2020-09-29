@@ -4,8 +4,10 @@
 		<view class="audio-wrapper">
 			<image src="./static/prev.png" class="prevbtn" @click="step(0)" mode="widthFix" v-if="stepShow"></image>
 			<view class="audio-number">{{ current }}</view>
-			<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value"
-			 @changing="changing" @change="change"></slider>
+				<!-- 	<slider class="audio-slider" :activeColor="themeColor" block-size="16" :value="current_value" :max="duration_value"
+			 @changing="changing" @change="change"></slider> -->
+			<myslider style="margin-left: 29rpx;margin-right: 29rpx;width: 100%;" :block-size="36" blockOuterColor="rgba(254,139,22,0.3)"
+			 blockColor="#FE8B16" activeColor="#FE8B16" :value="current_value" :max="duration_value" @changed="change"></myslider>
 			<view class="audio-number">{{ duration }}</view>
 			<image src="./static/next.png" class="nextbtn" @click="step(1)" mode="widthFix" v-if="stepShow"></image>
 		</view>
@@ -13,7 +15,11 @@
 </template>
 
 <script>
+	import myslider from '@/components/ly-drag-slider/dc-slider.vue'
 	export default {
+		components: {
+			myslider
+		},
 		data() {
 			return {
 				current: '00:00', //当前播放时间
@@ -44,7 +50,7 @@
 			},
 			themeColor: {
 				type: String,
-				default: '#42b983'
+				default: '#rgb(248, 173, 38)'
 			},
 			stepShow: {
 				//是否显示快进后退按钮
@@ -101,7 +107,7 @@
 			this.$audio.onCanplay(() => {});
 			this.$audio.onPlay(() => {
 				// console.log('++++++++++++++++++', 111111111111111111);
-				console.log('++++++++++++++++++', this.$audio.currentTime,'开始播放');
+				console.log('++++++++++++++++++', this.$audio.currentTime, '开始播放');
 				this.paused = false;
 				this.saveplay('src', this.info.src);
 				this.$store.commit('setpause', false); //记录音频正常停止 false
@@ -132,10 +138,11 @@
 				this.current_value = '0';
 				this.saveplay('current', this.current);
 				this.saveplay('current_value', this.current_value);
+				// console.log('音频正常停止');
+				uni.$emit('audioEnde',1)
 			});
 
 			this.$audio.onTimeUpdate(() => {
-
 				// console.log(1,this.info.src,this.$store.state.app.playinfo.src);
 				// if (this.info.src == this.$store.state.app.playinfo.src) {
 				this.current = this.format(this.$audio.currentTime);
@@ -298,26 +305,26 @@
 					this.$store.commit('setpause', false);
 				} else {
 					console.log('音频相同');
-					// const {
-					// 	src,
-					// 	title,
-					// 	singer,
-					// 	coverImgUrl
-					// } = this.$store.state.app.audio;
-					// this.$audio.src = src;
-					// this.$audio.title = title;
-					// this.$audio.singer = singer;
-					// this.$audio.coverImgUrl = coverImgUrl || this.default_cover;
-					// this.$audio.play();
-					// this.$audio.startTime = parseFloat(this.$store.state.app.playinfo.current_value);
-					// this.$audio.seek(parseFloat(this.$store.state.app.playinfo.current_value));
-					// this.$store.commit('setaudio', {
-					// 	src: src,
-					// 	title: title,
-					// 	singer: singer,
-					// 	coverImgUrl: coverImgUrl || this.default_cover
-					// });
-					// this.hassrc = src;
+					const {
+						src,
+						title,
+						singer,
+						coverImgUrl
+					} = this.$store.state.app.audio;
+					this.$audio.src = src;
+					this.$audio.title = title;
+					this.$audio.singer = singer;
+					this.$audio.coverImgUrl = coverImgUrl || this.default_cover;
+					this.$audio.play();
+					this.$audio.startTime = parseFloat(this.$store.state.app.playinfo.current_value);
+					this.$audio.seek(parseFloat(this.$store.state.app.playinfo.current_value));
+					this.$store.commit('setaudio', {
+						src: src,
+						title: title,
+						singer: singer,
+						coverImgUrl: coverImgUrl || this.default_cover
+					});
+					this.hassrc = src;
 					this.paused = false;
 					this.$store.commit('setpause', false);
 				}
@@ -330,7 +337,8 @@
 
 			//完成拖动事件
 			change(e) {
-				this.$audio.seek(e.detail.value);
+				// console.log(e);
+				this.$audio.seek(e.value);
 			},
 
 			step(type) {
@@ -350,9 +358,9 @@
 
 <style scoped lang="scss">
 	.imt-audio.music {
-		padding: 0 30upx 30upx;
+		padding: 0 30rpx 30rpx 0;
 		background: #fff;
-
+		
 		.top {
 			&>view:nth-child(2) {
 				.title {
@@ -442,7 +450,7 @@
 	.imt-audio.fm {
 		// background: #fff;
 		// border: 1px solid #cecece;
-		width: 90%;
+		width: 96%;
 		margin: 0 auto;
 		border-radius: 10px;
 		// box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
@@ -477,7 +485,6 @@
 		.audio-wrapper {
 			display: flex;
 			align-items: center;
-			padding: 30rpx 20rpx;
 		}
 
 		.audio-slider {

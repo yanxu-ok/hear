@@ -1,7 +1,7 @@
 <template>
 	<view class="drawer">
 		<!-- #ifdef MP-WEIXIN -->
-		<drawer ref="drawer-bottom" pos="bottom" standout="250rpx" width="750rpx" height="x-1200rpx" @overlayClicked="hide">
+		<drawer ref="drawer-bottom" pos="bottom" standout="300rpx" width="750rpx" height="x-1150rpx" @overlayClicked="hide">
 			<!-- #endif -->
 			<!-- #ifdef H5 -->
 			<drawer ref="drawer-bottom" pos="bottom" standout="300rpx" width="750rpx" height="x-1200rpx" @overlayClicked="hide">
@@ -11,21 +11,19 @@
 				<!-- 主体部分 -->
 				<view class="pb-body">
 					<!-- 横线 -->
-					
+
 					<view class="pb-title" @tap="hide">
 						<view class="pb-title_header"></view>
 					</view>
-					
+
 					<!-- 头部 -->
 					<drawerheader></drawerheader>
 
-					<u-line color="#E5E5E5" margin="24rpx 0 0 24rpx" length="700rpx"></u-line>
+					<!-- <u-line color="#E5E5E5" margin="24rpx 0 0 24rpx"></u-line> -->
 
 					<!-- tabswiper -->
-					<playlist></playlist>
+					<playlist style="flex: 1;display: flex;flex-direction: column;"></playlist>
 
-					<!-- 底部 -->
-					<pdbottom></pdbottom>
 
 				</view>
 
@@ -63,31 +61,28 @@
 <style lang="scss">
 	.drawer {
 		z-index: 999;
+		flex: 1;
 	}
 
-	.pb {
-		&-title {
-			width: 750rpx;
-			height: 70rpx;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: center;
-			border-bottom-width: 1px;
-			border-bottom-color: $myp-border-color-light;
-			background-color: #FFFFFF;
-			border-top-left-radius: 24rpx;
-			border-top-right-radius: 24rpx;
-		}
+	.pb-title {
+		width: 750rpx;
+		height: 70rpx;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		border-top-left-radius: 24rpx;
+		border-top-right-radius: 24rpx;
+	}
 
-		&-body {
-			width: 750rpx;
-			height: 100%;
-			background-color: #FFFFFF;
-			flex-direction: column;
-			align-items: center;
-			position: relative;
-		}
+	.pb-body {
+		width: 750rpx;
+		height: 100%;
+		border-top-left-radius: 24rpx;
+		border-top-right-radius: 24rpx;
+		background-color: #FFFFFF;
+		display: flex;
+		flex-direction: column;
+		position: relative;
 	}
 
 	.pb-title_header {

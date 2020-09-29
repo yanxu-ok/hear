@@ -9,7 +9,7 @@
 				<view class="baoliu"></view>
 				<!-- tabs -->
 				<view style="display: flex; align-items: center;padding-right: 20rpx;">
-					<tabsSwiper ref="uTabs" :list="tabList" :current="current" :bold="true" @change="tabsChange" name="categoryName"
+					<tabsSwiper ref="uTabs" name="categoryName" :list="tabList" :current="current" :bold="true" @change="tabsChange"
 					 :is-scroll="true" swiperWidth="650" style="width:680rpx" font-size="30rpx" :active-color="changeBgcolor.color"
 					 :inactive-color="changeBgcolor.color"></tabsSwiper>
 					<tags></tags>
@@ -25,6 +25,7 @@
 							<u-image width="35rpx" height="33rpx" src="@/static/images/xiaoxi.png"></u-image>
 							<badge :is-dot="true" type="error" is-center="true" size="mini"></badge>
 						</view>
+						<u-image src="@/static/images/touying.png" width="10rpx" height="52rpx"></u-image>
 						<u-image width="34rpx" @click="handleMyClick" height="34rpx" src="@/static/images/lishi.png"></u-image>
 					</view>
 				</view>
@@ -41,8 +42,8 @@
 							<template v-if="index == 0">
 								<indexContent></indexContent>
 							</template>
-							<template v-if="index != 0">
-								<category :categoryId="item.categoryId" :categoryCurrect="item"></category>
+							<template v-if="current == index && current != 0">
+								<category ref="catList" :categoryId="item.categoryId" :categoryCurrect="item"></category>
 							</template>
 						</scroll-view>
 					</swiper-item>
@@ -51,11 +52,22 @@
 		</view>
 
 		<!-- tabbar -->
-		<tabbar :list="tabbarData" height="55px" :mid-button="true" inactive-color="#cbcedd" active-color="#fe9503"></tabbar>
+		<tabbar :list="tabbarData" :before-switch="beforeSwitch" height="55px" :mid-button="true" inactive-color="#cbcedd"
+		 active-color="#fe9503"></tabbar>
 	</view>
 </template>
 
 <script>
+	// #ifdef H5
+	import {
+		WebBridgeApi
+	} from "ijsbridge"
+	// #endif
+	import {
+		isLogin,
+		getCurrectStorg,
+		isApp
+	} from '@/libs/hear-util/index.js'
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
 	import category from './components/categoryList.vue'
 	import tabsSwiper from '@/components/u-tabs-swiper/u-tabs-swiper.vue'
@@ -82,15 +94,23 @@
 				tabbarData: state => state.system.tabBarList,
 				bannerList: state => state.app.bannerList
 			}),
+
 			changeBgcolor() {
 				return {
-					style: this.bannerList[this.currectBanner],
+					style: this.bannerList[this.currectBanner] ? this.bannerList[this.currectBanner].bannerColor : '',
 					transtion: 'all 0.2s',
 					color: this.tabsColor,
 					searchColor: this.sColor
 				}
 			}
 		},
+
+		// async onLoad() {
+		// 	let token = getCurrectStorg('token')
+		// 	// console.log(token);
+		// 	console.log(11111);
+		// 	this.token = token
+		// },
 
 		data() {
 			return {
@@ -104,11 +124,16 @@
 				tabsColor: '#ffffff',
 				sColor: '#c6c4c8',
 				Ani: null,
-				search: true
+				search: true,
+				token: ''
 			}
 		},
 
 		async created() {
+			let token = getCurrectStorg('token')
+			// console.log(token);
+			this.token = token
+			// console.log(this.token);
 			this.getBanner(1)
 			let list = await this.category() // 获取分类
 			list.unshift({
@@ -119,12 +144,55 @@
 		},
 
 		methods: {
+
+			beforeSwitch(index) {
+				let isLog = isLogin() // 判断用户是否登录
+				if (index == 3) {
+					if (!isLog) {
+						console.log(1);
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+						return false;
+					}
+					// #ifdef H5
+					if (isApp() == 'chuangqi') {
+						WebBridgeApi.router({
+							route: 'webapp',
+							params: {
+								url: 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+									'&hearEnv=ok'
+							}
+						})
+						return false;
+					}
+					// #endif
+					else {
+						return true
+					}
+				} else if (index == 4) {
+					if (!isLog) {
+						console.log(1);
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+						return false;
+					} else {
+						return true
+					}
+				} else {
+					return true
+				}
+			},
+
 			handleMyClick() {
 				uni.navigateTo({
 					url: '/pages/listpage/listpage?name=' + "播放历史" + '&type=lishi'
 				})
 			},
+
 			...mapActions(['getBanner', 'category']),
+
 			scroll(e) {
 				this.scrollTop = e.detail.scrollTop
 				if (this.scrollTop >= 23) {
@@ -135,14 +203,15 @@
 					this.animationData = this.Ani.export();
 				} else {
 					this.tabsColor = "#ffffff"
-					// let color = this.bannerList[this.currectBanner].backgroud
-
-					this.Ani.backgroundColor("#0C5CAC").step({
+					let color = this.bannerList[this.currectBanner].bannerColor
+					// console.log(color);
+					this.Ani.backgroundColor(color).step({
 						duration: 500
 					})
 					this.animationData = this.Ani.export();
 				}
 			},
+
 			// tabs通知swiper切换
 			tabsChange(index) {
 				this.swiperCurrent = index;
@@ -156,25 +225,38 @@
 				// 	url: "/pages/listpage/listpage?name=" + str + '&categoryId=' + categoryId,
 				// })
 			},
+
 			// swiper-item左右移动，通知tabs的滑块跟随移动
 			transition(e) {
 				let dx = e.detail.dx;
 				this.$refs.uTabs.setDx(dx);
 			},
+
 			// 由于swiper的内部机制问题，快速切换swiper不会触发dx的连续变化，需要在结束时重置状态
 			// swiper滑动结束，分别设置tabs和swiper的状态
+
 			animationfinish(e) {
 				let current = e.detail.current;
 				this.$refs.uTabs.setFinishCurrent(current);
 				this.swiperCurrent = current;
 				this.current = current;
-				// console.log(1);
+				// console.log(this.current);
+
+				if (this.current == 0) {
+					return;
+				}
+
+				// let categoryId = this.tabList[this.current].categoryId
+				// console.log(this.$refs);
+				// this.$refs.catList[this.current--].downCallback()
+
 			},
+
 			onLoad() {
 				this.Ani = uni.createAnimation();
 				uni.$on('animationfinish', (e) => {
 					this.currectBanner = e.detail.current
-					let color = this.bannerList[this.currectBanner].backgroud
+					let color = this.bannerList[this.currectBanner].bannerColor
 					// console.log(color, e.detail.current);
 					if (this.scrollTop > 23) {
 						return;
@@ -186,13 +268,16 @@
 					this.animationData = this.Ani.export();
 				})
 			},
+
 			hadnleFalse() {
 				// return false
 			},
+
 			onUnload() {
 				// 移除监听事件  
 				uni.$off('login');
 			},
+
 			// 刷新
 			onRefresh() {
 				this.triggered = true;
@@ -200,10 +285,12 @@
 					this.triggered = false;
 				}, 1500)
 			},
+
 			// 复位刷新按钮
 			onRestore() {
 				// console.log(1);
 			},
+
 			// 搜索按钮点击事件
 			handleClickSearch(e) {
 				console.log(1);
@@ -211,6 +298,7 @@
 					url: '/pages/search/search'
 				})
 			}
+
 		}
 	}
 </script>

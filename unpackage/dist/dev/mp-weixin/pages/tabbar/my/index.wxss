@@ -97,11 +97,11 @@
   display: -webkit-flex;
   display: flex;
   margin-top: 12rpx;
-  -webkit-box-pack: justify;
-  -webkit-justify-content: space-between;
-          justify-content: space-between;
+  -webkit-box-pack: start;
+  -webkit-justify-content: flex-start;
+          justify-content: flex-start;
   text-align: center;
-  width: 450rpx;
+  width: 400rpx;
   margin-left: 45rpx;
 }
 .my_guanzhu .fensi {
@@ -130,12 +130,9 @@
   width: 100%;
 }
 .vip {
-  position: absolute;
-  bottom: 0;
   width: 663rpx;
   height: 137rpx;
   background: black;
-  left: 44rpx;
   border-radius: 20px 20px 0px 0px;
   display: -webkit-box;
   display: -webkit-flex;
@@ -147,6 +144,8 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
   padding: 40rpx 38rpx 30rpx 43px;
+  margin-top: 83rpx;
+  margin: 83rpx auto 0 auto;
 }
 .vip .vip_xufei {
   width: 157rpx;
@@ -212,6 +211,7 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
+  margin-bottom: 30rpx;
 }
 .shudan_content .addshudan .addshudan_text {
   margin-left: 19rpx;

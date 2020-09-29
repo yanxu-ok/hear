@@ -28,7 +28,7 @@
 		align-items: center;
 
 		& view:nth-child(1) {
-			font-size: $uni-font-size-36;
+			// font-size: $uni-font-size-36;
 			color: $uni-tit-33;
 			font-weight: 500;
 			font-family: PingFang SC;
@@ -36,7 +36,7 @@
 
 		& view:nth-child(2) {
 			font-family: PingFang SC;
-			font-size: $uni-font-size-sm;
+			// font-size: $uni-font-size-sm;
 			color: $uni-tit-99;
 		}
 	}

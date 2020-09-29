@@ -7,16 +7,19 @@
 			<!-- <u-count-down :show-days="false" ref="uCountDown" :timestamp="shijian" :autoplay="false" style="margin-left: 180rpx;"></u-count-down> -->
 			<!-- <jishi :mode="1"></jishi> -->
 			<!-- {{time}} -->
+			<clock @clockend="clockend" ref="myClock">
+			</clock>
 		</view>
 		<!-- {{shijian}} -->
+
 
 		<!-- #ifdef H5 -->
 		<view style="margin-top: 100rpx;display: flex; justify-content: space-around;padding: 0 107rpx;">
 			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/quxiao.png" @click="endRecord"></u-image>
 			<!-- <u-image width="126.4rpx" shape="circle" height="126.4rpx" src="" @click="handleStartClick"></u-image> -->
-			<view style="position: relative;">
-				<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/zhongxin.png" @click="handleStartClick"></u-image>
-				<image :src="luzhiImg" style="position: absolute;left: 0; margin: auto;bottom: 0; top: 0; right: 0;width: 37rpx;height: 57rpx;"></image>
+			<view style="position: relative;margin: 0 20rpx;" >
+				<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/zhongxin.png"></u-image>
+				<image :src="luzhiImg" @click="handleStartClick" style="position: absolute;left: 0; margin: auto;bottom: 0; top: 0; right: 0;width: 37rpx;height: 57rpx;"></image>
 			</view>
 			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/wancheng.png" @click="handleRecord"></u-image>
 		</view>
@@ -26,8 +29,8 @@
 		<view style="margin-top: 100rpx;display: flex; justify-content: space-around;padding: 0 107rpx;">
 			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/quxiao.png" @click="endRecord"></u-image>
 			<view style="position: relative;">
-				<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/zhongxin.png" @click="startRecord"></u-image>
-				<image :src="luzhiImg" style="position: absolute;left: 0; margin: auto;bottom: 0; top: 0; right: 0;width: 37rpx;height: 57rpx;"></image>
+				<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/zhongxin.png"></u-image>
+				<image :src="luzhiImg"  @click="startRecord" style="position: absolute;left: 0; margin: auto;bottom: 0; top: 0; right: 0;width: 37rpx;height: 57rpx;"></image>
 			</view>
 			<u-image width="126.4rpx" shape="circle" height="126.4rpx" src="@/static/listen/wancheng.png" @click="handleRecord"></u-image>
 		</view>
@@ -40,7 +43,7 @@
 </template>
 
 <script>
-	import chunLeiModal from '@/components/chunLei-modal/chunLei-modal.vue'
+	import clock from '@/components/tanluzhe-clock/clock.vue'
 	import {
 		mapState,
 		mapActions,
@@ -89,11 +92,11 @@
 
 		components: {
 			jishi,
-			chunLeiModal
+			// chunLeiModal
+			clock
 		},
 
 		computed: {
-			
 			...mapState({
 				audioInfo: state => state.huting.audioInfo,
 				audioOrActicle: state => state.huting.audioOrActicle,
@@ -110,10 +113,9 @@
 			},
 			// 录制的图片
 			luzhiImg() {
-				let result = this.luzhi ?   require('@/static/listen/tingzhi.png') : require('@/static/listen/jixuluzhi.png')
+				let result = this.luzhi ? require('@/static/listen/tingzhi.png') : require('@/static/listen/jixuluzhi.png')
 				return result
 			}
-			
 		},
 
 		async mounted() {
@@ -163,20 +165,30 @@
 				this.endTime()
 				this.shoattishi()
 				this.setFlag(true)
+				this.$refs.myClock.end(); // 结束计时
 			})
+			
 			recorderManager.onStart((res) => {
 				console.log('recorder onStart');
 				this.luzhi = true
 				this.startTime()
 				this.shoattishi()
+				this.$refs.myClock.start(); // 开始计时
 			})
+			
 			recorderManager.onPause((res) => {
 				console.log('已暂停');
 			})
 			// #endif
 		},
 		methods: {
-
+			
+			// 计时器回调
+			clockend(res) {
+				console.log(res)
+				this.setallTime(res) // 将总时长存到vuex中
+			},
+			
 			startTime() {
 				this.timer = setInterval(() => {
 					this.time = this.nowTimeStr()
@@ -205,13 +217,16 @@
 				// document.getElementById("TopCurrentTime").innerHTML = timestr;
 				return timestr
 			},
-			...mapMutations(['setVoicePath', 'setLocalId', 'setFlag']),
+			
+			...mapMutations(['setVoicePath', 'setLocalId', 'setFlag', 'setallTime']),
 			// ...mapActions(['getWeinConfig']),
+			
 			handleHuting() {
 				uni.navigateTo({
 					url: '/pages/listen_nei/components/listen_huting'
 				})
 			},
+			
 			// 微信
 			async getWeixin() {
 				let _this = this
@@ -220,25 +235,32 @@
 				});
 				return res.data.data
 			},
+			
 			handleLuyin() {
 				this.show = !this.show
 			},
+			
 			// #ifdef MP-WEIXIN
+			
 			startRecord() {
 				if (this.luzhi) {
 					recorderManager.stop()
+					// this.$refs.myClock.end(); // 结束计时
 				} else {
 					console.log('开始录音');
 					recorderManager.start(this.options);
+					// this.$refs.myClock.start(); // 开始计时
 					// this.startTime()
 				}
 			},
+			
 			endRecord() {
 				this.luzhi = false
 				console.log('录音结束');
 				recorderManager.stop();
 				this.setVoicePath('')
 			},
+			
 			playVoice() {
 				console.log('播放录音');
 				if (this.voicePath) {
@@ -270,6 +292,7 @@
 					});
 				}
 			},
+			
 			handleStartClick() {
 				let _this = this
 				if (this.luzhi) {
@@ -289,6 +312,7 @@
 							result
 						}) => {
 							_this.luzhi = true
+							// this.$refs.myClock.end();
 							console.log(err, result);
 						});
 					}
@@ -315,6 +339,7 @@
 					} else { // 一县一端中开始录音
 						// console.log(1);
 						_this.luzhi = true
+						this.$refs.myClock.start();
 						WebBridgeApi.audioRecord({
 							start: true,
 							time: 600
@@ -328,6 +353,7 @@
 							// _this.setVoicePath(result.audio.f)
 							_this.setFlag(true)
 							_this.shoattishi()
+							_this.$refs.myClock.end();
 						});
 					}
 				}
@@ -364,7 +390,6 @@
 					}) => {
 						_this.luzhi = false
 						_this.shoattishi()
-
 						console.log(err, result);
 						_this.setVoicePath(result.audio.data.audioFileURL)
 						// _this.setVoicePath(result.audio.f)
@@ -430,6 +455,7 @@
 
 		display: flex;
 		justify-content: flex-start;
+		align-items: center;
 
 		.regiestLu {
 			width: 105rpx;
@@ -444,6 +470,7 @@
 			font-weight: bold;
 			color: rgba(153, 153, 153, 1);
 			margin-top: 11rpx;
+			margin-right: 200rpx;
 		}
 	}
 </style>

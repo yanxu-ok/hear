@@ -2,7 +2,37 @@
 	<view class="jigoubodan">
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
 		 :up="upOption" style="flex: 1; ">
-			<bodan :list="dataList" style="margin-top: 30rpx;padding-left: 20rpx;"></bodan>
+			<bodan :list="dataList" style="margin-top: 30rpx;padding-left: 20rpx;" @handlePlay="handlePlay"></bodan>
+			<!-- 	<view class="bodan_flex">
+				<template v-for="(item,index) in dataList">
+					<block :key="index">
+						<view class="bodan" @tap="handlePlay(item)">
+							<view style="width:129rpx; height:129rpx;line-height: 129rpx;text-align: center;">
+								<u-image width="129rpx" height="129rpx" :src="item.avatar" border-radius="10rpx"></u-image>
+							</view>
+							<view class="bodan_content">
+								<view class="bodan_content_title">{{item.topicName | titleFilter(10)}}</view>
+								<view class="bodan_content_desc">
+									{{item.topicDescribe | titleFilter(10)}}
+								</view> -->
+			<!-- <view class="bodan_content_desc" v-else>
+								</view> -->
+			<!-- 	<template>
+									<view class="bodan_content_author">
+										<u-image width="19rpx" height="20rpx" src="@/static/images/author.png"></u-image>
+										<view class="bodan_content_author_name">{{item.nickName}}</view>
+										<u-image width="17rpx" height="20rpx" src="@/static/images/play.png" style="margin-left: 20rpx;"></u-image>
+										<view class="bodan_content_author_count">{{item.topicReadAmount}}次播放</view>
+									</view>
+								</template> -->
+			<!-- 只有播单显示的列表 -->
+			<!-- 				<view class="bodan_content_author_count">200本</view>
+								<u-line color="#E6E6E6" margin="30rpx 0 0 0 " style="width: 100%;"></u-line>
+							</view>
+						</view>
+					</block>
+				</template>
+			</view> -->
 		</mescroll-uni>
 	</view>
 </template>
@@ -75,7 +105,17 @@
 				if (page.num == 1) this.dataList = []; //如果是第一页需手动置空列表
 				this.dataList = this.dataList.concat(curPageData); //追加新数据
 				this.mescroll.endByPage(curPageLen, totalPage);
+			},
+
+			// 专题点击时
+
+			handlePlay(item) {
+				console.log(item);
+				uni.navigateTo({
+					url: '/pagesA/topic-list-page/topic-list-page?topicId=' + item.topicId + '&authorId=' + item.userAuthorId
+				})
 			}
+
 		},
 	}
 </script>
@@ -89,5 +129,57 @@
 		top: 0;
 		display: flex;
 		flex-direction: column;
+	}
+
+	.bodan {
+		display: flex;
+		justify-content: flex-start;
+		margin-bottom: 30rpx;
+		/* #ifdef MP-WEIXIN */
+		margin-left: 30rpx;
+		/* #endif */
+
+		& .bodan_content_desc {
+			margin-top: 23rpx;
+			font-size: 27rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: rgba(153, 153, 153, 1);
+			width: 550rpx;
+		}
+
+		& .bodan_content_title {
+			font-size: 32rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: rgba(51, 51, 51, 1);
+		}
+
+		& .bodan_content_author {
+			display: flex;
+			justify-content: flex-start;
+			margin-top: 10rpx;
+			width: 400rpx;
+
+			& .bodan_content_author_name {
+				margin-left: 10rpx;
+				color: #fac882;
+			}
+
+			& .bodan_content_author_count {
+				margin-left: 10rpx;
+				color: rgba(153, 153, 153, 1);
+			}
+
+		}
+	}
+
+	.bodan_content {
+		display: flex;
+		flex-direction: column;
+		justify-content: flex-start;
+		margin-left: 20rpx;
+		width: 100%;
+		margin-right: 10rpx;
 	}
 </style>

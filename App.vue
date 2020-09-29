@@ -44,7 +44,7 @@
 			cleanHstoryTimer() {
 				clearInterval(this.timer)
 			},
-			
+
 			// 定时器
 			async history() {
 				// console.log(this.zhangjieList,this.currectPlayIndex,this.$audio.currentTime);
@@ -57,7 +57,7 @@
 					let reult = await this.update_history(data)
 					console.log('记录播放进度', reult);
 				} else { // 互听播放
-				 console.log(this.audioInfo,'互听、播放');
+					console.log(this.audioInfo, '互听、播放');
 					let data = {
 						topicId: this.audioInfo.articleId,
 						chapterId: this.audioInfo.audioId,
@@ -85,7 +85,7 @@
 				newvalue ? this.cleanHstoryTimer() : this.startHstoryTimer()
 			}
 		},
-		
+
 	}
 </script>
 
@@ -93,4 +93,5 @@
 <style lang="scss">
 	@import './static/iconfont.css';
 	@import "./index.scss";
+	@import './gloal.css'
 </style>

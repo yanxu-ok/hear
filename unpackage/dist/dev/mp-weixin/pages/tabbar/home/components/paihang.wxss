@@ -79,6 +79,7 @@
   color: #999999;
   margin-top: 14rpx;
   margin-bottom: 15rpx;
+  height: 10rpx;
 }
 .paihangbang {
   margin-left: 20rpx;

@@ -53,7 +53,7 @@ export const get_audio_by_id = ({
 		params: {
 			audioId,
 			userId,
-			loginId
+			// loginId
 		}
 	})
 }
@@ -61,11 +61,15 @@ export const get_audio_by_id = ({
 // 前端-共同在读
 // audioId	true	string		音频id
 export const get_reading_together = ({
-	articleId
+	articleId,
+	pageNum,
+	pageSize
 }) => {
 	return http.get('/listen/get_reading_together', {
 		params: {
-			articleId
+			articleId,
+			pageNum,
+			pageSize
 		}
 	})
 }
@@ -105,7 +109,7 @@ export const insert_audio = ({
 	typeId
 }) => {
 	return http.post('/listen/insert_audio', {
-		userId,
+		// userId,
 		articleId,
 		audioAddress,
 		audioReadAmount: 0,
@@ -140,7 +144,7 @@ export const insert_article = ({
 	articleWords
 }) => {
 	return http.post('/article/insert_article', {
-		userId,
+		// userId,
 		// articleAuthorName,
 		cover,
 		articleTitle,
@@ -158,4 +162,17 @@ export const insert_article = ({
 // 获取标签
 export const get_all_category = () => {
 	return http.get('/category/get_all_category')
+}
+
+
+// 给文稿阅读量加一
+// articleId	true	number		文稿id
+export const increase_read_amount = ({
+	articleId
+}) => {
+	return http.get('/article/increase_read_amount', {
+		params: {
+			articleId
+		}
+	})
 }

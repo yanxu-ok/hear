@@ -1,8 +1,8 @@
 <template>
-	<view class="listen_nei" @touchstart="touchstart" @touchend="touchend">
+	<view class="listen_nei">
 		<image src="@/static/listen/listennei.jpg" class="listen_nei_img"></image>
 
-		<u-navbar background="" title-color="#FFFFFF" back-icon-color="#FFFFFF" z-index="1">
+		<u-navbar background=""  :customBack="back" title-color="#FFFFFF" back-icon-color="#FFFFFF" :z-index="zIndex">
 			<!-- 	<view slot="right">
 				<view class="slot_wrap1">
 					<image src="@/static/images/quanzi.png"></image>
@@ -12,30 +12,33 @@
 		</u-navbar>
 
 		<!-- 标题 -->
-		<view class="listen_nei_title">{{audioInfo ? audioInfo.articleTitle : '暂无标题'}}</view>
+		<view class="listen_nei_title">{{audioInfo ? audioInfo.articleTitle : '暂无标题' | titleFilter(10)}}</view>
 
 		<!-- 作者 -->
-		<view class="listen_nei_author">作者：{{audioInfo ? audioInfo.articleUserName : '暂无作者名字'}}·{{audioInfo ? audioInfo.audioReadAmount : '暂无'}}人看过·预计3分钟</view>
+		<template v-if="audioInfo">
+			<view class="listen_nei_author">作者：{{audioInfo.articleUserName || audioInfo.nickName | titleFilter(6) }}{{ audioInfo.audioReadAmount || audioInfo.articleReadAmount | numFormat}}人看过·预计{{audioInfo.audioTime || audioInfo.estimatedTime | dateFormat}}分钟</view>
+		</template>
 
 		<!-- 歌词 -->
 		<geci @gongdu="handleGongdu"></geci>
 
 		<!-- 底部文章作者 -->
-		<listenauthor></listenauthor>
+		<listenauthor @handleHuting="handleHuting"></listenauthor>
 
 		<view :style="{display:type == 'audio' ? '' : 'none' }">
-			<drawer ref="drawer-right" pos="right" standout="32rpx" width="750rpx" @overlayClicked="hide">
+			<drawer ref="drawer-right" pos="bottom" standout="32rpx" width="750rpx" @overlayClicked="hide" z-index="999999">
 				<view class="dr" style="z-index: 9999;">
-					<view style="width: 32rpx;"></view>
+					<!-- <view style="width: 32rpx;"></view> -->
 					<!-- <menu-view></menu-view> -->
 					<view style="width: 750rpx; height: 100%;background-color: white;z-index: 9999999;" :style="{visibility:choutiShow? 'visible' : 'hidden' }">
-						<hutingplay :audio="audio"></hutingplay>
+						<hutingplay :audio="audio" @handleBack="handleBack"></hutingplay>
 					</view>
 				</view>
 			</drawer>
 		</view>
 
-		<u-popup v-model="gong" mode="bottom" width="100%" height="100%" :mask-close-able="false" :closeable="true" z-index="99999">
+		<!-- 共读的标识  -->
+		<u-popup v-model="gong" mode="bottom" width="100%" height="80%" :mask-close-able="false" :closeable="true" z-index="99999">
 			<gongdu></gongdu>
 		</u-popup>
 
@@ -78,6 +81,7 @@
 				choutiShow: false,
 				audio: {}, // 音频信息
 				gong: false,
+				zIndex: 1 // 顶部导航栏index值
 			}
 		},
 		computed: {
@@ -118,12 +122,29 @@
 			} else {
 				const item = JSON.parse(decodeURIComponent(option.item));
 				this.setAudioInfo(item)
+				await this.increase_read_amount({
+					articleId: this.audioInfo.articleId
+				})
+				console.log(this.audioInfo); // 进来要调接口 添加阅读量
 			}
 		},
 
 		methods: {
-			...mapActions(['get_audio_by_id', 'insert_history']),
+
+			...mapActions(['get_audio_by_id', 'insert_history', 'increase_read_amount']),
 			...mapMutations(['setAudioInfo', 'setAudioOrActicle', 'setType', 'setAudioType', 'setGloalImg', 'setAudioOrauthor']),
+
+			//点击按钮 返回到列表
+			back() {
+
+				console.log(1, '返回到列表');
+				// uni.redirectTo({
+				// 	url: '/pages/tabbar/listen/index'
+				// })
+				uni.switchTab({
+					url: '/pages/tabbar/listen/index'
+				})
+			},
 
 			// 获取互听音频简介信息
 			async getAudioInfo() {
@@ -144,6 +165,7 @@
 					coverImgUrl: audioinfo.cover,
 					historyDate: historyValue
 				}
+
 			},
 
 			//touchmove 监听 向左滑动事件
@@ -156,14 +178,28 @@
 
 				if (this.left - pageX > 40) { // 满足向左滑事件
 					console.log('向左划');
-					this.show()
-					this.choutiShow = true
+					// this.show()
+					// this.choutiShow = true
 				}
 				if (pageX - this.left > 40) {
 					console.log('向左划');
 					this.hide()
 					this.choutiShow = false
 				}
+			},
+
+			// 点击图标需要在底下上升
+			handleHuting() {
+				this.zIndex = -1
+				this.show()
+				this.choutiShow = true
+			},
+
+			// 点击图标返回
+			handleBack() {
+				this.zIndex = 1
+				this.hide()
+				this.choutiShow = false
 			},
 
 			show(duration) {

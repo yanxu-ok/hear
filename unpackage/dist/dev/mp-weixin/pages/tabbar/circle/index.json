@@ -1,4 +1,6 @@
 {
+  "navigationBarTitleText": "圈子",
+  "disableScroll": true,
   "usingComponents": {
     "tabbar": "/components/u-tabbar/u-tabbar"
   }

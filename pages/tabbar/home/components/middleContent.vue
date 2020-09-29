@@ -47,7 +47,7 @@
 				this.$emit('prePage',type)
 			},
 			quanbu(title){
-				this.$emit('quanbu',title)
+				this.$emit('quanbu',this.title)
 			}
 		}
 	}

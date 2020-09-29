@@ -36,14 +36,12 @@
           align-items: center;
 }
 .header view:nth-child(1) {
-  font-size: 36rpx;
   color: #333333;
   font-weight: 500;
   font-family: PingFang SC;
 }
 .header view:nth-child(2) {
   font-family: PingFang SC;
-  font-size: 24rpx;
   color: #999999;
 }
 

@@ -76,6 +76,7 @@
 		},
 		methods: {
 			...mapActions(['get_dynamic_by_userid']),
+			
 			/*下拉刷新的回调*/
 			async downCallback() {
 				this.mescroll.resetUpScroll(); // 重置列表为第一页 (自动执行 page.num=1, 再触发upCallback方法 )
@@ -88,6 +89,7 @@
 				// let pageNum = page.num; // 页码, 默认从1开始
 				// let pageSize = page.size; // 页长, 默认每页10条
 				let result = await this.getList(page)
+				console.log(result);
 				let curPageData = result.list; //接口返回的当前页数据列表 (数组)
 				let curPageLen = result.list.length; //// 接口返回的当前页数据长度 (如列表有26个数据,当前页返回8个,则curPageLen=8)
 				let totalPage = result.pages; // 接口返回的总页数
@@ -101,7 +103,7 @@
 
 			async getList(page) {
 				let data = {
-					userId: 1,
+					// userId: 1,
 					otherUserId: this.userId,
 					pageNum: page.num,
 					pageSize: page.size,

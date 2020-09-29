@@ -24,6 +24,9 @@
 /* 垂直间距 */
 /* 透明度 */
 /* 文章场景相关 */
+.shudan {
+  margin-bottom: 38rpx;
+}
 .shudan_list {
   margin-left: 25rpx;
   display: -webkit-box;
@@ -40,6 +43,7 @@
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
+  width: 390rpx;
 }
 .shudan_list .shudan_list_title .pd {
   font-size: 32rpx;

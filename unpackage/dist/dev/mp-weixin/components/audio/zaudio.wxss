@@ -25,7 +25,7 @@
 /* 透明度 */
 /* 文章场景相关 */
 .imt-audio.music.data-v-1629a830 {
-  padding: 0 30rpx 30rpx;
+  padding: 0 30rpx 30rpx 0;
   background: #fff;
 }
 .imt-audio.music .top > view:nth-child(2) .title.data-v-1629a830 {
@@ -111,7 +111,7 @@
           justify-content: space-around;
 }
 .imt-audio.fm.data-v-1629a830 {
-  width: 90%;
+  width: 96%;
   margin: 0 auto;
   border-radius: 10px;
   overflow: hidden;
@@ -151,7 +151,6 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
-  padding: 30rpx 20rpx;
 }
 .imt-audio.fm .audio-slider.data-v-1629a830 {
   -webkit-box-flex: 1;

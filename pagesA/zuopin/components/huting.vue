@@ -5,23 +5,24 @@
 			<template v-for="(item,index) in dataList">
 				<block :key="index">
 					<view class="bodan" @click="handlePlay(item)">
-						<view style="width:129rpx; height:129rpx;line-height: 129rpx;text-align: center;">
-							<view style="font-size:32rpx;">{{index+1}}</view>
+						<view style="width:129rpx; height:129rpx;line-height: 129rpx;text-align: center;margin-left: 30rpx;">
+							<!-- <view style="font-size:32rpx;">{{index+1}}</view> -->
+							<u-image :src="item.cover" width="120rpx" height="120rpx" border-radius="10rpx"></u-image>
 						</view>
 						<view class="bodan_content">
 							<view class="bodan_content_title" style="display: flex;justify-content: space-between;">
-								{{item.articleTitle}}
-								<view style="font-size:24rpx;font-family:PingFang SC;font-weight:400;">{{item.updateTime}}</view>
+								{{item.articleTitle | titleFilter(10)}}
+								<view style="font-size:24rpx;font-family:PingFang SC;font-weight:400;">{{item.updateTime.slice(0,10)}}</view>
 							</view>
 
 							<template>
 								<view class="bodan_content_author">
 									<view style="width: 19rpx; height: 20rpx;">
-										<u-image width="19rpx" height="20rpx" src="@/static/logo.png"></u-image>
+										<u-image width="19rpx" height="20rpx" src="@/static/images/play.png"></u-image>
 									</view>
-									<view class="bodan_content_author_name" style="color: #999999;">{{item.audioReadAmount + '播放'}}</view>
-									<u-image width="17rpx" height="20rpx" src="@/static/logo.png" style="margin-left: 20rpx;"></u-image>
-									<view class="bodan_content_author_count">{{item.audioTime}}</view>
+									<view class="bodan_content_author_name" style="color: #999999;">{{item.audioReadAmount | numFormat}}播放</view>
+									<u-image width="17rpx" height="20rpx" src="@/static/images/shijian.png" style="margin-left: 20rpx;"></u-image>
+									<view class="bodan_content_author_count">{{item.audioTime |s_to_hs}}</view>
 								</view>
 							</template>
 							<u-line color="#E6E6E6" margin="30rpx 0 0 0 " style="width: 100%;"></u-line>
@@ -139,6 +140,7 @@
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: rgba(51, 51, 51, 1);
+			height: 68rpx;
 		}
 
 		& .bodan_content_author {

@@ -2,7 +2,7 @@
 	<view style="overflow-x: hidden;position: absolute;left:0; top: 0; right: 0; bottom: 0; flex;flex-direction: column;">
 		<view class="bg">
 			<u-navbar title="会员开通" background="" title-color="#000000" back-icon-color="#000000">
-				<view slot="right" @tap="handleMingxi">
+				<view slot="right" @tap="handleMingxi" style="padding-right: 30rpx;">
 					明细
 				</view>
 			</u-navbar>

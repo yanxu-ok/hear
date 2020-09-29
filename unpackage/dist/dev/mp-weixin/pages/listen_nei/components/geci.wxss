@@ -32,6 +32,9 @@
   -webkit-justify-content: space-between;
           justify-content: space-between;
   margin-right: 30rpx;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
 }
 .geci_contain .geci_contain_right {
   display: -webkit-box;

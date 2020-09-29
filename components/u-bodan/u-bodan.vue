@@ -4,14 +4,14 @@
 			<block :key="index">
 				<view class="bodan" @tap="handlePlay(item)">
 					<view style="width:129rpx; height:129rpx;line-height: 129rpx;text-align: center;">
-						<u-image width="129rpx" height="129rpx" :src="item.topicImage" v-if="leixing != 'zj'"></u-image>
+						<u-image width="129rpx" height="129rpx" :src="item.topicImage" v-if="leixing != 'zj'" border-radius="10rpx"></u-image>
 						<view v-else style="font-size:32rpx;">{{index+1}}</view>
 					</view>
 					<view class="bodan_content">
 						<view class="bodan_content_title">{{item.topicName | titleFilter(length)}}</view>
 						<view class="bodan_content_title" v-if="leixing == 'zj'" style="display: flex;justify-content: space-between;">
 							<view> {{item.chapterName | titleFilter(length)}}</view>
-							<view style="font-size:24rpx;font-family:PingFang SC;font-weight:400;">{{item.createTime}}</view>
+							<view style="font-size:24rpx;font-family:PingFang SC;font-weight:400;">{{item.createTime.slice(0,7)}}</view>
 						</view>
 						<view class="bodan_content_desc" v-if="leixing == 'lishi'">
 							{{item.chapterName | titleFilter(length)}}
@@ -24,9 +24,9 @@
 						<template v-if=" leixing == 'zhubo' || leixing ==''  ">
 							<view class="bodan_content_author" v-if=" leixing == 'zhubo' || leixing ==''  ">
 								<u-image width="19rpx" height="20rpx" src="@/static/images/author.png"></u-image>
-								<view class="bodan_content_author_name">{{item.nickName}}</view>
+								<view class="bodan_content_author_name">{{item.nickName | titleFilter(5)}}</view>
 								<u-image width="17rpx" height="20rpx" src="@/static/images/play.png" style="margin-left: 20rpx;"></u-image>
-								<view class="bodan_content_author_count">{{item.topicReadAmount}}次播放</view>
+								<view class="bodan_content_author_count">{{item.topicReadAmount | numFormat}}次播放</view>
 							</view>
 						</template>
 						<template v-if=" leixing == 'lishi' ">
@@ -42,7 +42,7 @@
 								<view style="width: 19rpx; height: 20rpx;">
 									<u-image width="19rpx" height="20rpx" src="@/static/images/play.png"></u-image>
 								</view>
-								<view class="bodan_content_author_name" style="color: #999999;">{{item.chapterReadAmount + '播放'}}</view>
+								<view class="bodan_content_author_name" style="color: #999999;">{{item.chapterReadAmount | numFormat}}播放</view>
 								<u-image width="17rpx" height="20rpx" src="@/static/images/shijian.png" style="margin-left: 20rpx;"></u-image>
 								<view class="bodan_content_author_count">{{item.chapterTime | s_to_hs}}</view>
 								<view style="color: #F8A11F;margin-left:auto;">{{item.radioType==2? '互听':'章节'}}</view>
@@ -120,11 +120,11 @@
 			display: flex;
 			justify-content: flex-start;
 			margin-top: 10rpx;
-			width: 400rpx;
 
 			& .bodan_content_author_name {
 				margin-left: 10rpx;
 				color: #fac882;
+				width: 170rpx;
 			}
 
 			& .bodan_content_author_count {

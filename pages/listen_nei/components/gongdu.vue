@@ -8,7 +8,7 @@
 		 :up="upOption">
 			<template v-for="(item,index) in dataList">
 				<block :key="index">
-					<guanzhu :item="item" @handleGuanzhu="handleGuanzhu"></guanzhu>
+					<guanzhu :item="item" @handleGuanzhu="handleGuanzhu" @handleAvatar="handleAvatar"></guanzhu>
 				</block>
 			</template>
 		</mescroll-uni>
@@ -43,16 +43,18 @@
 				dataList: [] // 数据
 			}
 		},
+
 		computed: {
 			...mapState({
 				audioInfo: state => state.huting.audioInfo
 			})
 		},
+
 		mounted() {
 			console.log(this.audioInfo, '当前文稿信息');
 		},
 		methods: {
-			...mapActions(['get_reading_together','insert_focus','delete_focus']),
+			...mapActions(['get_reading_together', 'insert_focus', 'delete_focus']),
 
 			mescrollInit(mescroll) {
 				this.mescroll = mescroll;
@@ -81,9 +83,11 @@
 				this.mescroll.endByPage(curPageLen, totalPage);
 			},
 
-			async getAudioList() {
+			async getAudioList(page) {
 				let data = {
-					articleId: this.audioInfo.articleId
+					articleId: this.audioInfo.articleId,
+					pageNum: page.num,
+					pageSize: page.size
 				}
 				let result = await this.get_reading_together(data)
 				console.log(result);
@@ -92,7 +96,7 @@
 
 			// 关注点击事件
 			async handleGuanzhu(item) {
-				console.log(item,'关注的当前项');
+				console.log(item, '关注的当前项');
 				if (item.isFocus == 0) { // 说明是没有关注他  要调用关注接口
 					let result = await this.insert_focus(item.userId)
 					if (result.success) {
@@ -114,7 +118,16 @@
 						})
 					}
 				}
+			},
+
+			// 头像点击事件
+			handleAvatar(item) {
+				console.log(item);
+				uni.navigateTo({
+					url: '/pages/listen_nei/listen_nei?audioId=' + item.audioId + '&type=audio&authorId=' + item.userId
+				})
 			}
+			
 
 		},
 	}

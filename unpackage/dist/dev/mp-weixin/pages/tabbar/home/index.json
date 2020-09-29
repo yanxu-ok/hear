@@ -1,5 +1,6 @@
 {
   "disableScroll": true,
+  "navigationBarTitleText": "听见",
   "usingComponents": {
     "u-image": "/components/u-image/u-image",
     "tabbar": "/components/u-tabbar/u-tabbar",

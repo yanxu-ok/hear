@@ -3,23 +3,22 @@
 		<u-navbar title="" background="" title-color="#333333" back-icon-color="#333333">
 		</u-navbar>
 
-		<scroll-view class="scroll-view_H" scroll-y  scroll-left="120">
+		<view class="addshudan" @tap="handleAddshudan">
+			<u-image width="120rpx" height="120rpx" src="@/static/my/chuangjian.png"></u-image>
+			<view class="addshudan_text">创建播单</view>
+		</view>
+		<u-line color="#E5E5E5" length="700" margin="25rpx auto"></u-line>
 
-			<view class="addshudan" @tap="handleAddshudan">
-				<u-image width="120rpx" height="120rpx" src=""></u-image>
-				<view class="addshudan_text">创建播单</view>
-			</view>
-
-			<u-line color="#E5E5E5" length="700" margin="25rpx auto"></u-line>
-
+		<scroll-view class="scroll-view_H" scroll-y>
 			<!-- 书单 -->
-			<template v-for="(item,index) in bodanList">
-				<block :key="index">
-					<shudan :length="31" :item="item" :image="item.topicImage" @handleClickList="handleClick" :count="item.chapterCount"
-					 :title="item.topicName"></shudan>
-				</block>
-			</template>
-
+			<view style="padding-left: 25rpx ;padding-right: 50rpx; height: 100%;">
+				<template v-for="(item,index) in bodanList">
+					<block :key="index">
+						<shudan :length="31" bottom="25rpx" :item="item" :image="item.topicImage" @handleClickList="handleClick" :count="item.chapterCount"
+						 :title="item.topicName"></shudan>
+					</block>
+				</template>
+			</view>
 		</scroll-view>
 
 		<!-- 弹出层  -->
@@ -55,7 +54,7 @@
 				tirm: true,
 				bodanList: [], // 播单的list
 				info: null,
-				
+
 			}
 		},
 		components: {
@@ -66,6 +65,7 @@
 				zhangjieList: state => state.play.zhangjieList,
 				currectPlayIndex: state => state.play.currectPlayIndex,
 				audioInfo: state => state.huting.audioInfo,
+				topicId: state => state.play.topicId,
 			}),
 		},
 		async onLoad(e) {
@@ -74,8 +74,8 @@
 			console.log(this.bodanList);
 		},
 		methods: {
-			...mapActions(['insert_topic', 'get_user_play_single', 'insert_collect_chapter']),
-			...mapMutations(['setZhangjieList','setAudioInfo']),
+			...mapActions(['insert_topic', 'get_user_play_single', 'insert_collect_chapter', 'get_chapter_list_by_topic']),
+			...mapMutations(['setZhangjieList', 'setAudioInfo']),
 			handleAddshudan() {
 				this.show = !this.show
 			},
@@ -109,14 +109,13 @@
 			// 获取播单
 			async getUserBodan(userId) {
 				let data = {
-					userAuthorId: userId,
 					topicType: 2,
 					pageNum: null,
 					pageSize: null,
-					otherUserId: null
+					otherUserId: userId
 				}
 				let result = await this.get_user_play_single(data)
-				// console.log(result.list);
+				console.log(result);
 				return result.list
 			},
 
@@ -133,16 +132,27 @@
 				if (result.success) { // 如果收藏成功 改变 列表对应的值
 
 					if (this.info.type == 'zj') {
-						let newList = this.zhangjieList
-						newList[this.currectPlayIndex].isChapterCollect = 1
-						this.setZhangjieList(newList)
+						
 						uni.showToast({
 							title: '收藏成功',
 							icon: 'none'
 						})
+						
+						let data = {
+							topicId: this.topicId,
+							pageNum: 1,
+							pageSize: 1000,
+							listOrder: 1
+						}
+						let result = await this.get_chapter_list_by_topic(data)
+						
+						// let newList = this.zhangjieList
+						// newList[this.currectPlayIndex].isChapterCollect = 1
+						this.setZhangjieList(result.list)
+
 						uni.navigateBack({})
 					} else {
-						// 如果收藏成功 改变 列表对应的值
+						// 如果收藏成功 改变 互听对应的值
 						let newList = this.audioInfo
 						newList.isCollect = 1
 						this.setAudioInfo(newList)
@@ -173,6 +183,8 @@
 		bottom: 0;
 		right: 0;
 		top: 0;
+		display: flex;
+		flex-direction: column;
 
 		& .addshudan {
 			display: flex;
@@ -180,6 +192,7 @@
 			padding-left: 25rpx;
 			margin-top: 50rpx;
 			align-items: center;
+			margin-bottom: 30rpx;
 		}
 
 		& .addshudan_text {
@@ -188,7 +201,7 @@
 
 
 		& .scroll-view_H {
-			height: 1200rpx;
+			flex: 1;
 		}
 
 		& .anniu_contain {

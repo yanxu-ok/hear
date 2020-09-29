@@ -1,14 +1,15 @@
 <template>
 	<view class="shangchuan">
+		
 		<view class="shangchuan_bg">
 			<!-- <image :src="audioInfo.cover" style="position: absolute;top: 0; bottom: 0; left: 0;right: 0; margin: auto;filter: blur(40rpx);"></image> -->
 
 			<u-navbar background="" title-color="#ffffff" back-icon-color="#ffffff">
 			</u-navbar>
 			<view class="shangchuan_bg_addtext">添加或选择一张封面吧~</view>
-			<view style="display: flex;flex-direction: row;justify-content: center;align-items: center;">
-				<loadshangchuan @result="handleResult" uploadImgCount="1" imgCount="1" async="async" :url="Imgurl" style="margin-left: 30rpx;margin-top: 20rpx;"></loadshangchuan>
-				<view style="display: flex;">
+			<view style="display: flex;flex-direction: row;justify-content: center;align-items: center;margin-top: 34rpx;">
+				<loadshangchuan @result="handleResult" uploadImgCount="1" imgCount="1" async="async" :url="Imgurl"></loadshangchuan>
+				<view style="display: flex;margin-left: 41rpx;">
 					<!-- <view>
 						<u-image width="147rpx" height="147rpx" src="https://img11.iqilu.com/29/2020/09/15/2d06df7459f0c547406f4b3f175301de.jpg"
 						 style="margin-right: 25rpx;"></u-image>
@@ -22,13 +23,14 @@
 						 style="margin-right: 25rpx;"></u-image>
 					</view> -->
 					<view v-for="(item,index) in imgList" :key="index">
-						<view :style="{border: imgIndex == index ? '#F8A11F solid 1rpx' : 'none'}" class="add">
-							<image style="width: 100%; height: 100%;" :src="item" @click="handleTap(item,index)"></image>
+						<view :style="{border: imgIndex == index ? '#F8A11F solid 3rpx' : 'none'}" class="add">
+							<image style="width: 100%; height: 100%;border-radius: 10rpx;" :src="item" @click="handleTap(item,index)"></image>
 						</view>
 					</view>
 				</view>
 			</view>
 		</view>
+
 		<view style="padding: 30rpx;">
 			<view>标题:</view>
 			<u-input v-model="title" :type="type" :border="border" :disabled="article== 'audio' ? true : false " />
@@ -59,7 +61,7 @@
 			 @confirm="handleQUeding" @cancel="handleQuxiao"></u-picker>
 			<u-line color="#EFEFF1" margin="60rpx 0 0 0" />
 
-			<u-button type="warning" @click="handleSave">保存信息</u-button>
+			<u-button type="warning" throttle-time="2000" @click="handleSave">保存信息</u-button>
 
 		</view>
 
@@ -104,8 +106,8 @@
 				value: '',
 				type: 'text',
 				border: false,
-				height: 200,
-				autoHeight: true,
+				height: 50,
+				autoHeight: false,
 				showLine: false,
 				picker: false, //picker显示的值，
 				picker1: false,
@@ -116,16 +118,16 @@
 				quanzi: '', // 圈子
 				str: '', //代表的是圈子还是类别,
 				imgToken: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcHAiOiJoZWFyIiwidGltZSI6MTYwMDE3MTcxMiwiZXhwIjoxNjAwMjE0OTEyLCJ1c2VyaWQiOjEsImlhdCI6MTYwMDE3MTcxMiwib3JnaWQiOiIzIn0.zFGo7ShQS_ACkJMeJoJmudui3EFB_JJu_ZUrx95CmEM', // 图片的token
-				serverUrl: '', // 服务器的地址
+				serverUrl: 'https://img11.iqilu.com/29/2020/09/15/2d06df7459f0c547406f4b3f175301de.jpg', // 服务器的地址
 				article: '',
 				imgList: ['https://img11.iqilu.com/29/2020/09/15/2d06df7459f0c547406f4b3f175301de.jpg',
 					'https://img11.iqilu.com/29/2020/09/15/0fd1a9ff5523dc31fa9b9ad6125614ac.jpg',
 					'https://img11.iqilu.com/29/2020/09/15/ee3095b9c2e5572fdac1c9664f40186d.jpg'
 				],
 				imgIndex: 0,
-				artContent: '',
+				artContent: null,
 				isAudio: "false",
-				title: '',
+				title: null,
 				closeable: true,
 				mLeiBie: '' // 证明是空的
 				// disabled: false
@@ -135,7 +137,8 @@
 			...mapState({
 				audioInfo: state => state.huting.audioInfo,
 				audioOrActicle: state => state.huting.audioOrActicle,
-				voicePath: state => state.huting.voicePath
+				voicePath: state => state.huting.voicePath,
+				allTime: state => state.huting.allTime,
 			}),
 			Imgurl() {
 				let data = {
@@ -172,7 +175,7 @@
 		// },
 		async onLoad(options) {
 			this.article = options.type;
-			this.isAudio = options.isAudio
+			this.isAudio = options.isAudio;
 			console.log(this.audioInfo, options);
 			// if (this.isAudio == "true") {
 			// 	let data = await this.get_article_by_audio_id(this.audioInfo.audioId)
@@ -185,7 +188,6 @@
 			} else {
 				return;
 			}
-
 		},
 		async created() {
 			this.imgToken = await this.get_upload_token()
@@ -196,6 +198,7 @@
 			}
 		},
 		methods: {
+
 			...mapActions(['get_upload_token', 'insert_audio', 'get_article_by_audio_id', 'category', 'insert_article',
 				'get_all_category'
 			]),
@@ -219,13 +222,16 @@
 				this.voicePath = blobUrl
 				console.log(url, '上传的url', this.voicePath);
 				// #endif
+
 				let data = {
 					"group": "chuangqi",
 					"orgid": "29",
 					"pathConfig": "video"
 				}
+
 				let url = "https://appadmin.iqilu.com/cq-app-upload/upload/attach/file?uploadParam=" + encodeURIComponent(JSON.stringify(
 					data)) + '&token=' + this.imgToken
+
 				uni.uploadFile({
 					url: url,
 					filePath: this.voicePath,
@@ -261,10 +267,11 @@
 
 			// 点击picker显示的值
 			async handlePicker(str) {
-				
+
 				if (this.article == 'audio') {
 					return;
 				}
+
 				this.showBiaoqian = !this.showBiaoqian
 				this.str = str
 				let result = await this.get_all_category()
@@ -328,7 +335,7 @@
 						articleId: this.audioInfo.articleId,
 						audioAddress: this.voicePath,
 						audioReadAmount: 0,
-						audioTime: 600,
+						audioTime: allTime,
 						praiseNum: 0,
 						typeId: 1
 					})
@@ -338,9 +345,9 @@
 							title: '上传成功',
 							icon: 'none'
 						})
-						uni.navigateTo({
-							url: '/pages/tabbar/listen/index'
-						})
+						uni.switchTab({
+						    url: '/pages/tabbar/listen/index'
+						});
 					} else {
 						uni.showToast({
 							title: '上传失败',
@@ -348,6 +355,7 @@
 						})
 					}
 				} else {
+					// console.log(this.serverUrl);
 					let str = ''
 					this.selectorResult.forEach((item, index) => {
 						if (index == this.selectorResult.length - 1) {
@@ -357,13 +365,6 @@
 						}
 					})
 
-					if (!str) {
-						uni.showToast({
-							title: '请选择圈子',
-							icon: 'none'
-						})
-						return;
-					}
 					if (this.serverUrl == '') {
 						uni.showToast({
 							title: '请选择图片',
@@ -371,6 +372,31 @@
 						})
 						return;
 					}
+					
+					if (!this.title) {
+						uni.showToast({
+							title: '请输入标题',
+							icon: 'none'
+						})
+						return;
+					}
+					
+					if (!this.artContent) {
+						uni.showToast({
+							title: '请输入内容',
+							icon: 'none'
+						})
+						return;
+					}
+
+					if (!str) {
+						uni.showToast({
+							title: '请选择类别',
+							icon: 'none'
+						})
+						return;
+					}
+
 					let result = await this.insert_article({
 						userId: 1,
 						// articleAuthorName:,
@@ -390,9 +416,12 @@
 							title: '上传成功',
 							icon: 'none'
 						})
-						uni.navigateTo({
-							url: '/pages/tabbar/listen/index'
-						})
+						setTimeout(()=>{
+							uni.switchTab({
+							    url: '/pages/tabbar/listen/index'
+							});
+						},1100)
+						
 					} else {
 						uni.showToast({
 							title: '上传失败',

@@ -7,14 +7,23 @@
 				<u-image width="88.5rpx" height="88.5rpx" :src="zhangjieObj.avatar" border-radius="50%" @click="handleZhubo(zhangjieObj)"></u-image>
 			</view>
 			<view class="xilie_content">
-				<view>{{zhangjieObj.topicAuthorName | titleFilter(10)}}</view>
-				<view>{{zhangjieObj.topicDescribe | titleFilter(10)}}</view>
+				<view>{{zhangjieObj.nickName | titleFilter(5)}}</view>
+				<view>{{zhangjieObj.userDescribe | titleFilter(8)}}</view>
 			</view>
+			<!-- #ifdef H5 -->
 			<u-button type="error" :custom-style="customStyle" shape="circle" :hair-line="flag" style="margin-right: 0;" @click="handleGuanzhu">{{isFocus}}</u-button>
+			<!-- #endif -->
+			<!-- #ifdef MP-WEIXIN -->
+			<u-button type="error" :custom-style="customStyle" shape="circle" :hair-line="flag" style="margin-left: auto;"
+			 @click="handleGuanzhu">{{isFocus}}</u-button>
+			<!-- #endif -->
+
 		</view>
 
 		<!-- desc -->
-		<view class="xilie_desc">悬疑玄幻都市言情在这里有最好的平台足好听等我的广告合作热线：82837486）</view>
+		<view class="xilie_desc">
+			<!-- 悬疑玄幻都市言情在这里有最好的平台足好听等我的广告合作热线：82837486） -->
+			</view>
 
 		<!-- 间隔槽 -->
 		<u-gap height="18" bg-color="#F7F7F7" margin-top="35" margin-bottom="35"></u-gap>
@@ -22,9 +31,12 @@
 		<!-- 专辑简介 -->
 		<view class="zhubo">专辑简介</view>
 
-		<u-read-more :toggle="true" show-height="200">
+		<!-- <u-read-more :toggle="true" show-height="200">
 			<rich-text :nodes="zhangjieObj.topicDescribe"></rich-text>
-		</u-read-more>
+		</u-read-more> -->
+		<scroll-view scroll-y="true" style="overflow-y:auto;margin-top: 38rpx;">
+			<view style="padding: 0 30rpx;">{{zhangjieObj.topicDescribe}}</view>
+		</scroll-view>
 
 	</view>
 </template>
@@ -35,6 +47,9 @@
 		mapActions,
 		mapMutations
 	} from 'vuex'
+	import {
+		isLogin
+	} from '@/libs/hear-util/index.js'
 	export default {
 		data() {
 			return {
@@ -61,9 +76,18 @@
 		},
 		methods: {
 			...mapMutations(['setZhangjieObj']),
-			...mapActions(['insert_focus','delete_focus']),
+			...mapActions(['insert_focus', 'delete_focus']),
 			// 关注作者
 			async handleGuanzhu() {
+				
+				let isLog = isLogin() // 判断用户是否登录
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+
 				if (this.zhangjieObj.isFocus) { // 说明已经关注了 需要取消关注
 
 					let result = await this.delete_focus(this.zhangjieObj.fansId)
@@ -116,8 +140,9 @@
 
 <style lang="scss">
 	.jianjie_contain {
-		width: 100%;
 		height: 100%;
+		display: flex;
+		flex-direction: column;
 
 		& .zhubo {
 			font-size: 36rpx;
@@ -130,7 +155,7 @@
 
 		& .xilie {
 			display: flex;
-			justify-content: space-between;
+			justify-content: flex-start;
 			padding: 0 26rpx 0 26rpx;
 			margin-top: 27rpx;
 		}
@@ -138,8 +163,9 @@
 		& .xilie_content {
 			display: flex;
 			margin-left: 24rpx;
+			width: 250rpx;
 			/* #ifdef MP-WEIXIN */
-			margin-left: -70rpx;
+			// margin-left: -70rpx;
 			/* #endif */
 			flex-direction: column;
 		}
@@ -153,7 +179,7 @@
 			color: rgba(85, 85, 85, 1);
 			line-height: 36rpx;
 			margin: 25rpx auto 0 auto;
-			background: rgba(241, 243, 245, 1);
+			// background: rgba(241, 243, 245, 1);
 			opacity: 0.6;
 			border-radius: 10rpx;
 			padding: 36rpx 34rpx 36rpx 25rpx;

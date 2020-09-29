@@ -19,7 +19,7 @@ export const get_chapter_list_by_topic = ({
 			pageNum,
 			pageSize,
 			listOrder,
-			loginId
+			// loginId
 		}
 	})
 }
@@ -29,17 +29,14 @@ export const get_chapter_list_by_topic = ({
 // topicId	true	string		专题id
 //userId传查看的专题作者id
 // loginId传登录的用户id
-
 export const get_introduction_by_topic_id = ({
 	topicId,
-	userId,
-	loginId
+	userId
 }) => {
 	return http.get('/topic/get_introduction_by_topic_id', {
 		params: {
 			topicId,
-			userId,
-			loginId
+			userId
 		}
 	})
 }
@@ -55,7 +52,7 @@ export const insert_praise_add = ({
 }) => {
 	return http.post('/user/insert_praise_add', {
 		audioId,
-		userId,
+		// userId,
 		praiseType
 	})
 }
@@ -71,7 +68,7 @@ export const delete_praise_cancel = ({
 }) => {
 	return http.delete('/user/delete_praise_cancel', {
 		audioId,
-		userId,
+		// userId,
 		praiseType
 	})
 }
@@ -87,7 +84,7 @@ export const insert_collect_chapter = ({
 	topicId
 }) => {
 	return http.post('/chapter/insert_collect_chapter', {
-		userId,
+		// userId,
 		chapterId,
 		radioType,
 		topicId
@@ -102,7 +99,7 @@ export const insert_collect = ({
 	topicId
 }) => {
 	return http.post('/collect/insert_collect', {
-		userId,
+		// userId,
 		topicId
 	})
 }
@@ -115,7 +112,7 @@ export const delete_collect = ({
 	topicId
 }) => {
 	return http.delete('/collect/delete_collect', {
-		userId,
+		// userId,
 		topicId
 	})
 }

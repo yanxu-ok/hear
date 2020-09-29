@@ -9,11 +9,14 @@
     "pages/playPage/playPage",
     "pages/shudan/shudan",
     "pages/shudan-zhang/shudan-zhang",
+    "pages/list_page_zhang/list_page_zhang",
     "pages/listpage/listpage",
     "pages/listen_nei/listen_nei",
     "pages/setup/setup",
     "pages/myinfo/myinfo",
     "pages/login/login",
+    "pages/login/components/password",
+    "pages/login/components/phoneLogin",
     "pages/shangchuan/shangchuan",
     "pages/haibao/haibao"
   ],
@@ -25,7 +28,15 @@
         "guanzhu/guanzhu",
         "myindex/myindex",
         "huiyuan/huiyuan",
-        "huiyuan/components/shouru"
+        "huiyuan/components/shouru",
+        "topic-list-page/topic-list-page"
+      ]
+    },
+    {
+      "root": "pagesB",
+      "pages": [
+        "login_out/login_out",
+        "setup/setup"
       ]
     }
   ],
@@ -59,6 +70,5 @@
       }
     ]
   },
-  "usingComponents": {},
-  "sitemapLocation": "sitemap87.json"
+  "usingComponents": {}
 }

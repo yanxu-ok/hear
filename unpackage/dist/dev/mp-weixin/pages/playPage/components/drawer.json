@@ -1,7 +1,6 @@
 {
   "component": true,
   "usingComponents": {
-    "u-line": "/components/u-line/u-line",
     "drawer": "/pages/playPage/components/myp-drawer",
     "drawerheader": "/pages/playPage/components/drawerheader",
     "playlist": "/pages/playPage/components/playlist",

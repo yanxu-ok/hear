@@ -11,7 +11,7 @@ export const get_user_count = (
 ) => {
 	return http.get('/user/get_user_count', {
 		params: {
-			userId: 1
+			// userId: 1
 		}
 	})
 }
@@ -24,7 +24,7 @@ export const get_user_msg = ({
 }) => {
 	return http.get('/user/get_user_msg', {
 		params: {
-			userId,
+			// userId,
 			otherUserId
 		}
 	})
@@ -41,31 +41,31 @@ export const get_user_msg = ({
 export const update_user_msg = ({
 	userDate,
 	userAddress,
-	userSignature
+	userSignature,
+	userSex
 }) => {
 	return http.put('/user/update_user_msg', {
-		userId: 1,
+		// userId: 1,
 		userDate,
 		userAddress,
-		userSignature
+		userSignature,
+		userSex
 	})
 }
-
-
-
 
 // 前台-获取标签
 //labelType	false	number	null	标签库类型(1: 分类 2: 性别 3: 年龄) - 为空查询全部类型
 // userId	true	number		用户ID(后期换为Token)
 export const get_label = ({
-	labelType
+	labelType,
+	userId
 }) => {
 	// let data{
 	// 	labelType
 	// }
 	return http.get('/label/get_label', {
 		params: {
-			userId: 1,
+			userId,
 			labelType
 		}
 	})
@@ -88,7 +88,7 @@ export const insert_user_label = (
 export const get_upload_token = () => {
 	return http.get('/common/get_upload_token', {
 		params: {
-			userId: 1
+			// userId: 1
 		},
 	})
 }
@@ -103,7 +103,7 @@ export const get_focus_or_fans_count = ({
 }) => {
 	return http.get('/user/get_focus_or_fans_count', {
 		params: {
-			userId,
+			// userId,
 			type,
 			otherUserId
 		},
@@ -119,7 +119,7 @@ export const is_focus = ({
 }) => {
 	return http.get('/user/is_focus', {
 		params: {
-			userId,
+			// userId,
 			userFocusId
 		},
 	})
@@ -131,7 +131,7 @@ export const is_focus = ({
 export const get_user_topic_listen_count = () => {
 	return http.get('/user/get_user_topic_listen_count', {
 		params: {
-			userId: 1
+			// userId: 1
 		},
 	})
 }
@@ -150,7 +150,7 @@ export const get_user_play_single = ({
 }) => {
 	return http.get('/user/get_user_play_single', {
 		params: {
-			userAuthorId,
+			// userAuthorId,
 			topicType,
 			pageNum,
 			pageSize,
@@ -163,12 +163,16 @@ export const get_user_play_single = ({
 // userId	true	number		用户ID(后期改为Token)
 export const get_user_collect = ({
 	userId,
-	otherUserId
+	otherUserId,
+	pageNum,
+	pageSize,
 }) => {
 	return http.get('/collect/get_user_collect', {
 		params: {
-			userId,
-			otherUserId
+			// userId,
+			otherUserId,
+			pageNum,
+			pageSize,
 		},
 	})
 }
@@ -185,7 +189,7 @@ export const get_user_fans = ({
 }) => {
 	return http.get('/user/get_user_fans', {
 		params: {
-			userId,
+			// userId,
 			pageNum,
 			pageSize
 		},
@@ -203,7 +207,7 @@ export const get_user_focus = ({
 }) => {
 	return http.get('/user/get_user_focus', {
 		params: {
-			userId,
+			// userId,
 			pageNum,
 			pageSize
 		},
@@ -215,7 +219,7 @@ export const get_user_focus = ({
 // userFocusId	true	number		关注的用户ID
 export const insert_focus = (userFocusId) => {
 	return http.post('/user/insert_focus', {
-		userId: 1,
+		// userId: 1,
 		userFocusId
 	})
 }
@@ -244,7 +248,7 @@ export const insert_topic = ({
 	topicImage
 }) => {
 	return http.post('/topic/insert_topic', {
-		userAuthorId: 1,
+		// userAuthorId: 1,
 		// topicAuthorName,
 		topicName,
 		topicDescribe,
@@ -266,7 +270,7 @@ export const get_chapter_list_by_topic_single = ({
 }) => {
 	return http.get('/chapter/get_chapter_list_by_topic_single', {
 		params: {
-			userId,
+			// userId,
 			topicId
 		},
 	})
@@ -277,12 +281,18 @@ export const get_chapter_list_by_topic_single = ({
 // sortType	true	number		排序方式 1-时间排序 2-热度排序
 export const get_my_creation_list = ({
 	userId,
-	topicId
+	content,
+	sortType,
+	pageNum,
+	pageSize
 }) => {
 	return http.get('/listen/get_my_creation_list', {
 		params: {
-			userId,
-			topicId
+			// userId,
+			content,
+			sortType,
+			pageNum,
+			pageSize
 		},
 	})
 }
@@ -343,9 +353,39 @@ export const get_dynamic_by_userid = ({
 			otherUserId,
 			pageNum,
 			pageSize,
-			userId
+			// userId
 		},
 	})
 }
 
+//修改头像
+// api/upload/img
+export const api_img = ({
+	filePath
+}) => {
+	return http.upload('https://app-auth.iqilu.com/member/avatar', {
+		params: {},
+		/* 会加在url上 */
+		// #ifdef APP-PLUS || H5
+		// files: [], // 需要上传的文件列表。使用 files 时，filePath 和 name 不生效。App、H5（ 2.6.15+）
+		// #endif
+		// #ifdef MP-ALIPAY
+		fileType: 'image/video/audio', // 仅支付宝小程序，且必填。
+		// #endif
+		filePath, // 要上传文件资源的路径。
+		name: 'file', // 文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+		header: {
+			// 'cookie': 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE2Iiwib3JnaWQiOiIyOSIsIm5pY2tuYW1lIjoiXHU0ZjYwXHU1OTdkIiwiYXZhdGFyIjoiaHR0cHM6XC9cL2ltZzExLmlxaWx1LmNvbVwvMjAyMFwvMDZcLzA3XC8xMjJjYjNhOGZkZjc3ZDZiZTYxZjBiZWViYTdhZDhmNC5wbmcifQ.zBZk4iHTU35Zbh8dbmzWJ5Awc2-nsiVM_qm5PSvTg5A'
+		},
 
+	})
+}
+
+
+//解析token
+// userId	true	number		用户ID(后期改为Token)
+export const c_get_user_msg = () => {
+	return http.get('/common/get_user_msg', {
+		params: {},
+	})
+}

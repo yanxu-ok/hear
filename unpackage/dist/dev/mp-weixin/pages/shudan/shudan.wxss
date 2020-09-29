@@ -30,6 +30,13 @@
   bottom: 0;
   right: 0;
   top: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
 }
 .shudan_contain .addshudan {
   display: -webkit-box;
@@ -44,12 +51,15 @@
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
+  margin-bottom: 30rpx;
 }
 .shudan_contain .addshudan_text {
   margin-left: 22rpx;
 }
 .shudan_contain .scroll-view_H {
-  height: 1200rpx;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
 }
 .shudan_contain .anniu_contain {
   display: -webkit-box;

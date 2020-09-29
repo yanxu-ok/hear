@@ -12,7 +12,7 @@
 		<!-- #endif -->
 		<view class="listen_header_chuan" style="margin-left: 10px;" @tap="handleShangchuan">
 			<u-image width="35rpx" height="34rpx" src="@/static/listen/wengao.png" style="margin: 0 auto;"></u-image>
-			<view>上传</view>
+			<view>文稿</view>
 		</view>
 		<view class="listen_header_chuan" style="margin-left: 10px;" @tap="handleSort">
 			<u-image width="35rpx" height="34rpx" src="@/static/listen/wengao.png" style="margin: 0 auto;"></u-image>

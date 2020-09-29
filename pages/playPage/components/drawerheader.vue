@@ -2,14 +2,14 @@
 	<!-- 头部 -->
 	<view class="now_header">
 		<view style="width: 204rpx; height: 204rpx;">
-			<u-image width="204rpx" height="204rpx" :src="zhangjieObj.topicImage" border-radius="20rpx"></u-image>
+			<u-image width="204rpx" height="204rpx" :src="zhangjieObj.topicImage" border-radius="10rpx"></u-image>
 		</view>
 		<view class="now_header_content">
 			<view class="now_header_content_text">
-				{{zhangjieObj.topicName | titleFilter(30)}}
+				{{zhangjieObj.topicName | titleFilter(22)}}
 			</view>
 			<view class="now_header_count">
-				<view class="ji">共{{zhangjieObj.chapterCount}}集</view>
+				<view class="ji">共{{zhangjieObj.chapterCount | numFormat}}集</view>
 				<u-button :custom-style="customStyle" :hair-line="flag" :ripple="true" ripple-bg-color="#FFE8D1" size="mini" shape="circle"
 				 @click="handleClickShoucang">{{isShoucang}}</u-button>
 			</view>
@@ -18,6 +18,9 @@
 </template>
 
 <script>
+	import {
+		isLogin
+	} from '@/libs/hear-util/index.js'
 	import {
 		mapState,
 		mapActions,
@@ -32,12 +35,14 @@
 					width: '150rpx',
 					height: '60rpx',
 					border: '0px',
-					marginRight: '30rpx'
+					marginRight: '0'
 				},
 				flag: false,
 			}
 		},
+		
 		computed: {
+			
 			...mapState({
 				zhangjieObj: state => state.play.zhangjieObj,
 				zhangjieList: state => state.play.zhangjieList,
@@ -49,13 +54,20 @@
 					return this.zhangjieList[0].isCollect ? '已收藏' : '+收藏'
 				}
 			}
-
 		},
+		
 		methods: {
 			...mapMutations(['setZhangjieList']),
 			...mapActions(['insert_collect', 'delete_collect']),
 			// 收藏专题
 			async handleClickShoucang() {
+				let isLog = isLogin() // 判断用户是否登录
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				let data = {
 					userId: 1,
 					topicId: this.zhangjieObj.topicId
@@ -107,7 +119,8 @@
 <style lang="scss">
 	.now_header {
 		height: 205rpx;
-		margin: 0 25rpx;
+		// margin: 0 25rpx;
+		padding: 0 27rpx 0 25rpx;
 		display: flex;
 
 		& .now_header_content {
@@ -125,7 +138,7 @@
 				font-size: 36rpx;
 				font-family: PingFang SC;
 				font-weight: 500;
-				color: rgba(51, 51, 51, 1);
+				color: #343434;
 			}
 		}
 

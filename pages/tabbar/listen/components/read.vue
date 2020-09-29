@@ -9,7 +9,8 @@
 			<template v-for="(item,index) in dataList">
 				<block :key="index">
 					<hutingdiv :gendu="rindex" :authorDu="item.nickName" :title="item.articleTitle" :avatar="item.avatar" :count="item.articleWords"
-					 :author="item.articleUserName" :brankGroudImg="item.cover" :item="item" @hutingdiv="handleClickHuting"></hutingdiv>
+					 :author="item.articleUserName" :peopleCount="item.audioReadAmount || item.articleReadAmount" :brankGroudImg="item.cover"
+					 :item="item" @hutingdiv="handleClickHuting" :time="item.audioTime || item.estimatedTime"></hutingdiv>
 				</block>
 			</template>
 		</mescroll-uni>
@@ -34,7 +35,18 @@
 				},
 				// 上拉加载的配置(可选)
 				upOption: {
-
+					toTop: {
+						src: null,
+						offset: 100,
+						duration: 300,
+						zIndex: 9990,
+						right: 20,
+						bottom: 120,
+						safearea: false,
+						width: 72,
+						radius: "50%",
+						left: null
+					}
 				},
 				// pageNum: 1,
 				// pageSize: 10,

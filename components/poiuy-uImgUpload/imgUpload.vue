@@ -390,8 +390,8 @@
 </script>
 
 <style scoped>
-	.w-100 {
-		width: 100%;
+	.w-100 {/* 
+		width: 100%; */
 	}
 
 	.flex {

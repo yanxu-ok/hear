@@ -1,4 +1,5 @@
 <template>
+	
 	<!-- 排行榜元素-->
 	<view class="paihang_contain">
 		<!-- 头部 -->
@@ -16,7 +17,9 @@
 		</view>
 
 		<!-- 描述 -->
-		<view class="paihang_contain_desc">万本好书包月听，更实惠</view>
+		<view class="paihang_contain_desc">
+			<!-- 万本好书包月听，更实惠 -->
+			</view>
 
 		<!-- 线条 -->
 		<u-line color="#E5E5E5" margin="0 0 19rpx 0"></u-line>
@@ -37,7 +40,9 @@
 				</block>
 			</template>
 		</view>
+		
 	</view>
+	
 </template>
 
 <script>
@@ -109,6 +114,7 @@
 			color: #999999;
 			margin-top: 14rpx;
 			margin-bottom: 15rpx;
+			height: 10rpx;
 		}
 
 	}

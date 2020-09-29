@@ -1,42 +1,42 @@
 <template>
 	<view class="play_contain">
 		<view :style="{background:'url(' + zhangjieObj.topicImage + ') 0 / cover'}" class="play_contain_img_img"></view>
-		<u-navbar :title="zhangjieObj.topicName" :customBack="back" background="" title-color="#FFFFFF" back-icon-color="#FFFFFF">
 
+		<u-navbar :title="zhangjieObj.topicName" :customBack="back" background="" title-color="#FFFFFF" back-icon-color="#FFFFFF">
 			<view slot="right" class="slot_wrap">
 				<image src="@/static/images/three_dian.png" style="width: 30rpx;height: 7rpx;"></image>
 				<!-- <u-image width="30rpx" height="7rpx" src="@/static/images/three_dian.png" class="play_contain_right"></u-image> -->
 			</view>
-
 		</u-navbar>
 
 		<!-- 播放界面滑动 -->
-		<scroll-view :scroll-y="true" zoom="true" class="play_scroll">
+		<!-- <scroll-view :scroll-y="true" zoom="true" class="play_scroll"> -->
 
-			<!-- 图片 -->
-			<playimg></playimg>
+		<!-- 图片 -->
+		<playimg></playimg>
 
-			<!-- 圈子 -->
-			<quanzi></quanzi>
+		<!-- 圈子 -->
+		<quanzi></quanzi>
 
-			<!-- 进度条 -->
-			<!-- <view class="jindutiao"> -->
-			<!-- <view class="now_date">00:01</view> -->
-			<template v-if="audiolist">
-				<zaudio :oldinfo="audiolist" v-if="audiolist" :stepShow="show" themeColor="" ref="audio"></zaudio>
-			</template>
-			<!-- <view class="all_date">20:36</view> -->
-			<!-- </view> -->
+		<!-- 进度条 -->
+		<!-- <view class="jindutiao"> -->
+		<!-- <view class="now_date">00:01</view> -->
+		<template v-if="audiolist">
+			<zaudio :oldinfo="audiolist" v-if="audiolist" :stepShow="show" themeColor="" style="margin-top: 42rpx;padding: 0 25rpx;"
+			 ref="audio"></zaudio>
+		</template>
+		<!-- <view class="all_date">20:36</view> -->
+		<!-- </view> -->
 
-			<!-- 播放按钮 -->
-			<!-- <playbutton></playbutton> -->
-			<view class="play_button_contain">
-				<u-image width="32rpx" height="36rpx" src="@/static/images/shang.png" style="margin-right: 118rpx;" @tap="handleNext"></u-image>
-				<u-image width="49rpx" height="67rpx" :fade="true" duration="1550" :src="playimg" @tap="handleBofang"></u-image>
-				<u-image width="32rpx" height="35rpx" src="@/static/images/xia.png" style="margin-left: 118rpx;" @tap="handlePrev"></u-image>
-			</view>
+		<!-- 播放按钮 -->
+		<!-- <playbutton></playbutton> -->
+		<view class="play_button_contain">
+			<u-image width="32rpx" height="36rpx" src="@/static/images/shang.png" style="margin-right: 118rpx;" @tap="handleNext"></u-image>
+			<u-image width="59rpx" height="67rpx" :fade="true" duration="1550" :src="playimg" @tap="handleBofang"></u-image>
+			<u-image width="32rpx" height="35rpx" src="@/static/images/xia.png" style="margin-left: 118rpx;" @tap="handlePrev"></u-image>
+		</view>
 
-		</scroll-view>
+		<!-- </scroll-view> -->
 
 		<!-- 上拉 可滑动章节列表 -->
 		<indexdrawer></indexdrawer>
@@ -57,27 +57,42 @@
 	import zaudio from '@/components/audio/zaudio';
 
 	import {
-		setCurrectIndex
+		setCurrectStorg
 	} from '@/libs/hear-util/index.js'
 
 	export default {
+
 		components: {
 			quanzi,
 			playimg,
 			indexdrawer,
 			zaudio
 		},
+
 		// 接受 专题id
 		onLoad(e) {
+
 			if (!e.topicId) {
 				return;
 			}
+
+			// 音频播放完毕自动播放下一首
+			uni.$on('audioEnde', (res) => {
+				console.log('音频播放完毕');
+				this.handlePrev()
+			})
+
 			//  需要将topicId存到缓存中
-			this.setStorage(e.topicId)
 			this.setTopicId(e.topicId)
+			setCurrectStorg('topicId', e.topicId) // 将专题id 放到缓存中
+			setCurrectStorg('chapterId', e.chapterId) // 将章节id 放到缓存中
+			e.chapterId ? this.setChapterId(e.chapterId) : null // 将章节id 放到vuex中
 			this.getJianJie(this.topicId, e.authorId)
+
 		},
+
 		computed: {
+
 			...mapState({
 				topicId: state => state.play.topicId,
 				zhangjieObj: state => state.play.zhangjieObj,
@@ -92,6 +107,7 @@
 			}
 
 		},
+
 		data() {
 			return {
 				audiolist: {}, // 音频的信息
@@ -122,7 +138,9 @@
 				})
 			},
 
-			...mapMutations(['setTopicId', 'setCurrectPlayIndex', 'setPlay', 'setCurrectPlay', 'setAudioType', 'setGloalImg']),
+			...mapMutations(['setTopicId', 'setCurrectPlayIndex', 'setPlay', 'setCurrectPlay', 'setAudioType', 'setGloalImg',
+				'setChapterId'
+			]),
 			...mapActions(['get_introduction_by_topic_id', 'insert_history']),
 
 			// 改变播放状态
@@ -136,18 +154,6 @@
 				}
 			},
 
-
-			// 将专题id存到缓存中
-			setStorage(topicId) {
-				let _this = this
-				uni.setStorage({
-					key: 'topicId',
-					data: topicId,
-					success: function() {
-						console.log('success','将专题放到缓存中');
-					}
-				});
-			},
 
 			// 组合数组
 			zuhe(index, historyDate) {
@@ -168,8 +174,7 @@
 			async getJianJie(topicId, authorId) {
 				let result = await this.get_introduction_by_topic_id({
 					topicId,
-					userId: authorId,
-					loginId: 1
+					userId: authorId
 				})
 				this.setGloalImg(result.topicImage)
 			},

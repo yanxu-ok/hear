@@ -1,11 +1,11 @@
 <template>
 	<view class="shudan_list" :style="{marginLeft:left,	marginBottom: bottom}" @tap="handle(item)">
 		<view style="width: 120rpx; height: 120rpx;">
-			<u-image width="120rpx" height="120rpx" :src="image"></u-image>
+			<u-image border-radius="10rpx" width="120rpx" height="120rpx" :src="image"></u-image>
 		</view>
 		<view class="shudan_list_title">
 			<view class="pd" :style="{width:titleWidth, fontSize:size }">{{title | titleFilter(length) }}</view>
-			<view class="count">{{count}}本</view>
+			<view class="count">{{count | numFormat}}本</view>
 		</view>
 	</view>
 </template>

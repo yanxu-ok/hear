@@ -1,13 +1,16 @@
 <template>
-	<view>
+	<view style="margin-bottom: 70rpx;">
 		<view class="wenzhang_contain">
 			<view style="width: 88rpx;height: 90rpx;">
-				<u-image width="88rpx" height="90rpx" :src="audioInfo ? audioInfo.avatar : '' " shape="circle" class="play_contain_right"></u-image>
+				<u-image width="88rpx" height="90rpx" @click="handleAvatar" :src="audioInfo ? audioInfo.avatar : '' " shape="circle"
+				 class="play_contain_right"></u-image>
 			</view>
 			<view style="margin-left: 21rpx;">
 				<view class="wenzhang_contain_author">
-					<view class="wenzhang_contain_author_name" @tap="handleGuanzhu">{{audioInfo ? audioInfo.nickName : '暂无作者名字'}}</view>
+					<view class="wenzhang_contain_author_name">{{audioInfo ? audioInfo.nickName : '暂无作者名字' | titleFilter(4)}}</view>
 					<!-- <u-button :custom-style="customStyle" @tap="handleGuanzhu" type="error">{{isGuanzhu}}</u-button> -->
+					<button style="width: 120rpx; height: 28.8rpx;font-size: 14rpx;padding: 25rpx;background-color: #ff0000;line-height: 6rpx;color: white;"
+					 @tap="handleGuanzhu">{{isGuanzhu}}</button>
 				</view>
 				<view class="wenzhang_contain_author_text">文章作者</view>
 			</view>
@@ -21,10 +24,10 @@
 			</view>
 		</view>
 
-		<!-- 	<view style="display: flex;">
-			<u-image width="88rpx" shape="circle" height="90rpx" src="" class="play_contain_right" style="margin: 0 auto;"
+		<view :style="{display:type == 'audio' ? '' : 'none' }">
+			<u-image width="88rpx" shape="circle" height="90rpx" :src="audioInfo ? audioInfo.cover : '' " class="play_contain_right" style="margin: 0 auto;"
 			 @click="handleHuting"></u-image>
-		</view> -->
+		</view>
 
 		<!-- <u-popup v-model="luyin"  mode="bottom" border-radius="40" height="500rpx" :closeable="true" :mask='false' :mask-close-able="false">
 			<luzhi></luzhi>
@@ -44,7 +47,8 @@
 
 		<view>
 			<!-- 模态框 -->
-			<chunLei-modal  v-model="Shangchuan" :maskEnable="false" :mData="content" @onConfirm="handleConfirm" @cancel="handleQuxiao" navMask>
+			<chunLei-modal v-model="Shangchuan" :maskEnable="false" :mData="content" @onConfirm="handleConfirm" @cancel="handleQuxiao"
+			 navMask>
 			</chunLei-modal>
 		</view>
 
@@ -89,13 +93,14 @@
 				mask: false,
 				height: '0rpx',
 				luyin: false,
-				Shangchuan:false
+				Shangchuan: false
 			}
 		},
 		computed: {
 			...mapState({
 				audioInfo: state => state.huting.audioInfo,
-				flag: state => state.huting.flag
+				flag: state => state.huting.flag,
+				type: state => state.huting.type
 			}),
 			// ...mapGetters(['getFlag']),
 			isGuanzhu() {
@@ -128,22 +133,24 @@
 
 		},
 		methods: {
-			// handleHuting() {
-			// 	uni.navigateTo({
-			// 		url: '/pages/listen_nei/components/listen_huting'
-			// 	})
-			// },
-			...mapMutations(['setAudioInfo', 'setAudioOrActicle', 'setType','setFlag','setVoicePath', 'setLocalId']),
+			handleHuting() {
+				// uni.navigateTo({
+				// 	url: '/pages/listen_nei/components/listen_huting'
+				// })
+				// console.log(this.$parent);
+				this.$emit('handleHuting')
+			},
+			...mapMutations(['setAudioInfo', 'setAudioOrActicle', 'setType', 'setFlag', 'setVoicePath', 'setLocalId']),
 			...mapActions(['insert_focus', 'delete_focus']),
 
 			handleLuyin() {
 				// #ifndef MP-WEIXIN
 				// if (isApp() == 'web') {
-					uni.showToast({
-						title: 'h5暂时无法录制,请到小程序或微信中录制',
-						icon: 'none'
-					})
-					// return;
+				uni.showToast({
+					title: 'h5暂时无法录制,请到小程序或微信中录制',
+					icon: 'none'
+				})
+				return;
 				// }
 				// #endif
 				this.height = '500rpx'
@@ -182,6 +189,13 @@
 				this.setLocalId(null)
 				// console.log();
 				this.setFlag(false)
+			},
+
+			//点击头像跳转到用户个人主页
+			handleAvatar() {
+				uni.navigateTo({
+					url: '/pagesA/myindex/myindex?priv=1&userId=' + this.audioInfo.userId
+				})
 			},
 
 
@@ -234,7 +248,7 @@
 
 		& .wenzhang_contain_author {
 			display: flex;
-			align-items: center;
+			// align-items: center;
 
 			& .wenzhang_contain_author_name {
 				font-size: 28rpx;

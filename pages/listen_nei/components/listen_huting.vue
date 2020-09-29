@@ -3,15 +3,24 @@
 		<image src="@/static/listen/listennei.jpg" class="listen_nei_img" style="z-index: 0;"></image>
 		<view class="baoliu"></view>
 
-		<view class="author_name title" style="margin-top: 80rpx;">{{audioInfo ? audioInfo.articleTitle : '暂无标题'}}</view>
+		<view style="margin-left: 80rpx;margin-top: 80rpx;" @tap="back">
+			<u-icon name="arrow-down" color="white" size="28"></u-icon>
+		</view>
+
+		<view class="author_name title">{{audioInfo ? audioInfo.articleTitle : '暂无标题'}}</view>
 		<view class="author_name author">读者:{{audioInfo ? audioInfo.nickName : '暂无作者名字'}}</view>
 
 		<view class="wenzhang_img">
-			<u-image width="559rpx" height="560rpx" :src="audioInfo ? audioInfo.cover : ''" class="play_contain_right"></u-image>
-			<view class="play_img_bofang">
-				<u-image width="22rpx" height="26rpx" :src="audioInfo ? audioInfo.cover : ''"></u-image>
-				<view class="play_img_count">{{audioInfo ? audioInfo.audioReadAmount : '暂无'}}播放</view>
+			<view style="width: 559rpx;height: 560rpx;position: relative;">
+				<u-image width="559rpx" height="560rpx" border-radius="10px" :src="audioInfo ? audioInfo.cover : ''" class="play_contain_right"></u-image>
+				<view class="play_img_bofang">
+					<!-- <u-image width="22rpx" height="26rpx" ></u-image> -->
+					<image src="@/static/images/play.png" style="width: 22rpx;height: 26rpx;"></image>
+					<view class="play_img_count">{{audioInfo ? audioInfo.audioReadAmount : '暂无' | numFormat}}播放</view>
+				</view>
 			</view>
+
+
 		</view>
 
 		<view class="slot_wrap1">
@@ -34,7 +43,7 @@
 
 		<view class="play_button_contain">
 			<u-image width="32rpx" height="36rpx" src="@/static/images/shang.png" style="margin-right: 118rpx;"></u-image>
-			<u-image width="49rpx" height="63rpx" :fade="true" duration="1550" :src="playimg" @tap="handleBofang"></u-image>
+			<u-image width="59rpx" height="63rpx" :fade="true" duration="1550" :src="playimg" @tap="handleBofang"></u-image>
 			<u-image width="32rpx" height="35rpx" src="@/static/images/xia.png" style="margin-left: 118rpx;"></u-image>
 		</view>
 
@@ -68,9 +77,11 @@
 				audioInfo: state => state.huting.audioInfo,
 				paused: state => state.app.paused // 全局是否暂停
 			}),
+
 			playimg() { // 真的表示暂停 否则 播放
 				return this.paused ? require('@/static/listen/zanting.png') : require('@/static/images/bofang.png')
 			},
+
 			shoucang() {
 				// console.log(this.zhangjieList[this.currectPlayIndex],'是否收藏 、当前的列表');
 				if (this.audioInfo) {
@@ -82,6 +93,10 @@
 			},
 		},
 		methods: {
+			// 点击返回退出的事件
+			back() {
+				this.$emit('handleBack')
+			},
 			...mapActions(['delete_collect_chapter', 'setAudioInfo']),
 			handleBofang() {
 				if (this.paused) { // 点击了暂停
@@ -96,7 +111,7 @@
 				let currectPlay = this.audioInfo
 				if (currectPlay.isCollect) { // 说明已经收藏，需要取消收藏
 					let data = {
-						collectChapterId:currectPlay.collectChapterId
+						collectChapterId: currectPlay.collectChapterId
 					}
 					let result = await this.delete_collect_chapter(data)
 					if (result.success) { // 如果收藏成功 改变 列表对应的值
@@ -109,9 +124,9 @@
 						})
 					}
 				} else { //需要收藏调用接口
-
+				// console.log(this.audioInfo);
 					uni.navigateTo({
-						url: '/pages/shudan/shudan?userId=1&type=huting&chapterId=' + currectPlay.audioId
+						url: '/pages/shudan/shudan?userId=' + this.audioInfo.articleUserId + '&type=huting&chapterId=' + currectPlay.audioId
 					})
 				}
 
@@ -127,6 +142,8 @@
 		right: 0;
 		bottom: 0;
 		top: 0;
+		display: flex;
+		flex-direction: column;
 	}
 
 	.listen_nei_img {
@@ -161,7 +178,8 @@
 		display: flex;
 		justify-content: center;
 		position: relative;
-		margin-top: 110rpx;
+		align-items: center;
+		flex: 1;
 
 		& .play_img_bofang {
 			display: flex;
@@ -192,7 +210,6 @@
 		font-weight: 400;
 		color: rgba(255, 255, 255, 1);
 		margin-left: 101rpx;
-		margin-top: 41rpx;
 
 		& image {
 			width: 28rpx;
@@ -216,6 +233,7 @@
 		justify-content: center;
 		align-items: center;
 		margin-top: 30rpx;
+		margin-bottom: 150rpx;
 	}
 
 	.baoliu {

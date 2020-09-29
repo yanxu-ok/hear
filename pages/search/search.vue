@@ -16,17 +16,19 @@
 				<view class="search-btn" v-if="!isShowKeywordList" @tap="doSearch(keyword)">搜索</view>
 				<view class="search-btn" v-if="isShowKeywordList" @tap="doSearch()">取消</view>
 			</view>
+
 			<!--  -->
 			<view class="search-keyword">
 				<!-- 搜索结果 -->
-				<searchTabsSwiper :keyword="keyword" :resultList="resultList" v-if="isShowKeywordList"></searchTabsSwiper>
+				<searchTabsSwiper ref="searchResult" :keyword="keyword" :resultList="resultList" v-if="isShowKeywordList"></searchTabsSwiper>
+
 				<scroll-view class="keyword-box" v-if="!isShowKeywordList" scroll-y>
 
 					<view class="keyword-block" v-if="oldKeywordList.length>0">
 						<view class="keyword-list-header">
 							<view>历史搜索</view>
 							<view>
-								<u-image @tap="oldDelete" src=""></u-image>
+								<u-image @click="oldDelete" width="37rpx" height="39rpx" src="@/static/images/shanchu.png"></u-image>
 							</view>
 						</view>
 						<view class="keyword">
@@ -38,7 +40,7 @@
 						<view class="keyword-list-header">
 							<view>热门搜索</view>
 							<view>
-								<u-image @tap="hotToggle" src=""></u-image>
+								<!-- <u-image @tap="hotToggle" src=""></u-image> -->
 							</view>
 						</view>
 						<view class="keyword-hot" v-if="forbid==''">
@@ -87,7 +89,7 @@
 			searchTabsSwiper
 		},
 		methods: {
-			...mapActions(['get_search_rank', 'get_search_category','category']),
+			...mapActions(['get_search_rank', 'get_search_category', 'category']),
 			async init() {
 				this.loadDefaultKeyword();
 				this.loadOldKeyword();
@@ -174,6 +176,7 @@
 					}
 				});
 			},
+
 			//热门搜索开关
 			hotToggle() {
 				this.forbid = this.forbid ? '' : '_forbid';
@@ -187,8 +190,9 @@
 				}
 				this.isShowKeywordList = !this.isShowKeywordList
 				this.keyword = keyword
+				// console.log(this.$refs.searchResult);
+				// this.$refs.searchResult.getFenlei()
 				// 调用模糊搜索
-				this.resultList = await this.category()
 				this.saveKeyword(keyword); //保存为历史 		
 				// keyword = keyword.searchContent === false ? this.keyword : keyword.searchContent;
 
@@ -199,7 +203,7 @@
 			},
 			//保存关键字到历史记录
 			saveKeyword(keyword) {
-				if(!keyword){
+				if (!keyword) {
 					return;
 				}
 				uni.getStorage({

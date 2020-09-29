@@ -1,28 +1,28 @@
 <template>
-
 	<view class="shudan">
 		<view class="shudan_list">
-			<u-image width="120rpx" height="120rpx" :src="item.avatar" shape="circle"></u-image>
+			<view style="width: 120rpx;height: 120rpx;">
+				<u-image width="120rpx" height="120rpx" @click="handleAvatar(item)" :src="item.avatar" shape="circle"></u-image>
+			</view>
 			<view class="shudan_list_title">
 				<view style="display: flex;">
 					<view class="pd" :style="{width:titleWidth, fontSize:size, color: color  }" v-if="type =='zhubo' ">
-						{{item.nickName}}
+						{{item.nickName | titleFilter(10)}}
 					</view>
 					<view class="pd" :style="{width:titleWidth, fontSize:size, color: color  }" v-else>
-						{{item.nickName}}
+						{{item.nickName | titleFilter(10)}}
 					</view>
-					<u-image height="10rpx" width="10rpx" :src="item.avatar"></u-image>
+					<!-- <u-image height="10rpx" width="10rpx" :src="item.avatar"></u-image> -->
 				</view>
 
-				<view class="count" :style="{desccolor: desccolor  }">用一句话介绍一下你自己吧～</view>
+				<view class="count" :style="{desccolor: desccolor  }">{{item.userSignature | titleFilter(12)}}</view>
 			</view>
-			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 109rpx;" v-if="item.flag == 1 || item.isFocus == 0"
+			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 10rpx;" v-if="item.flag == 1 || item.isFocus == 0"
 			 @tap="handleGuanzhu(item)">+关注</u-button>
-			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 109rpx;" v-else @tap="handleGuanzhu(item)">已关注</u-button>
+			<u-button type="error" size="mini" :custom-style="customStyle" style="margin-left: 10rpx;" v-else @tap="handleGuanzhu(item)">已关注</u-button>
 		</view>
 		<u-line color="#E6E6E6" style="margin-left: 178rpx;" v-if="noline" />
 	</view>
-
 </template>
 
 <script>
@@ -79,12 +79,20 @@
 		methods: {
 			handleGuanzhu(item) {
 				this.$emit('handleGuanzhu', item)
+			},
+
+			handleAvatar(item) {
+				this.$emit('handleAvatar', item)
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.shudan {
+		margin-bottom: 38rpx;
+	}
+
 	.shudan_list {
 		margin-left: 25rpx;
 		display: flex;
@@ -97,6 +105,7 @@
 			margin-left: 23rpx;
 			display: block;
 			flex-direction: column;
+			width: 390rpx;
 
 			& .pd {
 				font-size: 32rpx;

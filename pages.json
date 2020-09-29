@@ -3,7 +3,8 @@
 		{
 			"path": "pages/tabbar/home/index",
 			"style": {
-				"disableScroll": true
+				"disableScroll": true,
+				"navigationBarTitleText": "听见"
 			}
 		}, {
 			"path": "pages/tabbar/listen/index",
@@ -15,18 +16,21 @@
 		},
 		{
 			"path": "pages/tabbar/midbutton/index",
-			"style": {}
+			"style": {
+				"navigationBarTitleText": "播放"
+			}
 		},
 		{
 			"path": "pages/tabbar/circle/index",
 			"style": {
-
+				"navigationBarTitleText": "圈子",
+				"disableScroll": true
 			}
 		},
 		{
 			"path": "pages/tabbar/my/index",
 			"style": {
-				"disableScroll": true
+				"navigationBarTitleText": "个人主页"
 			}
 		},
 		{
@@ -56,6 +60,13 @@
 			}
 		},
 		{
+			"path": "pages/list_page_zhang/list_page_zhang",
+			"style": {
+				"navigationBarTitleText": "列表页",
+				"disableScroll": true
+			}
+		},
+		{
 			"path": "pages/listpage/listpage",
 			"style": {
 				"navigationBarTitleText": "列表页",
@@ -69,12 +80,6 @@
 				"disableScroll": true
 			}
 		},
-		// {
-		// 	"path": "pages/listen_nei/components/listen_huting",
-		// 	"style": {
-		// 		"navigationBarTitleText": "互听播放页"
-		// 	}
-		// },
 		{
 			"path": "pages/setup/setup",
 			"style": {
@@ -94,6 +99,18 @@
 			}
 		},
 		{
+			"path": "pages/login/components/password",
+			"style": {
+				"navigationBarTitleText": "设置密码"
+			}
+		},
+		{
+			"path": "pages/login/components/phoneLogin",
+			"style": {
+				"navigationBarTitleText": "手机号登录"
+			}
+		},
+		{
 			"path": "pages/shangchuan/shangchuan",
 			"style": {
 				"navigationBarTitleText": "上传"
@@ -107,39 +124,65 @@
 		}
 	],
 	"subPackages": [{
-		"root": "pagesA",
-		"pages": [{
-				"path": "zuopin/zuopin",
-				"style": {
-					"navigationBarTitleText": "作品",
-					"disableScroll": true
+			"root": "pagesA",
+			"pages": [{
+					"path": "zuopin/zuopin",
+					"style": {
+						"navigationBarTitleText": "作品",
+						"disableScroll": true
+					}
+				}, {
+					"path": "guanzhu/guanzhu",
+					"style": {
+						"navigationBarTitleText": "关注",
+						"disableScroll": true
+					}
+				}, {
+					"path": "myindex/myindex",
+					"style": {
+						"navigationBarTitleText": "个人主页"
+						// "disableScroll": true
+					}
+				},
+				{
+					"path": "huiyuan/huiyuan",
+					"style": {
+						"navigationBarTitleText": "会员"
+					}
+				},
+				{
+					"path": "huiyuan/components/shouru",
+					"style": {
+						"navigationBarTitleText": "收支明细"
+					}
+				},
+				{
+					"path": "topic-list-page/topic-list-page",
+					"style": {
+						"navigationBarTitleText": "专题列表"
+					}
 				}
-			}, {
-				"path": "guanzhu/guanzhu",
-				"style": {
-					"navigationBarTitleText": "关注",
-					"disableScroll": true
+			]
+		},
+		{
+			"root": "pagesB",
+			"pages": [{
+					"path": "login_out/login_out",
+					"style": {
+						"navigationBarTitleText": "退出登录",
+						"disableScroll": true
+					}
+				},
+				{
+					"path": "setup/setup",
+					"style": {
+						"navigationBarTitleText": "设置",
+						"disableScroll": true
+					}
 				}
-			}, {
-				"path": "myindex/myindex",
-				"style": {
-					"navigationBarTitleText": "个人主页"
-				}
-			},
-			{
-				"path": "huiyuan/huiyuan",
-				"style": {
-					"navigationBarTitleText": "会员"
-				}
-			},
-			{
-				"path": "huiyuan/components/shouru",
-				"style": {
-					"navigationBarTitleText": "收支明细"
-				}
-			}
-		]
-	}],
+			]
+		}
+	],
 	"globalStyle": {
 		"navigationStyle": "custom",
 		"navigationBarTextStyle": "black",

@@ -1,6 +1,6 @@
 <template>
 	<view class="tabs_listen">
-		
+
 		<view>
 			<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false" swiperWidth="750"
 			 active-color="#F8A942"></u-tabs-swiper>
@@ -8,8 +8,9 @@
 
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="listen_swiper">
 			<swiper-item class="swiper-item" v-for="(item, index) in list" :key="index">
-				<read v-if="index == 0 || index == 1" :rindex="index"></read>
-				<zuopin v-if="index === 2"></zuopin>
+				<read v-if="current == index && current == 0" :rindex="index"></read>
+				<read v-if="current == index && current == 1" :rindex="index"></read>
+				<zuopin v-if="current == index && current == 2 "></zuopin>
 			</swiper-item>
 		</swiper>
 
@@ -31,7 +32,7 @@
 				}, {
 					name: '大家在看'
 				}, {
-					name: '我的作品'
+					name: '我的在读'
 				}],
 				// 因为内部的滑动机制限制，请将tabs组件和swiper组件的current用不同变量赋值
 				current: 0, // tabs组件的current值，表示当前活动的tab选项
@@ -55,6 +56,7 @@
 				this.$refs.uTabs.setFinishCurrent(current);
 				this.swiperCurrent = current;
 				this.current = current;
+				console.log(this.current);
 			}
 		}
 	};

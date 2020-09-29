@@ -1,0 +1,12 @@
+{
+  "navigationBarTitleText": "专题列表",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "u-image": "/components/u-image/u-image",
+    "u-line": "/components/u-line/u-line",
+    "u-gap": "/components/u-gap/u-gap",
+    "zhuantiheader": "/components/zhuanti-header/zhuanti-header"
+  }
+}

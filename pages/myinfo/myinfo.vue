@@ -3,67 +3,87 @@
 		<u-navbar background="" title-color="#000000" back-icon-color="#000000">
 		</u-navbar>
 		<view class="ui-all">
+			<view class="ui-all_my">个人信息</view>
+			<u-line color="#EFF0F1" />
 			<view class="avatar" @tap="avatarChoose">
+				<view class="ui-all_my_font">我的头像</view>
 				<view class="imgAvatar">
 					<u-image width="100%" height="100%" :src="userInfo.avatar"></u-image>
-					<!-- <view class="iavatar" :style="'background: url('+avater+') no-repeat center/cover #eeeeee;'"></view> -->
 				</view>
-				<text v-if="avater">修改头像</text>
-				<button v-if="!avater" open-type="getUserInfo" @getuserinfo="getUserInfo" class="getInfo"></button>
 			</view>
+			<u-line color="#EFF0F1" />
 			<view class="ui-list">
-				<text>昵称</text>
-				<input type="text" :placeholder="value" :value="userInfo.nickName" @input="bindnickName" placeholder-class="place" />
+				<view class="ui-all_my_font">我的昵称</view>
+				<input type="text" :placeholder="value" v-model=" userInfo.nickName " @input="bindnickName" placeholder-class="place" />
 			</view>
+			<u-line color="#EFF0F1" />
 			<view class="ui-list ">
-				<text>性别</text>
+				<view class="ui-all_my_font">性别</view>
 				<!-- <picker @change="bindPickerChange" mode='selector' range-key="name" :value="index" :range="sex"> -->
 				<view class="picker">
-					{{userInfo.userSex}}
+					<!-- {{ userInfo.userSex == 1 ? '男' : '女' }} -->
+					<input type="text" style="flex: 1;" v-model="userInfo.userSex" @input="bindnickName" placeholder-class="place" />
 				</view>
 				<!-- </picker> -->
 			</view>
+			<u-line color="#EFF0F1" />
 			<view class="ui-list ">
-				<text>地区</text>
+				<view class="ui-all_my_font">地区</view>
 				<!-- <picker @change="bindRegionChange" mode='region'> -->
-				<view class="picker">
-					<input type="text" v-model="userInfo.userAddress" @input="bindnickName" placeholder-class="place" />
-					<!-- {{region[0]}} {{region[1]}} {{region[2]}} -->
-				</view>
+				<!-- <view class="picker"> -->
+				<input type="text" style="flex: 1;" v-model="userInfo.userAddress" @input="bindnickName" placeholder-class="place" />
+				<!-- {{region[0]}} {{region[1]}} {{region[2]}} -->
+				<!-- </view> -->
 				<!-- </picker> -->
 			</view>
+			<u-line color="#EFF0F1" />
 			<view class="ui-list ">
-				<text>出生日期</text>
+				<view class="ui-all_my_font">出生日期</view>
 				<picker mode="date" :value="date" @change="bindDateChange">
 					<view class="picker">
 						{{userInfo.userDate}}
 					</view>
 				</picker>
 			</view>
+			<u-line color="#EFF0F1" />
 			<view class="ui-list" @tap="hanldeBiaoqian">
-				<text>兴趣</text>
-				<template v-for="(item,index) in selectList">
-					<text :key="index">{{item}}</text>
-				</template>
+				<view class="ui-all_my_font">兴趣</view>
+				<scroll-view scroll-x="true" style="flex: 1;white-space: nowrap; overflow: hidden;">
+					<view style="display: flex; ">
+						<template v-for="(item,index) in selectList">
+							<view :key="index" style="margin-right: 10rpx;">{{item}}</view>
+						</template>
+					</view>
+				</scroll-view>
 			</view>
+			<u-line color="#EFF0F1" />
 			<view class="ui-list">
-				<text>签名</text>
+				<view class="ui-all_my_font">签名</view>
 				<input :placeholder="value" placeholder-class="place" v-model="userInfo.userSignature" @input="binddescription" />
 			</view>
 		</view>
 
-		<u-button :custom-style="customStyle" @click="savaInfo">保存信息</u-button>
+		<view style="margin-top: 100rpx;">
+			<u-button :custom-style="customStyle" @click="savaInfo" style="margin-top: 100rpx;">保存信息</u-button>
+		</view>
 
-		<biaoqian ref="myBiao" :userInfo="userInfo" @handleSuccend="handleSuccend"></biaoqian>
+		<biaoqian ref="myBiao" :userInfo="userInfo" @handleSuccend="handleSuccend" @getInfo="handleSuccend"></biaoqian>
+
 	</view>
 </template>
 
+
 <script>
+	import baseUrl from '@/libs/config/baseUrl.js'
+	import {
+		setCurrectStorg
+	} from '@/libs/hear-util/index.js'
 	import {
 		mapActions,
 		mapMutations,
 		mapState
 	} from 'vuex'
+	// import $ from "jquery";
 	import biaoqian from './components/mybiaoqian.vue'
 	export default {
 		components: {
@@ -95,25 +115,37 @@
 					background: "#f88f1d",
 					color: '#FFFFFF'
 				},
-				userInfo: {}, // 用户信息
+				userInfo: null, // 用户信息
 				userBiaoqianList: [], // 用户标签数组
 				selectList: [], //用户已经选中的兴趣
-				imgToken: '' // 图片上传的token
+				userToken: '', // 图片上传的token，
+				tempImg: '', // 选择的临时图片路径
+				serveUrl: null, // 需要上传的图片url，
+				tempImgPath: null // 图片的路径
 			}
 		},
-		async mounted() {
+		computed: {
+			// img() {
+			// 	let img = this.userInfo ? this.userInfo.avatar : ''
+			// 	return img
+			// }
+		},
+		async created() {
 			let _this = this
 			uni.getStorage({
 				key: 'user',
 				success(res) {
 					let res1 = JSON.parse(res.data)
+					res1.userSex == 1 ? res1.userSex = '男' : res1.userSex = '女'
 					_this.userInfo = res1;
 					_this.getBiaoqian()
 				}
 			});
 		},
 		methods: {
-			...mapActions(['get_label', 'insert_user_label', 'get_user_count', 'get_upload_token', 'update_user_msg']),
+
+			...mapActions(['get_label', 'insert_user_label', 'get_user_count', 'get_upload_token', 'update_user_msg', 'api_img']),
+
 			// 选择标签
 			hanldeBiaoqian() {
 				this.$refs.myBiao.show = true
@@ -121,52 +153,61 @@
 			},
 
 			// 保存成功时返回的事件
-			handleSuccend() {
-				this.getBiaoqian()
+			handleSuccend(newArr) {
+				// this.getBiaoqian()
+				this.selectList = newArr
 			},
 
 			bindPickerChange(e) {
 				this.index = e.detail.value;
 
 			},
+
 			bindRegionChange(e) {
 				this.region = e.detail.value;
 
 			},
+
 			bindDateChange(e) {
 				this.userInfo.userDate = e.detail.value;
 
 			},
+
 			bindnickName(e) {
 				this.nickName = e.detail.value;
 
 			},
+
 			bindmobile(e) {
 				this.mobile = e.detail.value;
 
 			},
+
 			binddescription(e) {
 				this.description = e.detail.value;
 
 			},
+
 			async avatarChoose() {
 				let that = this;
 				// 先获取图片token
-				let imgToken = await this.get_upload_token()
-				that.imgToken = imgToken
+				// let imgToken = await this.get_upload_token()
+				let userToken = uni.getStorageSync('token');
+				console.log(userToken, '用户的token');
+				that.userToken = userToken
 				uni.chooseImage({
 					count: 1,
 					sizeType: ['original', 'compressed'],
 					sourceType: ['album', 'camera'],
 					success(res) {
-						console.log(res);
 						// tempFilePath可以作为img标签的src属性显示图片
 						console.log(res);
-						that.imgUpload(res.tempFiles);
-						// const tempFilePaths = res.tempFilePaths;
+						that.tempImgPath = res.tempFilePaths
+						that.userInfo.avatar = res.tempFilePaths[0];
 					}
 				});
 			},
+
 			getUserInfo(e) {
 				if (e.detail.iv) {
 					console.log(e.detail.iv) //传后台解密换取用户信息
@@ -176,8 +217,8 @@
 						duration: 2000
 					})
 				}
-
 			},
+
 			getphonenumber(e) {
 				if (e.detail.iv) {
 					console.log(e.detail.iv) //传后台解密换取手机号
@@ -188,83 +229,80 @@
 					})
 				}
 			},
+
 			// 保存信息
 			async savaInfo() {
+				if (!this.tempImgPath) { // 表示直接调用
+
+					if (this.isRequest()) { // 判断是否需要修改信息	
+						// console.log(1, this.userInfo.nickname);
+						this.saveUserInfo()
+					} else {
+						uni.request({
+							url: baseUrl.BASE_Url + '/member/edit', //仅为示例，并非真实接口地址。
+							data: {
+								nickname: this.userInfo.nickName
+							},
+							method: 'POST',
+							header: {
+								// 'custom-header': 'hello' //自定义请求头信息,
+								// 'cookie': this.userToken
+							},
+							success: (res) => {
+								console.log(res);
+								this.saveUserInfo()
+								// this.text = 'request success';
+							}
+						});
+					}
+				} else {
+					this.imgUpload(this.tempImgPath);
+				}
+			},
+
+			// 保存用户信息
+			async saveUserInfo() {
+
+				this.userInfo.userSex == '男' ? this.userInfo.userSex = 1 : this.userInfo.userSex = 2
+
 				let data = {
+					userSex: this.userInfo.userSex,
 					userDate: this.userInfo.userDate,
 					userAddress: this.userInfo.userAddress,
 					userSignature: this.userInfo.userSignature
 				}
+
 				let result = await this.update_user_msg(data)
+
 				if (result.success) {
 					uni.showToast({
-						title: '保存成功'
+						title: '保存成功',
+						icon: 'none'
 					})
+
+					setCurrectStorg('user', JSON.stringify(this.userInfo)) // 重新将用户信息 放入 缓存中
+
+					uni.navigateBack({}) //然后返回
 				} else {
 					uni.showToast({
-						title: '保存失败'
+						title: '保存失败',
+						icon: 'none'
 					})
 				}
-				// let that = this;
-				// let nickname = that.nickName;
-				// let headimg = that.headimg;
-				// let gender = that.index + 1;
-				// let mobile = that.mobile;
-				// let region = that.region;
-				// let birthday = that.date;
-				// let description = that.description;
-				// let updata = {};
-				// if (!nickname) {
-				// 	uni.showToast({
-				// 		title: '请填写昵称',
-				// 		icon: 'none',
-				// 		duration: 2000
-				// 	});
-				// 	return;
-				// }
-				// updata.nickname = nickname;
-				// if (!headimg) {
-				// 	headimg = that.avater;
-				// }
-				// updata.headimg = headimg;
-				// updata.gender = gender;
-				// if (that.isPoneAvailable(mobile)) {
-				// 	updata.mobile = mobile;
-				// } else {
-				// 	uni.showToast({
-				// 		title: '手机号码有误，请重填',
-				// 		icon: 'none',
-				// 		duration: 2000
-				// 	});
-				// 	return;
-				// }
-				// if (region.length == 1) {
-				// 	uni.showToast({
-				// 		title: '请选择常住地',
-				// 		icon: 'none',
-				// 		duration: 2000
-				// 	});
-				// 	return;
-				// } else {
-				// 	updata.province = region[0];
-				// 	updata.city = region[1];
-				// 	updata.area = region[2];
-				// }
-				// if (birthday == "0000-00-00") {
-				// 	uni.showToast({
-				// 		title: '请选择生日',
-				// 		icon: 'none',
-				// 		duration: 2000
-				// 	});
-				// 	return;
-				// }
-				// updata.birthday = birthday;
-				// updata.description = description;
-				// that.updata(updata);
-				// uni.navigateBack({
-
-				// })
 			},
+
+			// 是否请求
+			isRequest() {
+				const value = uni.getStorageSync('user');
+				let result = JSON.parse(value)
+				console.log(result, this.userInfo);
+				if (result.nickName == this.userInfo.nickName) {
+					return true
+				} else {
+					return false
+				}
+			},
+
 			isPoneAvailable(poneInput) {
 				var myreg = /^[1][3,4,5,7,8][0-9]{9}$/;
 				if (!myreg.test(poneInput)) {
@@ -273,41 +311,61 @@
 					return true;
 				}
 			},
+
 			async updata(datas) {
 				//传后台
-
 			},
-			imgUpload(file) {
+
+			async imgUpload(file) {
 				let that = this;
 				uni.uploadFile({
 					header: {
-						Authorization: {
-							token: that.imgToken
-						}
+						// 'Cookie': that.userToken
 					},
-					url: '/api/upload/image', //需传后台图片上传接口
+					url: baseUrl.BASE_Url + '/member/avatar', //需传后台图片上传接口
 					filePath: file[0],
 					name: 'file',
-					formData: {
-						type: 'user_headimg'
-					},
 					success: function(res) {
+
 						var data = JSON.parse(res.data);
-						data = data.data;
-						that.avater = that.url + data.img;
+						console.log(data);
+						if (data.code) {
+							if (that.isRequest()) { // 则不需要调用修改名字的接口 直接调用保存信息的接口
+								that.saveUserInfo()
+							} else {
+								uni.request({
+									url: baseUrl.BASE_Url + '/member/edit', //仅为示例，并非真实接口地址。
+									data: {
+										nickname: that.userInfo.nickName
+									},
+									method: 'POST',
+									header: {
+										// 'custom-header': 'hello' //自定义请求头信息,
+										// 'cookie': this.userToken
+									},
+									success: (res) => {
+										that.saveUserInfo()
+										// this.text = 'request success';
+									}
+								});
+							}
 
-						that.headimg = that.url + data.img;
-
+						}
 					},
 					fail: function(error) {
 						console.log(error);
 					}
 				});
+				// await this.api_img({
+				// 	filePath: file[0]
+				// })
 			},
+
 			// 获取标签
 			async getBiaoqian() {
 				let result = await this.get_label({
-					labelType: 1
+					labelType: 1,
+					userId: this.userInfo.userId
 				})
 				// console.log(result);
 				let selectArr = []
@@ -323,19 +381,21 @@
 				})
 				this.selectList = selectArr
 				this.userBiaoqianList = result
+				// console.log(this.selectList, this.userBiaoqianList);
 			}
+
 		},
 		onLoad() {}
 	}
 </script>
 
-<style lang="less">
+<style lang="scss">
 	.container {
 		display: block;
 	}
 
 	.ui-all {
-		padding: 20rpx 40rpx;
+		padding: 0 30rpx;
 		width: 700rpx;
 		height: 931rpx;
 		background: rgba(255, 255, 255, 1);
@@ -343,16 +403,34 @@
 		border-radius: 20rpx;
 		margin: 0 auto;
 
-		.avatar {
+		& .ui-all_my_font {
+			font-size: 32rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: #9A9A9A;
+			width: 128rpx;
+			margin-right: 40rpx;
+		}
+
+		& .ui-all_my {
+			font-size: 34rpx;
+			font-family: PingFang SC;
+			font-weight: 500;
+			color: #343434;
+			padding: 40rpx 0 38rpx 0;
+		}
+
+		& .avatar {
 			width: 100%;
-			text-align: left;
-			padding: 20rpx 0;
-			border-bottom: solid 1px #f2f2f2;
-			position: relative;
+			display: flex;
+			justify-content: space-between;
+			align-items: center;
+			padding: 17rpx 0 19rpx 0;
 
 			.imgAvatar {
 				width: 112rpx;
 				height: 111rpx;
+
 				border-radius: 50%;
 				display: inline-block;
 				vertical-align: middle;
@@ -365,57 +443,22 @@
 				}
 			}
 
-			text {
-				display: inline-block;
-				vertical-align: middle;
-				color: #8e8e93;
-				font-size: 28rpx;
-				margin-left: 40rpx;
-			}
-
-			&:after {
-				content: ' ';
-				width: 20rpx;
-				height: 20rpx;
-				border-top: solid 1px #030303;
-				border-right: solid 1px #030303;
-				transform: rotate(45deg);
-				-ms-transform: rotate(45deg);
-				/* IE 9 */
-				-moz-transform: rotate(45deg);
-				/* Firefox */
-				-webkit-transform: rotate(45deg);
-				/* Safari 和 Chrome */
-				-o-transform: rotate(45deg);
-				position: absolute;
-				top: 85rpx;
-				right: 0;
-			}
 		}
 
 		.ui-list {
 			width: 100%;
-			text-align: left;
-			padding: 20rpx 0;
-			border-bottom: solid 1px #f2f2f2;
-			position: relative;
+			display: flex;
+			align-items: center;
+			padding: 32rpx 0;
 
-			text {
-				color: #4a4a4a;
-				font-size: 28rpx;
-				display: inline-block;
-				vertical-align: middle;
-				min-width: 150rpx;
-			}
-
-			input {
+			& input {
 				color: #030303;
 				font-size: 30rpx;
 				display: inline-block;
 				vertical-align: middle;
 			}
 
-			button {
+			& button {
 				color: #030303;
 				font-size: 30rpx;
 				display: inline-block;
@@ -429,18 +472,7 @@
 				}
 			}
 
-			picker {
-				width: 90%;
-				color: #030303;
-				font-size: 30rpx;
-				display: inline-block;
-				vertical-align: middle;
-				position: absolute;
-				top: 30rpx;
-				left: 150rpx;
-			}
-
-			textarea {
+			& textarea {
 				color: #030303;
 				font-size: 30rpx;
 				vertical-align: middle;
@@ -449,29 +481,10 @@
 				margin-top: 50rpx;
 			}
 
-			.place {
+			& .place {
 				color: #999999;
 				font-size: 28rpx;
 			}
-		}
-
-		.right:after {
-			content: ' ';
-			width: 20rpx;
-			height: 20rpx;
-			border-top: solid 1px #030303;
-			border-right: solid 1px #030303;
-			transform: rotate(45deg);
-			-ms-transform: rotate(45deg);
-			/* IE 9 */
-			-moz-transform: rotate(45deg);
-			/* Firefox */
-			-webkit-transform: rotate(45deg);
-			/* Safari 和 Chrome */
-			-o-transform: rotate(45deg);
-			position: absolute;
-			top: 40rpx;
-			right: 0;
 		}
 
 		.save {

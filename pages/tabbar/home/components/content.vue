@@ -17,8 +17,7 @@
 
 		<!-- 滑动 swiper -->
 		<view class="paihangbang">
-			<scroll-view class="homescroll" :scroll-top="scrollTop" scroll-x="true" @scrolltoupper="upper" @scrolltolower="lower"
-			 @scroll="scroll">
+			<scroll-view class="homescroll" :scroll-top="scrollTop" scroll-x="true">
 				<paihangbang :list="reqiList" @quanbu="quanbu" type="人气" @handleClick="handleContentClick"></paihangbang>
 				<paihangbang :list="xiaoliangList" @quanbu="quanbu" type="销量" @handleClick="handleContentClick"></paihangbang>
 			</scroll-view>
@@ -99,14 +98,18 @@
 
 		},
 		methods: {
+			
 			...mapActions(['get_recently_topic', 'get_limited_time_free_topic', 'get_recommend_topic', 'get_billboard_topic']),
 
 			// 点击内容事件
 			handleContentClick(item) {
 				console.log(item);
+				// 暂时先跳到专题列表页
+
 				uni.navigateTo({
-					url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userAuthorId
+					url: '/pagesA/topic-list-page/topic-list-page?topicId=' + item.topicId + '&authorId=' + item.userAuthorId
 				})
+
 			},
 
 			// 点击换一批
@@ -172,7 +175,7 @@
 		padding: 45rpx 46rpx 23rpx 44rpx;
 
 		& view:nth-child(1) {
-			font-size: $uni-font-size-36;
+			font-size: $uni_font_36;
 			color: $uni-tit-33;
 			font-weight: 500;
 			font-family: PingFang SC;
@@ -180,7 +183,7 @@
 
 		& view:nth-child(2) {
 			font-family: PingFang SC;
-			font-size: $uni-font-size-sm;
+			font-size: $uni_font_30;
 			color: $uni-tit-99;
 		}
 	}

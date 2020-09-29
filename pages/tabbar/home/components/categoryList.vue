@@ -5,8 +5,8 @@
 
 		<!-- 编辑力荐 -->
 		<view class="bianjiHeader">
-			<u-section :arrow="false" :title="categoryCurrect ? categoryCurrect.categoryName : '分类标题为空' " :show-line="false" font-size="36"
-			 :sub-title="sortType == 1 ?  '最热' : '最新' " @click="quanbu" ></u-section>
+			<u-section :arrow="false" :title="categoryCurrect ? categoryCurrect.categoryName : '分类标题为空' " :show-line="false"
+			 font-size="36" :sub-title="sortType == 1 ?  '最热' : '最新' " @click="quanbu"></u-section>
 		</view>
 
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
@@ -37,11 +37,11 @@
 			return {
 				scrollTop: 0,
 				downOption: {
-
+					// auto: false
 				},
 				// 上拉加载的配置(可选)
 				upOption: {
-
+					// auto: false
 				},
 				// pageNum: 1,
 				// pageSize: 10,
@@ -116,16 +116,16 @@
 		padding: 45rpx 46rpx 23rpx 44rpx;
 
 		& view:nth-child(1) {
-			font-size: $uni-font-size-36;
-			color: $uni-tit-33;
+			// font-size: $uni-font-size-36;
+			// color: $uni-tit-33;
 			font-weight: 500;
 			font-family: PingFang SC;
 		}
 
 		& view:nth-child(2) {
 			font-family: PingFang SC;
-			font-size: $uni-font-size-sm;
-			color: $uni-tit-99;
+			// font-size: $uni-font-size-sm;
+			// color: $uni-tit-99;
 		}
 	}
 

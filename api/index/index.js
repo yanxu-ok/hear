@@ -111,7 +111,7 @@ export const get_user_play_history = ({
 }) => {
 	return http.get('/history/get_user_play_history', {
 		params: {
-			userId: 1,
+			// userId: 1,
 			pageNum,
 			pageSize,
 			content,
@@ -130,7 +130,7 @@ export const get_topic_list_by_type = ({
 }) => {
 	return http.get('/topic/get_topic_list_by_type', {
 		params: {
-			userId: 1,
+			// userId: 1,
 			pageNum,
 			pageSize,
 			sortType,

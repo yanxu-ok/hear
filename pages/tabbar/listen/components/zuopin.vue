@@ -9,23 +9,24 @@
 			<template v-for="(item,index) in dataList">
 				<block :key="index">
 					<view class="bodan" @click="handleClickHuting(item)">
-						<view style="width:129rpx; height:129rpx;line-height: 129rpx;text-align: center;">
-							<view style="font-size:32rpx;">{{index+1}}</view>
+						<view style="width:129rpx; height:129rpx;line-height: 129rpx;text-align: center;margin-left: 30rpx;">
+							<!-- <view style="font-size:32rpx;">{{index+1}}</view> -->
+							<u-image :src="item.cover" width="120rpx" height="120rpx" border-radius="10rpx"></u-image>
 						</view>
 						<view class="bodan_content">
 							<view class="bodan_content_title" style="display: flex;justify-content: space-between;">
-								{{item.articleTitle}}
-								<view style="font-size:24rpx;font-family:PingFang SC;font-weight:400;">{{item.updateTime}}</view>
+								{{item.articleTitle | titleFilter(10)}}
+								<!-- <view style="font-size:24rpx;font-family:PingFang SC;font-weight:400;">{{item.updateTime.slice(0,10)}}</view> -->
 							</view>
-					
+
 							<template>
 								<view class="bodan_content_author">
 									<view style="width: 19rpx; height: 20rpx;">
-										<u-image width="19rpx" height="20rpx" src="@/static/logo.png"></u-image>
+										<u-image width="19rpx" height="20rpx" src="@/static/images/play.png"></u-image>
 									</view>
-									<view class="bodan_content_author_name" style="color: #999999;">{{item.audioReadAmount + '播放'}}</view>
-									<u-image width="17rpx" height="20rpx" src="@/static/logo.png" style="margin-left: 20rpx;"></u-image>
-									<view class="bodan_content_author_count">{{item.audioTime}}</view>
+									<view class="bodan_content_author_name" style="color: #999999;">{{item.audioReadAmount | numFormat }}播放</view>
+									<u-image width="17rpx" height="20rpx" src="@/static/images/shijian.png" style="margin-left: 20rpx;"></u-image>
+									<view class="bodan_content_author_count">{{item.audioTime |s_to_hs}}</view>
 								</view>
 							</template>
 							<u-line color="#E6E6E6" margin="30rpx 0 0 0 " style="width: 100%;"></u-line>
@@ -67,16 +68,15 @@
 			MescrollUni
 		},
 		computed: {
-			
+
 			...mapState({
 				sortType: state => state.huting.sortType,
 				content: state => state.huting.content
 			})
-			
+
 		},
 		watch: {
 			// 监听关键字搜索事件
-			
 			content(newValue, oldValue) {
 				console.log(newValue, '关键字发生变化了');
 				this.downCallback()
@@ -87,7 +87,7 @@
 				console.log(newValue, '排序方式发生了变化');
 				this.downCallback()
 			}
-			
+
 		},
 		methods: {
 			...mapActions(['get_my_creation_list']),
@@ -104,7 +104,7 @@
 				// let pageNum = page.num; // 页码, 默认从1开始
 				// let pageSize = page.size; // 页长, 默认每页10条
 				let result = await this.getAudioList(page)
-				console.log(result,'我的作品');
+				console.log(result, '我的作品');
 				let curPageData = result.list; //接口返回的当前页数据列表 (数组)
 				let curPageLen = result.list.length; //// 接口返回的当前页数据长度 (如列表有26个数据,当前页返回8个,则curPageLen=8)
 				let totalPage = result.pages; // 接口返回的总页数
@@ -116,14 +116,14 @@
 				this.mescroll.endByPage(curPageLen, totalPage);
 			},
 
-			// 获取大家再看列表list
+			// 
 			async getAudioList(page) {
 				const data = {
 					sortType: this.sortType,
 					pageNum: page.num,
 					pageSize: page.size,
 					content: this.content,
-					userId: 1,
+					// userId: 1,
 				}
 				const result = await this.get_my_creation_list(data) // 获取 大家再在读的列表
 				return result
@@ -135,9 +135,9 @@
 					url: '/pages/listen_nei/listen_nei?audioId=' + item.audioId + '&type=audio' + '&authorId=' + item.userId
 				})
 			}
-			
-			
-			
+
+
+
 		}
 	}
 </script>
@@ -154,7 +154,7 @@
 			bottom: 0rpx;
 		}
 	}
-	
+
 	.bodan {
 		display: flex;
 		justify-content: flex-start;
@@ -162,7 +162,7 @@
 		/* #ifdef MP-WEIXIN */
 		margin-left: 30rpx;
 		/* #endif */
-	
+
 		& .bodan_content_desc {
 			margin-top: 23rpx;
 			font-size: 27rpx;
@@ -171,31 +171,33 @@
 			color: rgba(153, 153, 153, 1);
 			width: 550rpx;
 		}
-	
+
 		& .bodan_content_title {
 			font-size: 32rpx;
 			font-family: PingFang SC;
 			font-weight: 500;
 			color: rgba(51, 51, 51, 1);
+			height: 69rpx;
 		}
-	
+
 		& .bodan_content_author {
 			display: flex;
 			justify-content: flex-start;
-			margin-top: 10rpx;
-	
+			margin-top: 34rpx;
+
 			& .bodan_content_author_name {
 				margin-left: 10rpx;
 				color: #fac882;
 			}
-	
+
 			& .bodan_content_author_count {
 				margin-left: 10rpx;
 				color: rgba(153, 153, 153, 1);
 			}
-	
+
 		}
 	}
+
 	.bodan_content {
 		display: flex;
 		flex-direction: column;

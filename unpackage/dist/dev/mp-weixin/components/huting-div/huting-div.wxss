@@ -48,7 +48,6 @@
   width: 518rpx;
 }
 .all_and_listen_div .all_and_listen_div_author {
-  width: 408rpx;
   font-size: 26rpx;
   font-family: PingFang SC;
   font-weight: 300;

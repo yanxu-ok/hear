@@ -30,40 +30,35 @@
   right: 0;
   bottom: 0;
   top: 0;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+          flex-direction: column;
 }
 .myindex .myindex_img {
   width: 100%;
   height: 429rpx;
-  background: #000000;
+  position: absolute;
+  top: 0;
+  background-repeat: no-repeat;
+  background-size: cover;
 }
 .myindex_desc {
   font-size: 28rpx;
   font-family: PingFang SC;
   font-weight: 300;
   color: #e5f4ff;
-  margin-left: 50rpx;
+  padding: 0 30rpx;
+  margin-top: 34rpx;
 }
-.pb-title {
-  width: 750rpx;
-  height: 70rpx;
-  display: -webkit-box;
-  display: -webkit-flex;
-  display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-          flex-direction: row;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-          align-items: center;
-  -webkit-box-pack: center;
-  -webkit-justify-content: center;
-          justify-content: center;
-  border-bottom-width: 1px;
-  border-bottom-color: #F7F5F5;
-  background-color: #FFFFFF;
-  border-top-left-radius: 24rpx;
-  border-top-right-radius: 24rpx;
+.hengtiao {
+  width: 100%;
+  height: 8rpx;
+  background: #E6E6E6;
+  opacity: 0.3;
 }
 .pb-body {
   width: 750rpx;
@@ -77,8 +72,17 @@
   -webkit-align-items: center;
           align-items: center;
   position: relative;
+  border-top-left-radius: 30rpx;
+  border-top-right-radius: 30rpx;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
+  flex-direction: column;
 }
-.shudan_list {
+.back {
+  background: #0051a8;
+}
+.shudan_list1 {
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
@@ -86,22 +90,25 @@
   -webkit-align-items: center;
           align-items: center;
   margin-bottom: 25rpx;
+  padding: 0 30rpx;
 }
-.shudan_list .shudan_list_title {
+.shudan_list1 .shudan_list_title {
   margin-left: 23rpx;
-  display: block;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
 }
-.shudan_list .shudan_list_title .pd {
+.shudan_list1 .shudan_list_title .pd {
   font-size: 32rpx;
   font-family: PingFang SC;
   font-weight: 400;
   color: white;
 }
-.shudan_list .shudan_list_title .count {
+.shudan_list1 .shudan_list_title .count {
   font-size: 21rpx;
   font-family: PingFang SC;
   font-weight: 400;

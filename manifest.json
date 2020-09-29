@@ -91,10 +91,22 @@
             "mode" : "hash",
             "base" : "/h5"
         },
-        "domain" : "iqilu.com",
+        "domain" : "10.0.117.248:9997",
         "title" : "听见",
         "devServer" : {
-            "https" : false
+            "https" : false,
+            "proxy" : {
+                "/member" : {
+                    // "port" : 8080, //端口号
+                    //  "disableHostCheck" : true,
+                    "target" : "https://app-auth.iqilu.com/member",
+                    "pathRewrite" : {
+                        "^/member" : ""
+                    },
+                    "changeOrigin" : true,
+                    "secure" : false
+                }
+            }
         }
     }
 }

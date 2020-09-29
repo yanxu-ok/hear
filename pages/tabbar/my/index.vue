@@ -4,25 +4,26 @@
 			<view class="baoliu"></view>
 			<view class="my_contain_touxiang">
 				<view style="display: flex;flex-direction: column;width: 490rpx;">
-					<view class="my_header_name">{{userInfo.nickName}}</view>
-					<view class="my_header_desc">{{userInfo.userDescribe | titleFilter(39)}}</view>
+					<view class="my_header_name">{{userInfo ? userInfo.nickName : ''}}</view>
+					<view class="my_header_desc">{{userInfo ? userInfo.userDescribe  : '' | titleFilter(39)}}</view>
 				</view>
 				<view style="width: 171rpx;height: 171rpx;position: relative">
-					<u-image width="171rpx" height="171rpx" :src="userInfo.avatar" shape="circle" @click="handleImg" style="box-shadow:0 0 3px #AAA;"></u-image>
+					<u-image width="171rpx" height="171rpx" :src="userInfo ? userInfo.avatar : '' " shape="circle" @click="handleImg"
+					 style="box-shadow:0 0 3px #AAA;"></u-image>
 					<image src="@/static/my/xiugai.png" class="my_contain_touxiang_edit"></image>
 				</view>
 			</view>
 			<view class="my_guanzhu">
 				<view @tap="handleClick(0)">
-					<view class="fensi">{{fensiCount}}</view>
+					<view class="fensi">{{fensiCount | numFormat}}</view>
 					<view class="fensi_name">粉丝</view>
 				</view>
-				<view @tap="handleClick(1)">
-					<view class="fensi">{{guanzhuCount}}</view>
+				<view @tap="handleClick(1)" style="margin-left: 100rpx;">
+					<view class="fensi">{{guanzhuCount | numFormat}}</view>
 					<view class="fensi_name">关注</view>
 				</view>
-				<view @tap="handleClick(2)">
-					<view class="fensi">{{zuoPinCount}}</view>
+				<view @tap="handleClick(2)" v-if="userInfo && userInfo.userRole != 3" style="margin-left: 100rpx;">
+					<view class="fensi">{{zuoPinCount | numFormat}}</view>
 					<view class="fensi_name">作品</view>
 				</view>
 			</view>
@@ -44,7 +45,7 @@
 		<view class="my_caozuo">
 			<view class="my_caozuo_div" @tap="handleMyClick(0)">
 				<u-image width="40rpx" height="39rpx" src="@/static/my/zhuye.png"></u-image>
-				<view class="my_caozuo_text">个人主页</view>
+				<view class="my_caozuo_text">{{userInfo && userInfo.userRole != 3 ? '个人主页' : '机构主页' }}</view>
 			</view>
 			<view class="my_caozuo_div" @tap="handleMyClick(1)">
 				<u-image width="38rpx" height="39rpx" src="@/static/my/lishi.png"></u-image>
@@ -60,42 +61,62 @@
 			</view>
 		</view>
 
-		<view style="display: flex;margin-top: 84rpx;">
-			<view class="my_shoucang" :class="{on:shudanIndex==index}" v-for="(item,index) in shudanList" :key="index" @tap="handle(index)">{{item}}</view>
-		</view>
+		<view style="height: 900rpx;display: flex;flex-direction: column;">
 
-		<scroll-view scroll-y="true" style="flex: 1;margin-top: 34rpx;overflow: hidden;">
-			<view class="shudan_content" v-if="showShudan">
-				<template v-for="(item,index) in bodanList">
-					<block :key="index">
-						<shudan width="165rpx" :titleWidth="width" :size="size" type="bodan" :length="9" :count="item.chapterCount"
-						 :title="item.topicName" :item="item" bottom="35rpx" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
-					</block>
-				</template>
-				<view class="addshudan" @tap="handleAddshudan">
-					<u-image width="120rpx" height="120rpx" src=""></u-image>
-					<view class="addshudan_text">创建播单</view>
+			<view style="display: flex;margin-top: 84rpx;">
+				<view class="my_shoucang" :class="{on:shudanIndex==index}" v-for="(item,index) in shudanList" :key="index" @tap="handle(index)">{{item}}</view>
+			</view>
+
+			<!-- <scroll-view scroll-y="true" style="flex: 1;margin-top: 34rpx;overflow: hidden;"> -->
+			<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" :bottombar="true" @down="downCallback" @up="upCallback"
+			 :down="downOption" :up="upOption" style="flex: 1;margin-top: 34rpx; overflow: auto;">
+				<view class="shudan_content" v-if="showShudan">
+					<template v-for="(item,index) in dataList">
+						<block :key="index">
+							<shudan width="165rpx" :titleWidth="width" :size="size" type="bodan" :length="9" :count="item.chapterCount"
+							 :title="item.topicName" :item="item" bottom="30rpx" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
+						</block>
+					</template>
+					<view class="addshudan" @tap="handleAddshudan">
+						<u-image width="120rpx" height="120rpx" src="@/static/my/chuangjian.png" border-radius="10rpx"></u-image>
+						<view class="addshudan_text">创建播单</view>
+					</view>
 				</view>
-			</view>
 
-			<view class="shudan_content" v-else>
-				<template v-for="(item,index) in zhuantiList">
-					<block :key="index">
-						<shudan width="165rpx" :titleWidth="width" :size="size" :length="9" type="zhuanti" :count="item.chapterCount"
-						 :item="item" :title="item.topicName" bottom="35rpx" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
-					</block>
-				</template>
-			</view>
-		</scroll-view>
+				<view class="shudan_content" v-else>
+					<template v-for="(item,index) in dataList">
+						<block :key="index">
+							<shudan width="165rpx" :titleWidth="width" :size="size" :length="9" type="zhuanti" :count="item.chapterCount"
+							 :item="item" :title="item.topicName" bottom="35rpx" :image="item.topicImage" @handleClickList="handleClickList"></shudan>
+						</block>
+					</template>
+				</view>
+				<!-- </scroll-view> -->
+			</mescroll-uni>
+
+		</view>
 
 		<biaoqian ref="biaoqian"></biaoqian>
 
-		<tabbar :list="tabbarData" height="55px" :mid-button="true" inactive-color="#cbcedd" active-color="#fe9503"></tabbar>
+		<tabbar :list="tabbarData" height="55px" :before-switch="beforeSwitch" :mid-button="true" inactive-color="#cbcedd"
+		 active-color="#fe9503"></tabbar>
 
 	</view>
 </template>
 
 <script>
+	// #ifdef H5
+	import {
+		WebBridgeApi
+	} from "ijsbridge"
+	// #endif
+	import {
+		isLogin,
+		getCurrectStorg,
+		isApp
+	} from '@/libs/hear-util/index.js'
+	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
+	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
 	import {
 		mapActions,
 		mapState
@@ -104,10 +125,12 @@
 	import shudan from '@/components/u-shudan/u-shudan.vue'
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
 	export default {
+		mixins: [MescrollMixin], // 使用mixin
 		components: {
 			tabbar,
 			shudan,
-			biaoqian
+			biaoqian,
+			MescrollUni
 		},
 		data() {
 			return {
@@ -116,46 +139,135 @@
 				show: true,
 				closeable: true,
 				user: {},
-				userInfo: [],
+				userInfo: null,
 				fensiCount: 0, // 粉丝的数量
 				guanzhuCount: 0, // 关注的数量
 				zuoPinCount: 0, //作品的数量
-				shudanList: ['创建播单', '收藏专题'],
+				shudanList: ['个人播单', '收藏专题'],
 				shudanIndex: 0,
 				showShudan: true, // 书单控制,
 				bodanList: [], // 播单
-				zhuantiList: [] // 专题list
+				zhuantiList: [], // 专题list，
+				downOption: {
+					auto: false
+				},
+				// 上拉加载的配置(可选)
+				upOption: {
+					auto: false
+				},
+				// pageNum: 1,
+				// pageSize: 10,
+				dataList: [], // 数据,
+				canReset: false,
+				token: ''
 			}
 		},
-		onLoad() {
-			this.get_user_msg({
-				userId: 1,
+
+		async onLoad() {
+			let token = getCurrectStorg('token')
+			// if (!token) {
+			// 	this.isLogin = false
+			// 	return;
+			// }
+			this.token = token
+
+			// 判断用户是否是第一次登录
+			let count = await this.get_user_count()
+
+			let res = await this.get_user_msg({
+				// userId: 1,
 				otherUserId: null
-			}).then(res => {
-				this.userInfo = res
-				uni.setStorage({
-					key: 'user',
-					data: JSON.stringify(res),
-					success: function() {
-						// console.log('success');
-					}
-				});
-				this.$refs.biaoqian.getBiaoqian()
-				this.init() // 获取作品啥的
-				this.getBodanList()
-				this.getZhuanTiList()
 			})
+
+			this.userInfo = res
+			uni.setStorageSync('user', JSON.stringify(res));
+			// uni.setStorage({
+			// 	key: 'user',
+			// 	data: JSON.stringify(res),
+			// 	success: function() {
+			// 		// console.log('success');
+			// 	}
+			// })
+			console.log(count, '用户登录的次数');
+
+			if (count == 0) {
+				this.$refs.biaoqian.show = true
+				this.$refs.biaoqian.getBiaoqian() // tan
+			} else {
+				// return;
+			}
+
+			this.init() // 获取作品啥的
+			this.downCallback()
+			// this.getZhuanTiList()
+
 		},
+
 		computed: {
 			...mapState({
 				tabbarData: state => state.system.tabBarList,
 				// userInfo: state => state.my.userInfo
 			})
+
 		},
+
+		onShow() {
+			this.canReset && this.downCallback()
+			this.canReset = true
+		},
+
 		methods: {
+
+			beforeSwitch(index) {
+				let isLog = isLogin() // 判断用户是否登录
+				if (index == 3) {
+					if (!isLog) {
+						console.log(1);
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+						return false;
+					}
+					// #ifdef H5
+					if (isApp() == 'chuangqi') {
+						WebBridgeApi.router({
+							route: 'webapp',
+							params: {
+								url: 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+									'&hearEnv=ok'
+							}
+						})
+						// .then(({
+						// 	err,
+						// 	result
+						// }) => {
+						// 	console.log("测试桥返回结果authorize", result, err);
+						// });
+						return false;
+					}
+					// #endif
+					else {
+						return true
+					}
+				} else if (index == 4) {
+					if (!isLog) {
+						console.log(1);
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+						return false;
+					} else {
+						return true
+					}
+				} else {
+					return true
+				}
+			},
+
 			...mapActions(['get_user_msg', 'get_focus_or_fans_count', 'get_user_topic_listen_count', 'get_user_play_single',
-				'get_user_collect'
+				'get_user_collect', 'get_user_count', 'c_get_user_msg'
 			]),
+
 			async init() {
 				let guanzhuCount = await this.get_focus_or_fans_count({
 					type: 1,
@@ -173,58 +285,139 @@
 				this.zuoPinCount = zuoPinCount
 			},
 
+
 			// 获取播单
 			async getBodanList() {
 				let data = {
-					userAuthorId: this.userInfo.userId,
+					// userAuthorId: this.userInfo.userId,
 					topicType: 2,
 					pageNum: null,
 					pageSize: null,
-					otherUserId: null
+					otherUserId: this.userInfo.userId
 				}
 				let result = await this.get_user_play_single(data)
-				this.bodanList = result.list
+				this.bodanList = result
 			},
 
 			// 获取专题
 			async getZhuanTiList() {
 				let data = {
-					userId: 1,
-					otherUserId: null
+					// userId: 1,
+					otherUserId: this.userInfo.userId
 				}
 				let result = await this.get_user_collect(data)
 				this.zhuantiList = result.list
 			},
 
+			/*下拉刷新的回调*/
+			async downCallback() {
+
+				// if (!this.userInfo) {
+				// 	this.mescroll.endSuccess()
+				// }
+				this.mescroll.resetUpScroll(); // 重置列表为第一页 (自动执行 page.num=1, 再触发upCallback方法 )
+				// 下拉刷新什么也不处理, 可直接调用或者延时一会调用 mescroll.endSuccess() 结束即可
+
+			},
+
+			/*上拉加载的回调*/
+			async upCallback(page) {
+				console.log(1);
+				// let pageNum = page.num; // 页码, 默认从1开始
+				// let pageSize = page.size; // 页长, 默认每页10条
+				let result = await this.ifType(page)
+				let curPageData = result.list; //接口返回的当前页数据列表 (数组)
+				let curPageLen = result.list.length; //// 接口返回的当前页数据长度 (如列表有26个数据,当前页返回8个,则curPageLen=8)
+				let totalPage = result.pages; // 接口返回的总页数
+				let totalSize = result.total; //  接口返回的总数据量
+
+				//设置列表数据
+				if (page.num == 1) this.dataList = []; //如果是第一页需手动置空列表
+				this.dataList = this.dataList.concat(curPageData); //追加新数据
+				this.mescroll.endByPage(curPageLen, totalPage);
+			},
+
+			async ifType(page) {
+				if (this.shudanIndex == 0) {
+					console.log(this.userInfo);
+					let data = {
+						// userAuthorId: this.userInfo.userId,
+						topicType: 2,
+						pageNum: page.num,
+						pageSize: page.size,
+						otherUserId: this.userInfo.userId
+					}
+					console.log(data);
+					let result = await this.get_user_play_single(data)
+					return result
+				} else {
+					let data = {
+						// userId: 1,
+						otherUserId: this.userInfo.userId
+					}
+					let result = await this.get_user_collect(data)
+					return result
+				}
+			},
+
 			// 增加书单
 			handleAddshudan() {
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				uni.navigateTo({
 					url: '/pages/shudan/shudan?userId=' + this.userInfo.userId
 				})
 			},
 
-			// 点击播单/专题之后的事件
+			// 点击播单/专题之后的事件 
 			handleClickList(item) {
-				console.log(item);
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				let str = item.type
 				if (str == 'bodan') {
 					uni.navigateTo({
-						url: '/pages/listpage/listpage?name=播单列表&type=zj&topicId=' + item.item.topicId
+						url: '/pages/list_page_zhang/list_page_zhang?name=播单列表&type=zj&topicId=' + item.item.topicId
 					})
 				} else {
 					uni.navigateTo({
-						url: '/pages/listpage/listpage?name=专题列表&type=zj&topicId=' + item.item.topicId
+						url: '/pagesA/topic-list-page/topic-list-page?topicId=' + item.item.topicId + '&authorId=' + item.item.userAuthorId
 					})
 				}
 			},
 
 			// 点击变色
 			handle(index) {
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				this.showShudan = !this.showShudan
 				this.shudanIndex = index
+
+				this.downCallback()
 			},
 
 			handleClick(index) {
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				if (index == 0) {
 					uni.navigateTo({
 						url: '/pagesA/guanzhu/guanzhu?index=' + index
@@ -242,6 +435,13 @@
 			},
 
 			handleMyClick(index) {
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				console.log(this.userInfo);
 				if (index == 0) {
 					uni.navigateTo({
@@ -254,17 +454,33 @@
 				} else if (index == 2) {
 
 				} else if (index == 3) {
-
+					uni.navigateTo({
+						url: '/pagesB/setup/setup'
+					})
 				}
 			},
 
 			handleImg() {
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				uni.navigateTo({
 					url: '/pages/myinfo/myinfo'
 				})
 			},
 
 			handleHuiyuan() {
+				let isLog = isLogin()
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				uni.navigateTo({
 					url: '/pagesA/huiyuan/huiyuan'
 				})
@@ -275,6 +491,7 @@
 					url: '/pages/login/login'
 				})
 			}
+
 		}
 	}
 </script>
@@ -352,9 +569,9 @@
 	.my_guanzhu {
 		display: flex;
 		margin-top: 12rpx;
-		justify-content: space-between;
+		justify-content: flex-start;
 		text-align: center;
-		width: 450rpx;
+		width: 400rpx;
 		margin-left: 45rpx;
 
 		& .fensi {
@@ -384,17 +601,16 @@
 	}
 
 	.vip {
-		position: absolute;
-		bottom: 0;
 		width: 663rpx;
 		height: 137rpx;
 		background: black;
-		left: 44rpx;
 		border-radius: 20px 20px 0px 0px;
 		display: flex;
 		align-items: center;
 		justify-content: space-between;
 		padding: 40rpx 38rpx 30rpx 43px;
+		margin-top: 83rpx;
+		margin: 83rpx auto 0 auto;
 
 		& .vip_xufei {
 			width: 157rpx;
@@ -445,10 +661,12 @@
 		display: flex;
 		flex-wrap: wrap;
 		padding: 0 0 0 44rpx;
+		// height: 100%;
 
 		& .addshudan {
 			display: flex;
 			align-items: center;
+			margin-bottom: 30rpx;
 
 			& .addshudan_text {
 				margin-left: 19rpx;

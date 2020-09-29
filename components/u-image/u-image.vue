@@ -99,7 +99,7 @@ export default {
 		// 圆角，单位任意
 		borderRadius: {
 			type: [String, Number],
-			default: 10
+			default: 0
 		},
 		// 是否懒加载，微信小程序、App、百度小程序、字节跳动小程序
 		lazyLoad: {

@@ -1,57 +1,65 @@
 <template>
 	<view class="myindex">
-		<view class="myindex_img">
+		<!-- 		<view :style="{background: 'url(' + userInfo.avatar + ') no-repeat' }" class="myindex_img"></view> -->
+		<!-- <u-image width="100%" height="429rpx" src="userInfo.avatar"></u-image> -->
+		<view style="width: 100%;height: 400rpx;position: relative;" :class="{back:priv==3}">
+			<image :src="userInfo.avatar" style="width: 100%;height: 100%;position: absolute;top: 0; filter: blur(40rpx);z-index: -1;"></image>
+
+			<!-- 	<view class="myindex_img"> -->
 			<u-navbar background="" title-color="#ffffff" back-icon-color="#ffffff">
 			</u-navbar>
 
-			<view class="shudan">
-				<view class="shudan_list">
+			<view class="shudan_list1">
+				<view style="width: 120rpx;height: 120rpx;">
 					<u-image width="120rpx" height="120rpx" :src="userInfo.avatar" shape="circle"></u-image>
-					<view class="shudan_list_title">
-						<view style="display: flex;">
-							<view class="pd">
-								{{userInfo.nickName}}
-							</view>
-							<!-- <u-image height="10rpx" width="10rpx" :src="userInfo.avatar"></u-image> -->
-						</view>
-
-						<view class="count" v-if="priv ==1 || priv ==2 ">关注:{{guanzhuCount}} 粉丝: {{fensiCount}} </view>
-						<!-- <view class="count">关注:{{guanzhuCount}} 粉丝: {{fensiCount}} </view> -->
-					</view>
-					<u-button type="error" size="mini" :custom-style="customStyle" :style="{ display: lei || priv != 3? 'none':'block' }"
-					 v-if="!guanzhu" @tap="handleGuanzhu(userInfo)">+关注</u-button>
-					<u-button type="error" size="mini" :custom-style="customStyle" :style="{ display: lei || priv != 3? 'none':'block' }"
-					 v-else @tap="handleGuanzhu(userInfo)">已关注</u-button>
 				</view>
+				<view class="shudan_list_title">
+					<view style="display: flex;">
+						<view class="pd">
+							{{userInfo.nickName | titleFilter(15)}}
+						</view>
+						<!-- <u-image height="10rpx" width="10rpx" :src="userInfo.avatar"></u-image> -->
+					</view>
+					<view class="count" v-if="priv ==1 || priv ==2 ">关注:{{guanzhuCount | numFormat}} 粉丝: {{fensiCount | numFormat}} </view>
+					<!-- <view class="count">关注:{{guanzhuCount}} 粉丝: {{fensiCount}} </view> -->
+				</view>
+				<u-button type="error" size="mini" :custom-style="customStyle" :style="{ display: lei || priv != 3? 'none':'block' }"
+				 v-if="!guanzhu" @tap="handleGuanzhu(userInfo)">+关注</u-button>
+				<u-button type="error" size="mini" :custom-style="customStyle" :style="{ display: lei || priv != 3? 'none':'block' }"
+				 v-else @tap="handleGuanzhu(userInfo)">已关注</u-button>
+				<!-- 	<view style="margin-left: auto;">
+					<u-button type="error" size="mini" :custom-style="customStyle" @tap="handleGuanzhu(userInfo)">已关注</u-button>
+				</view> -->
 			</view>
-
 			<view class="myindex_desc">{{userInfo.userSignature | titleFilter(80)}}</view>
 
-			<!-- 弹层 -->
-			<!-- <u-popup v-model="show" mode="bottom"  border-radius="30" width="100%" height="950rpx" :mask-close-able="zhezhao" :mask="showzhezhao"> -->
-			<drawer ref="drawer-bottom" pos="bottom" standout="930rpx" width="750rpx" height="x-900rpx" @overlayClicked="hide">
-				<!-- 主体部分 -->
-				<view class="pb-body">
-					<view class="pb-title" >
-						<view class="pb-title_header">
-							<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"></u-tabs-swiper>
-						</view>
-					</view>
-					<u-gap height="8" bg-color="rgba(230,230,230,0.3)"></u-gap>
-					<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" style="height: 850rpx;width: 100%;">
-						<swiper-item class="swiper-item" v-for="(item, index) in list" :key="index">
-							<!-- 首页 -->
-							<mytabs v-if=" item.name == '首页' " :priv="priv" :userId="userId"></mytabs>
-							<ruzhuzhubo v-if=" item.name == '入驻主播' " :priv="priv" :userId="userId"></ruzhuzhubo>
-							<dongtai v-if=" item.name == '动态' " :priv="priv" :userId="userId"></dongtai>
-							<jigoubodan v-if=" item.name == '拥有播单' " :priv="priv" :userId="userId"></jigoubodan>
-						</swiper-item>
-					</swiper>
-				</view>
-
-			</drawer>
-			<!-- </u-popup> -->
 		</view>
+
+		<!-- </view> -->
+
+		<!-- 弹层 -->
+		<view style="flex: 1;">
+			<!-- <u-popup v-model="show" mode="bottom"  border-radius="30" width="100%" height="950rpx" :mask-close-able="zhezhao" :mask="showzhezhao"> -->
+			<!-- <drawer ref="drawer-bottom" pos="bottom" standout="930rpx" width="750rpx" @overlayClicked="hide" style="flex: 1;"> -->
+			<!-- 主体部分 -->
+			<view class="pb-body">
+				<view class="pb-title_header">
+					<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false"></u-tabs-swiper>
+				</view>
+				<view class="hengtiao"></view>
+				<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" style="height: 100%; width: 100%;">
+					<swiper-item class="swiper-item" v-for="(item, index) in list" :key="index">
+						<!-- 首页 -->
+						<mytabs v-if=" item.name == '首页' " :priv="priv" :userId="userId"></mytabs>
+						<ruzhuzhubo v-if=" item.name == '入驻主播' " :priv="priv" :userId="userId"></ruzhuzhubo>
+						<dongtai v-if=" item.name == '动态' " :priv="priv" :userId="userId"></dongtai>
+						<jigoubodan v-if=" item.name == '专题汇总' " :priv="priv" :userId="userId"></jigoubodan>
+					</swiper-item>
+				</swiper>
+			</view>
+		</view>
+		<!-- </drawer> -->
+		<!-- </u-popup> -->
 	</view>
 </template>
 
@@ -67,6 +75,7 @@
 	import drawer from '@/pages/playPage/components/myp-drawer.vue'
 	import guanzhu from '@/components/u-guanzhu/u-guanzhu.vue'
 	export default {
+
 		components: {
 			guanzhu,
 			mytabs,
@@ -75,6 +84,7 @@
 			ruzhuzhubo,
 			jigoubodan
 		},
+
 		data() {
 			return {
 				noline: false,
@@ -88,7 +98,8 @@
 				userInfo: {}, // 传递过来的用户信息
 				customStyle: {
 					width: '113rpx',
-					height: '48rpx'
+					height: '50rpx',
+					borderRadius: '40rpx'
 				},
 				guanzhuCount: null,
 				fensiCount: null,
@@ -96,10 +107,11 @@
 				lei: false
 			}
 		},
+
 		async onLoad(e) {
 			// console.log(e);
 			this.priv = parseInt(e.priv)
-			// this.priv = 3
+			// this.priv = 2
 			this.userId = parseInt(e.userId)
 			this.init(this.priv) // 赋值tabs
 			this.ifCurrectUser(e.userId)
@@ -108,8 +120,8 @@
 			} else {
 				// 获取 入住主播和拥有播单
 			}
-
 		},
+
 		methods: {
 			...mapActions(['get_user_msg', 'get_focus_or_fans_count', 'is_focus', 'get_user_play_single']),
 			hide(duration) {
@@ -146,7 +158,7 @@
 					this.list = [{
 						name: '入驻主播'
 					}, {
-						name: '拥有播单'
+						name: '专题汇总'
 					}]
 				}
 			},
@@ -180,7 +192,7 @@
 
 							// 利用传过来的Id 重新获取用户信息
 							_this.get_user_msg({
-								userId: 1,
+								// userId: 1,
 								otherUserId: _this.userId
 							}).then(res => {
 								_this.userInfo = res
@@ -196,6 +208,8 @@
 					}
 				});
 			},
+
+
 			// 是否可见
 			isPublic(userInfo) {
 				if (userInfo.isPublic == 1) {
@@ -234,11 +248,16 @@
 		right: 0;
 		bottom: 0;
 		top: 0;
+		display: flex;
+		flex-direction: column;
 
 		& .myindex_img {
 			width: 100%;
 			height: 429rpx;
-			background: #000000;
+			position: absolute;
+			top: 0;
+			background-repeat: no-repeat;
+			background-size: cover;
 		}
 	}
 
@@ -248,27 +267,18 @@
 		font-family: PingFang SC;
 		font-weight: 300;
 		color: rgba(229, 244, 255, 1);
-		margin-left: 50rpx;
-		/* #ifdef H5 */
+		padding: 0 30rpx;
 		margin-top: 34rpx;
-		/* #endif */
+	}
+
+	.hengtiao {
+		width: 100%;
+		height: 8rpx;
+		background: #E6E6E6;
+		opacity: 0.3;
 	}
 
 	.pb {
-		&-title {
-			width: 750rpx;
-			height: 70rpx;
-			display: flex;
-			flex-direction: row;
-			align-items: center;
-			justify-content: center;
-			border-bottom-width: 1px;
-			border-bottom-color: $myp-border-color-light;
-			background-color: #FFFFFF;
-			border-top-left-radius: 24rpx;
-			border-top-right-radius: 24rpx;
-		}
-
 		&-body {
 			width: 750rpx;
 			height: 100%;
@@ -276,17 +286,26 @@
 			flex-direction: column;
 			align-items: center;
 			position: relative;
+			border-top-left-radius: 30rpx;
+			border-top-right-radius: 30rpx;
+			display: flex;
+			flex-direction: column;
 		}
 	}
 
-	.shudan_list {
+	.back {
+		background: #0051a8;
+	}
+
+	.shudan_list1 {
 		display: flex;
 		align-items: center;
 		margin-bottom: 25rpx;
+		padding: 0 30rpx;
 
 		& .shudan_list_title {
 			margin-left: 23rpx;
-			display: block;
+			display: flex;
 			flex-direction: column;
 
 			& .pd {
@@ -304,6 +323,10 @@
 				margin-top: 17rpx;
 			}
 		}
+	}
+
+	.swiper-item {
+		// padding-top: 37rpx;
 	}
 
 	.ifshow {

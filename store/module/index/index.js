@@ -146,7 +146,7 @@ export default {
 			return new Promise((resolve, reject) => {
 				get_topic_by_categoryid(obj).then(res => {
 					console.log(res, "搜索下的专题");
-					resolve(res.data.data.list)
+					resolve(res.data.data)
 				})
 			})
 		},

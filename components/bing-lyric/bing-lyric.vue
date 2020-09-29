@@ -1,7 +1,5 @@
 <template>
 	<view class="lyric-main" :style="{
-		width:cuAreaStyle.width,
-		height:cuAreaStyle.height,
 		background:cuAreaStyle.background}">
 		<scroll-view id="lyric-show" class="lyric-show" scroll-with-animation="true" :scroll-y="true" :scroll-into-view="showLyricId" @scroll="lyricScroll" 
 		:style="{
@@ -21,12 +19,12 @@
 				}">{{v}}</text>
 			</view>
 		</scroll-view>
-		<view class="center-view" :style="{top:centerLineTop,display:showCenterView?'flex':'none',fontSize:cuCenterStyle.fontSize,height:cuCenterStyle.height}">
+		<!-- <view class="center-view" :style="{top:centerLineTop,display:showCenterView?'flex':'none',fontSize:cuCenterStyle.fontSize,height:cuCenterStyle.height}">
 			<image v-if="cuCenterStyle.btnImg" class="center-btn" @click="centerBtnClick" :src="cuCenterStyle.btnImg" :style="{width:cuCenterStyle.height,height:cuCenterStyle.height}"></image>
 			<view v-else class="center-btn" @click="centerBtnClick">{{cuCenterStyle.btnText}}</view>
 			<view class="center-line" :style="{height:cuCenterStyle.lineHeight,backgroundColor:cuCenterStyle.color}"></view>
 			<view class="center-time">{{centerTime}}</view>
-		</view>
+		</view> -->
 <!-- 		<view class="selectControl" v-if="selectStatus" :style="{color:cuSelectControlStyle.color,backgroundColor:cuSelectControlStyle.backgroundColor,fontSize:cuSelectControlStyle.itemFontSize}">
 			<view class="selectAll" @click="selectAll" :style="{borderRadius:cuSelectControlStyle.itemBorderRadius,backgroundColor:cuSelectControlStyle.itemBackgroundColor}">{{selectAllStatus ? '全不选' : '全选'}}</view>
 			<view class="copy" @click="copyLyric" :style="{borderRadius:cuSelectControlStyle.itemBorderRadius,backgroundColor:cuSelectControlStyle.itemBackgroundColor}">复制歌词</view>
@@ -420,10 +418,13 @@
 <style>
 	.lyric-main {
 		position: relative;
+		display: flex;
+		flex-direction: column;
 	}
 	.lyric-show {
-		position: absolute;
+		/* position: absolute; */
 		overflow-anchor: none;
+		display: flex;
 	}
 	.lyric-show ::-webkit-scrollbar{
 		display: none;

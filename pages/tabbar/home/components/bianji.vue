@@ -14,12 +14,12 @@
 						<view class="bianji_content_author">
 							<view class="bianji_content_author_color">
 								<image style="width:19rpx; height:20rpx" src="@/static/images/author.png"></image>
-								<view style="margin-left: 10rpx;">{{item.topicAuthorName ? item.topicAuthorName : '无名氏' | titleFilter(5) }}</view>
+								<view style="margin-left: 10rpx;">{{item.nickName ? item.nickName : '无名氏' | titleFilter(3) }}</view>
 							</view>
 							<view class="bianji_content_author_color1">
 								<image style="width:17rpx; height:20rpx" src="@/static/images/play.png"></image>
 								<!-- <u-image width="17rpx" height="20rpx" src="@/static/images/play.png"></u-image> -->
-								<view style="margin-left: 10rpx;">{{item.topicReadAmount}}播放</view>
+								<view style="margin-left: 10rpx;">{{item.topicReadAmount | numFormat}}播放</view>
 							</view>
 						</view>
 					</view>

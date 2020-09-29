@@ -37,15 +37,11 @@
   padding: 45rpx 46rpx 23rpx 44rpx;
 }
 .bianjiHeader view:nth-child(1) {
-  font-size: 36rpx;
-  color: #333333;
   font-weight: 500;
   font-family: PingFang SC;
 }
 .bianjiHeader view:nth-child(2) {
   font-family: PingFang SC;
-  font-size: 24rpx;
-  color: #999999;
 }
 .paihangbang {
   margin-bottom: 20rpx;

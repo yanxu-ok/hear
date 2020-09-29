@@ -8,7 +8,7 @@
 			</view>
 			<view class="geci_contain_right_img" v-if="type == 'audio' ">
 				<u-image width="55rpx" height="54rpx" src="@/static/listen/pinglun.png"></u-image>
-				<view class="geci_contain_right_count">2.4W</view>
+				<view class="geci_contain_right_count">0</view>
 			</view>
 			<view class="geci_contain_right_img">
 				<u-image width="52rpx" height="47rpx" src="@/static/listen/fenxaing.png"></u-image>
@@ -24,6 +24,9 @@
 </template>
 
 <script>
+	import {
+		isLogin
+	} from '@/libs/hear-util/index.js'
 	import {
 		mapState,
 		mapActions,
@@ -65,10 +68,11 @@
 				ciBackground: {
 					background: 'none',
 					width: '400rpx',
-					height: '800rpx'
+					height: '700rpx'
 				}
 			}
 		},
+
 		async mounted() {
 			let content;
 			if (this.type == 'audio') {
@@ -78,11 +82,22 @@
 			}
 			this.list = this.zuhe(content)
 		},
+
 		methods: {
 			...mapActions(['insert_praise_add', 'delete_praise_cancel', 'get_article_by_audio_id']),
 			...mapMutations(['setAudioInfo']),
 			// 点赞 取消点赞
 			async handleDianzan() {
+
+				let isLog = isLogin() // 判断用户是否登录
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+
+
 				let obj = {
 					userId: 1,
 					audioId: this.audioInfo.audioId,
@@ -93,6 +108,7 @@
 					if (result.success) {
 						let audioInfo = this.audioInfo
 						audioInfo.isPraise = 0
+						audioInfo.praiseNum--
 						this.setAudioInfo(audioInfo)
 						uni.showToast({
 							title: '取消成功',
@@ -109,6 +125,7 @@
 					if (result.success) {
 						let audioInfo = this.audioInfo
 						audioInfo.isPraise = 1
+						audioInfo.praiseNum++
 						this.setAudioInfo(audioInfo)
 						uni.showToast({
 							title: '点赞成功',
@@ -140,21 +157,24 @@
 
 			// 组合歌词
 			zuhe(content) {
+				console.log();
 				let newArr = []
 				if (!content) {
 					return;
 				}
 				// console.log(content);
 				// 分秒相加 7秒
+				// let str 
 				if (content.articleContent.length >= 1) {
 					for (let i = 0; i < content.articleContent.length / 12; i++) {
 						let me = i * 7
 						let str = formatDate("2018/01/01 00:00:00", me)
 						str = `[${str}]`
-						newArr.push(str + content.articleContent.slice(0, 12))
+						newArr.push(str + content.articleContent.slice(i * 12, 12 * (i + 1)))
+						// console.log(newArr, content.articleContent);
 					}
 				}
-				// console.log(newArr, '组合后的歌词');
+				// console.log(newArr, '组合后的歌词', content.articleContent, '原始的歌词');
 				return newArr
 			}
 
@@ -167,6 +187,7 @@
 		display: flex;
 		justify-content: space-between;
 		margin-right: 30rpx;
+		flex: 1;
 
 		& .geci_contain_right {
 			display: flex;

@@ -26,6 +26,9 @@
 /* 文章场景相关 */
 .drawer {
   z-index: 999;
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+          flex: 1;
 }
 .pb-title {
   width: 750rpx;
@@ -33,33 +36,28 @@
   display: -webkit-box;
   display: -webkit-flex;
   display: flex;
-  -webkit-box-orient: horizontal;
-  -webkit-box-direction: normal;
-  -webkit-flex-direction: row;
-          flex-direction: row;
   -webkit-box-align: center;
   -webkit-align-items: center;
           align-items: center;
   -webkit-box-pack: center;
   -webkit-justify-content: center;
           justify-content: center;
-  border-bottom-width: 1px;
-  border-bottom-color: #F7F5F5;
-  background-color: #FFFFFF;
   border-top-left-radius: 24rpx;
   border-top-right-radius: 24rpx;
 }
 .pb-body {
   width: 750rpx;
   height: 100%;
+  border-top-left-radius: 24rpx;
+  border-top-right-radius: 24rpx;
   background-color: #FFFFFF;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: flex;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -webkit-flex-direction: column;
           flex-direction: column;
-  -webkit-box-align: center;
-  -webkit-align-items: center;
-          align-items: center;
   position: relative;
 }
 .pb-title_header {

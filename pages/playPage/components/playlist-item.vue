@@ -1,30 +1,31 @@
 <template>
-	<view style="height: 100%;">
-		<!-- <scroll-view scroll-y @scrolltolower="onreachBottom" class="play_swiper_scroll"> -->
+	<view style="display: flex;flex-direction: column;">
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" class="play_swiper_scroll" @down="downCallback"
 		 @up="upCallback" :down="downOption" :up="upOption">
 			<template v-for="(item,index) in dataList">
 				<view class="jiemu_contain" :key="index" @tap="handleZhangjie(index,item)">
-					<u-image width="39rpx" height="40rpx" src="@/static/images/zhibo.png" v-if="currectPlayIndex == index"></u-image>
-					<view v-else>{{index+1}}</view>
+					<view style="width: 55rpx;height: 25rpx;" v-if="currectPlayIndex == index">
+						<u-image width="39rpx" height="40rpx" src="@/static/images/zhibo.png"></u-image>
+					</view>
+					<view v-else style="width: 55rpx;height: 25rpx;font-size: 33rpx;color: #9A9A9A;">{{index+1}}</view>
 					<view class="jiemu_content">
 						<!-- 标题 -->
 						<view class="jiemu_content_title">
-							<view class="jiemu_content_title_name" :class="{on : style == index }">{{item.chapterName}}</view>
-							<view class="jiemu_content_title_date">{{item.createTime}}</view>
+							<view class="jiemu_content_title_name" :class="{on : style == index }">{{item.chapterName | titleFilter(10)}}</view>
+							<view class="jiemu_content_title_date">{{item.createTime.slice(0,7)}}</view>
 						</view>
 						<!-- 播放次数 -->
 						<view class="jiemu_content_count">
-							<u-image width="17rpx" height="20rpx" src="@/static/images/zhibo.png"></u-image>
-							<view style="margin-left: 10rpx;margin-right: 20rpx;">{{item.chapterReadAmount + '次'}}</view>
-							<u-image width="20rpx" height="20rpx" src="@/static/images/zhibo.png"></u-image>
-							<view style="margin-left: 10px;">{{item.chapterTime}}</view>
+							<u-image width="17rpx" height="20rpx" src="@/static/images/play.png"></u-image>
+							<view class="jiemu_content_count_img">{{item.chapterReadAmount | numFormat }}次播放</view>
+							<u-image width="20rpx" height="20rpx" src="@/static/images/shijian.png"></u-image>
+							<view style="margin-left: 12rpx; color: #9A9A9A;
+font-size: 24rpx;">{{item.chapterTime | s_to_hs}}</view>
 						</view>
 						<u-line color="#E5E5E5" margin="29rpx 0 0 0" length="600rpx"></u-line>
 					</view>
 				</view>
 			</template>
-			<!-- </scroll-view> -->
 		</mescroll-uni>
 	</view>
 </template>
@@ -35,6 +36,9 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
+	import {
+		setCurrectStorg
+	} from '@/libs/hear-util/index.js'
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
 	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
 	export default {
@@ -44,6 +48,7 @@
 				zhangjieList: state => state.play.zhangjieList,
 				topicId: state => state.play.topicId,
 				currectPlayIndex: state => state.play.currectPlayIndex,
+				chapterId: state => state.play.chapterId,
 			})
 		},
 		data() {
@@ -69,7 +74,7 @@
 		components: {
 			MescrollUni
 		},
-		async mounted() {
+		mounted() {
 			// this.setZhangjieList(result.list) // 列表存到vuex中  并且请求道得列表都请求到vuex中
 			// this.setCurrectPlayIndex(0)
 			// if (this.currectPlayIndex) {
@@ -95,9 +100,8 @@
 				let data = {
 					topicId: this.topicId,
 					pageNum: page.num,
-					pageSize: page.size,
-					listOrder: this.listOrder,
-					loginId: 1
+					pageSize: 1000,
+					listOrder: this.listOrder
 				}
 				return await this.get_chapter_list_by_topic(data)
 			},
@@ -109,7 +113,7 @@
 					return;
 				}
 				this.setCurrectPlayIndex(index) // 点击将当前的索引保存起来
-				// this.setCurrectPlay(this.zhangjieList[0])
+				setCurrectStorg('play', this.zhangjieList[index])
 			},
 
 			/*下拉刷新的回调*/
@@ -133,13 +137,39 @@
 				if (page.num == 1) this.dataList = []; //如果是第一页需手动置空列表
 				this.dataList = this.dataList.concat(curPageData); //追加新数据
 				this.setZhangjieList(this.dataList) // 列表存到vuex中  并且请求道得列表都请求到vuex中
-				if (this.isFirst) { // 符合 则是第一次刷新 
-					this.setCurrectPlayIndex(0)
-					this.isFirst = false
+
+				// console.log(this.chapterId);
+				console.log(this.chapterId, '章节的id');
+				let isChil = this.chapterId
+				if (isChil) { //	如果不为空 根据传过来的定位到当前的章节id	返回当前的索引
+					// this.isFirst = false
+
+					let chapterIndex = this.positionchapter() // 章节索引
+					this.setCurrectPlayIndex(chapterIndex)
+					this.setCurrectPlay(this.zhangjieList[chapterIndex])
+					// console.log(this.zhangjieList[chapterIndex]);
+					setCurrectStorg('play', this.zhangjieList[chapterIndex])
+				} else {
+					this.setCurrectPlayIndex(0) //如果是空的 是第一次进入 设置索引为0
+					this.setCurrectPlay(this.zhangjieList[0])
+					// console.log(this.zhangjieList[chapterIndex]);
+					setCurrectStorg('play', this.zhangjieList[0])
 				}
+
 				this.mescroll.endByPage(curPageLen, totalPage);
-				
+
 			},
+
+			// 获取索引
+			positionchapter() {
+				let result = this.dataList.findIndex((item, index) => {
+					return this.chapterId == item.chapterId
+				})
+				// let result = this.dataList.indexOf(this.chapterId)
+				console.log(result, '获取索引');
+				return result
+			}
+
 		}
 	}
 </script>
@@ -181,6 +211,14 @@
 			flex-direction: row;
 			align-items: end;
 			margin-top: 22rpx;
+
+			& .jiemu_content_count_img {
+				margin-left: 10rpx;
+				margin-right: 20rpx;
+				width: 170rpx;
+				font-size: 24rpx;
+				color: #9A9A9A;
+			}
 		}
 	}
 

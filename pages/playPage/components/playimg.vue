@@ -1,20 +1,27 @@
 <template>
 	<view class="play_img">
-		<u-image width="421rpx" height="422rpx" :fade="true" duration="1550" :src="zhangjieObj.topicImage" border-radius="20rpx" shaw="true">
+		<u-image width="421rpx" height="422rpx" :fade="true" duration="1550" :src="zhangjieObj.topicImage" border-radius="20rpx"
+		 shaw="true">
 		</u-image>
 		<view class="play_img_bofang">
-			<u-image width="17rpx" height="20rpx" src="@/static/logo.png"></u-image>
-			<view class="play_img_count">{{zhangjieObj.topicReadAmount}}播放</view>
+			<!-- <view style="width: 17rpx;height: 20rpx;"> -->
+				<!-- <u-image width="17rpx" height="20rpx" src="@/static/images/play.png"></u-image> -->
+				<image src="@/static/images/play.png" style="width: 17rpx;height: 20rpx;"></image>
+			<!-- </view> -->
+			<view class="play_img_count">{{zhangjieObj.topicReadAmount | numFormat}}播放</view>
 		</view>
 	</view>
 </template>
 
 <script>
-	import {mapState,mapActions} from 'vuex'
-	export default{
+	import {
+		mapState,
+		mapActions
+	} from 'vuex'
+	export default {
 		computed: {
 			...mapState({
-				zhangjieObj: state=>state.play.zhangjieObj
+				zhangjieObj: state => state.play.zhangjieObj
 			})
 		},
 	}
@@ -32,7 +39,8 @@
 			position: absolute;
 			display: flex;
 			bottom: 20rpx;
-			left: 260rpx;
+			left: 250rpx;
+			align-items: center;
 		}
 
 		& .play_img_count {

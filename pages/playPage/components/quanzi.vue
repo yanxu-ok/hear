@@ -14,6 +14,9 @@
 
 <script>
 	import {
+		isLogin
+	} from '@/libs/hear-util/index.js'
+	import {
 		mapActions,
 		mapState,
 		mapMutations
@@ -58,6 +61,17 @@
 
 			// 是否点赞
 			async handleParse() {
+				
+				let isLog = isLogin() // 判断用户是否登录
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				
+				
+				
 				let currectPlay = this.zhangjieList[this.currectPlayIndex]
 				if (currectPlay.isPraise) { // 说明已经点赞，需要取消点赞
 					let result = await this.delete_praise_cancel({
@@ -91,6 +105,14 @@
 
 			// 是否收藏
 			async handleShoucang() {
+				let isLog = isLogin() // 判断用户是否登录
+				if (!isLog) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				
 				let currectPlay = this.zhangjieList[this.currectPlayIndex]
 				if (currectPlay.isChapterCollect) { // 说明已经收藏，需要取消收藏
 					let result = await this.delete_collect_chapter({
@@ -101,12 +123,13 @@
 						newList[this.currectPlayIndex].isChapterCollect = 0
 						this.setZhangjieList(newList)
 					}
-				} else { //需要收藏调用接口
-					console.log(currectPlay, '当前播放的章节')
+				} else { //需要收藏调用接口	
+					const user = JSON.parse(uni.getStorageSync('user'))
+					console.log(currectPlay, '当前播放的章节',user)
 					uni.navigateTo({
-						url: '/pages/shudan/shudan?userId=1&type=zj&chapterId=' + currectPlay.chapterId
+						url: '/pages/shudan/shudan?userId=' + user.userId + '&type=zj&chapterId=' + currectPlay.chapterId
 					})
-
+					
 				}
 			}
 

@@ -7,7 +7,8 @@ import {
 	getWeinConfig,
 	insert_audio,
 	insert_article,
-	get_all_category
+	get_all_category,
+	increase_read_amount
 } from '@/api/huting/index.js'
 
 export default {
@@ -20,7 +21,8 @@ export default {
 		voicePath: '', // 录制的音频 
 		localId: null, // 微信录制完的音频id
 		flag: false, // 录制上传的音频
-		audioOrauthor: null // 全局保存音频id和读的作者
+		audioOrauthor: null, // 全局保存音频id和读的作者
+		allTime: 0 // 录制的音频总时长
 	},
 	getter: {
 		getFlag(state) {
@@ -71,7 +73,11 @@ export default {
 		// 全局设置音频的id
 		setAudioOrauthor(state, value) {
 			state.audioOrauthor = value
-		}
+		},
+
+		setallTime(state, value) {
+			state.allTime = value
+		},
 	},
 	actions: {
 		// 前端-获取大家在读列表
@@ -198,9 +204,21 @@ export default {
 					resolve(res.data.data)
 				})
 			})
+		},
+
+		// 给文稿阅读量加一
+		increase_read_amount({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				increase_read_amount(obj).then(res => {
+					console.log(res, "给文稿阅读量加一");
+					resolve(res)
+				})
+			})
 		}
-
-
 
 	}
 }

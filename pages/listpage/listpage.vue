@@ -1,5 +1,6 @@
 <template>
 	<view class="list_page_content">
+		
 		<u-navbar :title="title" background="" title-color="#333333" back-icon-color="#333333">
 			<view slot="right" @tap="handlePaixu">
 				<image src="../../static/listen/paixu.png" style="width: 30rpx;height: 30rpx;padding-right: 20rpx;" v-if="leixing !== 'lishi'  "></image>
@@ -10,11 +11,13 @@
 		<view style="height: 150rpx;" v-if="leixing === 'lishi' ">
 			<u-search placeholder="" v-model="content" class="search_c" margin="35rpx auto 0 auto" @search="custom"></u-search>
 		</view>
+		
 		<!-- <scroll-view scroll-y class="list_search_scroll" refresher-enabled="true" :refresher-triggered="shuaxin"
 		 @refresherrefresh="refresherrefresh" @scrolltolower="scrolltolower">
 			<u-bodan style="margin-left: 30rpx;" :length="15" :desc="40" :list="list" ref="list_bodanPage" :leixing="leixing"
 			 @handlePlay="handlePlay"></u-bodan>
 		</scroll-view> -->
+		
 		<view style="flex: 1; overflow: hidden;">
 			<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
 			 :up="upOption" style="flex: 1; ">
@@ -22,6 +25,7 @@
 				 @handlePlay="handlePlay"></u-bodan>
 			</mescroll-uni>
 		</view>
+
 	</view>
 </template>
 
@@ -79,6 +83,7 @@
 		async onLoad(e) {
 			console.log(e);
 			this.title = e.name
+			console.log(e.name);
 			this.categoryId = e.categoryId
 			this.topicId = e.topicId
 			this.leixing = e.type
@@ -102,13 +107,24 @@
 
 			// 点击之后排序
 			async handlePaixu() {
-				if (this.sortType == 2) {
-					this.sortType = 1
-					this.downCallback()
+				if (this.title == RenQi || this.title == XiaoLiang) {
+					if (this.biaoji == 2) {
+						this.biaoji = 1
+						this.downCallback()
+					} else {
+						this.biaoji = 2
+						this.downCallback()
+					}
 				} else {
-					this.sortType = 2
-					this.downCallback()
+					if (this.sortType == 2) {
+						this.sortType = 1
+						this.downCallback()
+					} else {
+						this.sortType = 2
+						this.downCallback()
+					}
 				}
+
 			},
 
 			// 获取历史列表
@@ -127,7 +143,7 @@
 				if (this.title == BoDan) {
 					if (!item.radioType || item.radioType == 1) {
 						uni.navigateTo({
-							url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId
+							url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId + '&chapterId=' + item.chapterId
 						})
 					} else {
 						uni.navigateTo({
@@ -135,16 +151,29 @@
 						})
 					}
 				} else if (this.title == LiShi) { // 如果是历史的话 需要判断是否是互听还是音频
-					let url = item.radioType == 1 ? '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId :
+					let url = item.radioType == 1 ? '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId +
+						'&chapterId=' + item.chapterId :
 						'/pages/listen_nei/listen_nei?audioId=' + item.chapterId + '&type=audio&authorId=' + item.userId
 					uni.navigateTo({
 						url
 					})
-				} else {
+				}
+				// else if (this.title == ZhuanTi) {
+				// 	uni.navigateTo({
+				// 		url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId + '&chapterId=' + item.chapterId
+				// 	})
+				// } 
+				else {
+					console.log(item);
+					// uni.navigateTo({
+					// 	url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userAuthorId 
+					// })
+					// 暂时先跳到专题列表页
 					uni.navigateTo({
-						url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId
+						url: '/pages/list_page_zhang/list_page_zhang?name=专题列表&type=zj&topicId=' + item.topicId
 					})
 				}
+
 			},
 
 			// 判断的函数
@@ -184,7 +213,7 @@
 						return await this.get_billboard_topic(data)
 						break;
 					case XiaoLiang:
-						this.biaoji = 2
+						// this.biaoji = 2
 						data = {
 							pageNum: page.num,
 							pageSize: page.size,

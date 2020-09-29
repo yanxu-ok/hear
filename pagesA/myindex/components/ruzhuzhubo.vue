@@ -3,7 +3,7 @@
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
 		 :up="upOption" style="flex: 1; ">
 			<view v-for="(item,index) in dataList" :key="index" style="margin-top: 30rpx;">
-				<guanzhu></guanzhu>
+				<guanzhu @handleGuanzhu="handleGuanzhu" :item="item" @handleAvatar="handleAvatar"></guanzhu>
 			</view>
 		</mescroll-uni>
 	</view>
@@ -20,7 +20,8 @@
 	export default {
 		mixins: [MescrollMixin], // 使用mixin
 		components: {
-			guanzhu
+			guanzhu,
+			MescrollUni
 		},
 		props: {
 			priv: {
@@ -45,12 +46,8 @@
 				dataList: [] // 数据
 			}
 		},
-		components: {
-			MescrollUni
-		},
-
 		methods: {
-			...mapActions(['get_org_anchor']),
+			...mapActions(['get_org_anchor', 'insert_focus', 'delete_focus']),
 
 			// 获取拥有的主播
 			async getZhubo(page) {
@@ -86,7 +83,44 @@
 				this.mescroll.endByPage(curPageLen, totalPage);
 			},
 
+			// 点击头像进入主播主页
+			handleAvatar(item) {
+				console.log(item);
+				// uni.navigateTo({
+				// 	url:''
+				// })
+				uni.navigateTo({
+					url: '/pagesA/myindex/myindex?priv=' + item.userRole + '&userId=' + item.userId
+				})
+			},
 
+
+			//点击关注后
+			async handleGuanzhu(item) {
+				console.log(item);
+				if (item.isFocus == 0) { // 说明是没有关注他  要调用关注接口 
+					let result = await this.insert_focus(item.userId)
+					if (result.success) {
+						// this.fensiList = await this.getFensiList()
+						this.downCallback()
+						uni.showToast({
+							title: '关注成功',
+							icon: 'none'
+						})
+
+					}
+				} else { // 说明已经关注 要调用取消关注接口
+					let result = await this.delete_focus(item.fansId)
+					if (result.success) {
+						// this.fensiList = await this.getFensiList()
+						this.downCallback()
+						uni.showToast({
+							title: '取消成功',
+							icon: 'none'
+						})
+					}
+				}
+			}
 
 		},
 	}

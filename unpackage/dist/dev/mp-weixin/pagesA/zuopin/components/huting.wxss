@@ -47,6 +47,7 @@
   font-family: PingFang SC;
   font-weight: 500;
   color: #333333;
+  height: 68rpx;
 }
 .bodan .bodan_content_author {
   display: -webkit-box;

@@ -1,14 +1,15 @@
 <template>
-	<view class="all_and_listen_div"  @tap="handleClickGendu">
+	<view class="all_and_listen_div" @tap="handleClickGendu">
 		<u-image width="690rpx" height="690rpx" :src="brankGroudImg" style="all_and_listen_div_img" border-radius="20rpx"></u-image>
 		<view class="all_and_listen_div_title">{{title | titleFilter(10)}}</view>
-		<view class="all_and_listen_div_author">作者：{{author}}·{{peopleCount}}人看过·{{count}}字</view>
+		<view class="all_and_listen_div_author">{{gendu ? '' : "文稿作者:"+ author | titleFilter(9)}}· 阅读量:{{peopleCount | numFormat}} ·
+			{{count | numFormat}}字 预计阅读时间:{{time | dateFormat}}分钟</view>
 		<view class="all_and_listen_div_gendu">
 			<view style="88rpx" height="88rpx">
-			<u-image width="88rpx" height="88rpx" shape="circle" :src="avatar" style="margin-left: 27rpx;"></u-image>
+				<u-image width="88rpx" height="88rpx" shape="circle" :src="avatar" style="margin-left: 27rpx;"></u-image>
 			</view>
 			<view class="all_and_listen_div_gendu_contain">
-				<view class="all_and_listen_div_gendu_name">{{authorDu | titleFilter(10)}}</view>
+				<view class="all_and_listen_div_gendu_name">{{authorDu | titleFilter(5)}}</view>
 				<view class="all_and_listen_div_gendu_zuozhe">作者</view>
 			</view>
 			<view class="gendu_contain">
@@ -20,39 +21,42 @@
 </template>
 
 <script>
-	export default{
-		props:{
-			title:{
-				type:String,
-				default:'暂无标题哒哒哒'
+	export default {
+		props: {
+			title: {
+				type: String,
+				default: '暂无标题哒哒哒'
 			},
-			author:{
-				type:String,
-				default:'暂无作者哒哒哒'
+			author: {
+				type: String,
+				default: '暂无作者哒哒哒'
 			},
-			peopleCount:{
-				type:String,
-				default:'10'
+			peopleCount: {
+				type: Number,
+				default: 0
 			},
-			count:{
-				type:Number,
-				default:10
+			count: {
+				type: Number,
+				default: 10
 			},
-			item:{
-				type:Object,
+			item: {
+				type: Object,
 			},
-			brankGroudImg:{
-				type:String
+			brankGroudImg: {
+				type: String
 			},
-			avatar:{
-				type:String
+			avatar: {
+				type: String
 			},
-			gendu:{
-				type:Number,
-				default:0
+			gendu: {
+				type: Number,
+				default: 0
 			},
-			authorDu:{
-				type:String
+			authorDu: {
+				type: String
+			},
+			time: {
+				type: Number
 			}
 		},
 		data() {
@@ -62,12 +66,12 @@
 		},
 		computed: {
 			genduText() {
-				return this.gendu == 0 ? '去跟读' : '我要读' 
+				return this.gendu == 0 ? '去跟读' : '我要读'
 			}
 		},
-		methods:{
-			handleClickGendu(){
-				this.$emit('hutingdiv',this.item)
+		methods: {
+			handleClickGendu() {
+				this.$emit('hutingdiv', this.item)
 			}
 		}
 	}
@@ -75,7 +79,7 @@
 
 
 <style lang="scss">
-	 .all_and_listen_div {
+	.all_and_listen_div {
 		display: flex;
 		justify-content: center;
 		position: relative;
@@ -97,7 +101,7 @@
 		}
 
 		& .all_and_listen_div_author {
-			width: 408rpx;
+			// width: 408rpx;
 			font-size: 26rpx;
 			font-family: PingFang SC;
 			font-weight: 300;
