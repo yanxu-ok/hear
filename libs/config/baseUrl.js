@@ -49,8 +49,8 @@ if (process.env.NODE_ENV === 'development') {
 	BASE_Url = '' // 登录的测试地址
 	orgid = 3 // test
 	apiUrl = 'https://app-bugoo.iqilu.com/api' // 听见的测试地址
-	circle = 'http://10.0.117.248:9998'
-	comment = 'http://10.0.117.248:8091' // 评论的测试地址
+	circle = 'https://app-community.iqilu.com/community/'
+	comment = 'https://app-comment.iqilu.com/api' // 评论的测试地址
 	requestComment = {
 		platformKey: 'ec3ef837337542bab1bbb31584be3047',
 		orgKey: '3'
