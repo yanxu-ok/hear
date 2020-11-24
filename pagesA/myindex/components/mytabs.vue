@@ -16,7 +16,8 @@
 				<view class="my_shoucang" :class="{on:shudanIndex==index}" v-for="(item,index) in show" :key="index" @tap="handle(index)">{{item}}</view>
 				<view @tap="handleQuanbu1(shudanIndex)">
 					<view style="font-size: 24rpx;color: rgb(144, 147, 153);">
-						全部 >
+						<text style="margin-right: 6rpx;">全部</text>
+						<u-icon name="arrow-right" size="24" color=""></u-icon>
 					</view>
 				</view>
 			</view>
@@ -76,14 +77,14 @@
 			} else if (this.priv == 2) { // 主播
 				this.zhuantiList = await this.getBodan(2)
 				this.bodanList = await this.getBodan(1)
-				console.log(this.zhuantiList, this.bodanList);
+				// console.log(this.zhuantiList, this.bodanList);
 			} else { // 机构的时候
 
 			}
 
 		},
 		computed: {
-			
+
 			show() {
 				if (this.priv == 1) {
 					return ['收藏专题']
@@ -91,7 +92,7 @@
 					return ['个人播单', '收藏专题']
 				}
 			},
-			
+
 			my() {
 				if (this.priv == 2) {
 					return '发布内容'
@@ -152,11 +153,11 @@
 			handleQuanbu(priv) {
 				if (priv == 2) {
 					uni.navigateTo({
-						url: '/pages/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=zhubo' // 代表的是主播发布的内容
+						url: '/pagesB/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=zhubo' // 代表的是主播发布的内容
 					})
 				} else {
 					uni.navigateTo({
-						url: '/pages/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=bodan' // 代表的是播单
+						url: '/pagesB/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=bodan' // 代表的是播单
 					})
 				}
 			},
@@ -164,15 +165,15 @@
 			handleQuanbu1(index) {
 				if (this.priv == 1 && index == 0) {
 					uni.navigateTo({
-						url: '/pages/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=zhuanti' // 代表的是播单
+						url: '/pagesB/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=zhuanti' // 代表的是播单
 					})
 				} else if (this.priv == 2 && index == 0) {
 					uni.navigateTo({
-						url: '/pages/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=bodan' // 代表的是播单
+						url: '/pagesB/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=bodan' // 代表的是播单
 					})
 				} else if (this.priv == 2 && index == 1) {
 					uni.navigateTo({
-						url: '/pages/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=zhuanti' // 代表的是播单
+						url: '/pagesB/shudan-zhang/shudan-zhang?userId=' + this.userId + '&type=zhuanti' // 代表的是播单
 					})
 				}
 			},
@@ -182,7 +183,7 @@
 				console.log(item, 'dianji');
 				if (item.type == 'bodan') { // 播单要跳的页
 					uni.navigateTo({
-						url: '/pages/list_page_zhang/list_page_zhang?name=播单列表&type=zj&topicId=' + item.item.topicId
+						url: '/pagesD/list_page_zhang/list_page_zhang?name=播单列表&type=zj&topicId=' + item.item.topicId
 					})
 				} else {
 					uni.navigateTo({

@@ -71,7 +71,8 @@
 			return {
 				customStyle: {
 					width: '113rpx',
-					height: '48rpx'
+					height: '48rpx',
+					borderRadius: '40rpx'
 				},
 				show: true
 			}
@@ -102,8 +103,9 @@
 		/* #endif */
 
 		& .shudan_list_title {
-			margin-left: 23rpx;
+			margin-left: 37rpx;
 			display: block;
+
 			flex-direction: column;
 			width: 390rpx;
 

@@ -1,13 +1,15 @@
 <template>
 	<scroll-view ref="scroll" id="scroll" :scroll-x="true" :scroll-left="scrollLeft" :scroll-with-animation="true" :show-scrollbar="false" :class="['myp-bg-'+bgType, 'myp-border-'+border, 'myp-tabs-scroll']" :style="mrScrollStyle">
-		<view style="flex-direction: column;">
-			<view :style="mrTabsStyle">
-				<view v-for="(item, index) in items" :key="index" :ref="'item'+index" :id="'item'+index" class="myp-tab-item" :style="mrItemStyle + (index===value ? activeItemStyle:'')" @click="changeTab(index)">
-					<text :class="['myp-color-'+(index===value?activeType:mrTitleType), 'myp-size-'+(index===value?activeSize:titleSize)]" :style="textStyle + (index===value ? activeTextStyle : '')">{{ titleLabel ? item[titleLabel] : item }}</text>
-				</view>
+		<view style="flex-direction: column;position: relative;">
+			<view v-if="hasIndicator" ref="myp-underline" :class="['myp-tab-item-underline', 'myp-bg-'+indicatorType, isTap?'myp-tab-item-animation':'']" :style="mrIndStyle">
+				<slot name="indicator"></slot>
 			</view>
-			<view v-if="hasIndicator" :class="['myp-tab-item-indicator']" :style="{height: indicatorHeight}">
-				<view ref="myp-underline" :class="['myp-tab-item-underline', 'myp-bg-'+(indicatorType&&indicatorType.length>0?indicatorType:'text'), isTap?'myp-tab-item-animation':'']" :style="mrIndStyle"></view>
+			<view :style="mrTabsStyle">
+				<view :style="{width: left}"></view>
+				<view v-for="(item, index) in items" :key="index" :ref="'item'+index" :id="'item'+index" class="myp-tab-item" :style="mrItemStyle + (index===value ? activeItemStyle:'') + (index===items.length-1?'margin-right:0;':'')" @click="changeTab(index)">
+					<text :class="['myp-color-'+(index===value?activeTextType:textType), 'myp-size-'+(index===value?activeTextSize:textSize)]" :style="textStyle + (index===value ? activeTextStyle : '')">{{ textLabel ? item[textLabel] : item }}</text>
+				</view>
+				<view :style="{width: right}"></view>
 			</view>
 		</view>
 	</scroll-view>
@@ -18,151 +20,249 @@
 	// item/indicator有固定宽度和动态宽度两种
 	// 
 	// #ifdef APP-NVUE
-	const dom = weex.requireModule('dom');
-	const animation = weex.requireModule('animation')
+	const dom = uni.requireNativePlugin('dom');
+	const animation = uni.requireNativePlugin('animation')
 	// #endif
-	import windowMixin from '../myp-mixin/windowMixin.js'
+	import {getPx} from '../utils/system.js'
 	
 	export default {
-		mixins: [windowMixin],
 		props: {
+			/**
+			 * tabs内容
+			 */
 			items: {
 				type: Array,
 				default: function() {
 					return []
 				}
 			},
-			// current index
+			/**
+			 * 当前index
+			 */
 			value: {
 				type: Number,
 				default: 0
 			},
-			// 因为scroll的过程中，current就会发生变化，我们需要用另外一个来记录
+			/**
+			 * 联动时需要。因为scroll的过程中，current就会发生变化，
+			 * 我们需要用另外一个来记录
+			 */
 			last: {
 				type: Number,
 				default: 0
 			},
-			titleLabel: {
+			/**
+			 * 文字内容的字段
+			 */
+			textLabel: {
 				type: String,
 				default: null
 			},
-			// px. swiperScroll dx
+			/**
+			 * 联动时swiper的偏移量。px. swiperScroll dx
+			 */
 			offset: {
 				type: Number,
 				default: 0
 			},
+			/**
+			 * swiper的宽度。联动时需要
+			 */
 			swiperWidth: {
 				type: String,
 				default: '750rpx'
 			},
+			/**
+			 * 是否是点击tab。不联动时一直设置为true
+			 */
 			isTap: {
 				type: Boolean,
 				default: false
 			},
-			// center或者end的时候，请注意items的数量不要超过总尺寸
+			/**
+			 * center或者end的时候，请注意items的数量不要超过总尺寸
+			 */
 			justify: {
 				type: String,
 				default: 'flex-start'
 			},
-			// width of the scroll-view
+			/**
+			 * scroll的自定义宽度
+			 */
 			scrollSize: {
 				type: String,
 				default: '750rpx'
 			},
-			titleSize: {
+			/**
+			 * 文字的尺寸主题
+			 */
+			textSize: {
 				type: String,
 				default: ''
 			},
-			activeSize: {
+			/**
+			 * 当前项文字的尺寸主题
+			 */
+			activeTextSize: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 背景主题
+			 */
 			bgType: {
 				type: String,
 				default: ''
 			},
-			titleType: {
+			/**
+			 * 文字颜色主题
+			 */
+			textType: {
 				type: String,
 				default: ''
 			},
-			activeType: {
+			/**
+			 * 当前项的文字颜色主题
+			 */
+			activeTextType: {
 				type: String,
 				default: ''
 			},
-			// item height: rpx/px
+			/**
+			 * 自定义高度
+			 */
 			height: {
 				type: String,
 				default: '80rpx'
 			},
-			// 0的时候，自适应宽度
+			/**
+			 * tab项的宽度。0的时候，自适应宽度
+			 */
 			width: {
 				type: String,
 				default: '120rpx'
 			},
+			/**
+			 * 左侧空白占位
+			 */
+			left: {
+				type: String,
+				default: '0'
+			},
+			/**
+			 * 右侧空白占位
+			 */
+			right: {
+				type: String,
+				default: '0'
+			},
+			/**
+			 * 各个tab之间的间隙
+			 */
 			space: {
 				type: String,
-				default: '16rpx'
+				default: '0px'
 			},
+			/**
+			 * 边框主题
+			 */
 			border: {
 				type: String,
 				default: 'none'
 			},
+			/**
+			 * 是否有底下指示器
+			 */
 			hasIndicator: {
 				type: Boolean,
 				default: true
 			},
+			/**
+			 * 指示器的背景主题
+			 */
 			indicatorType: {
 				type: String,
-				default: ''
+				default: 'primary'
 			},
-			// 0的时候动态宽度，自适应宽度
+			/**
+			 * 指示器的自定义宽度。0的时候动态宽度，自适应宽度
+			 */
 			indicatorWidth: {
 				type: String,
 				default: '80rpx'
 			},
+			/**
+			 * 指示器的自定义高度
+			 */
 			indicatorHeight: {
 				type: String,
 				default: '4rpx'
 			},
+			/**
+			 * 指示器的自定义圆角
+			 */
 			indicatorRadius: {
 				type: String,
 				default: '4rpx'
 			},
-			indicatorPos: {
-				type: String,
-				default: 'bottom'
-			},
-			indicatorOffset: {
-				type: String,
-				default: '4rpx'
-			},
-			indicatorBottom: {
-				type: String,
-				default: '4rpx'
-			},
+			/**
+			 * 外层样式，也是scroll的样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * tabs的内容样式
+			 */
+			tabsStyle: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 文字样式
+			 */
 			textStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 当前项的文字样式
+			 */
 			activeTextStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * tab项的样式
+			 */
 			itemStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 当前项的tab样式
+			 */
 			activeItemStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 指示器的样式
+			 */
 			indicatorStyle: {
 				type: String,
 				default: ''
+			},
+			/**
+			 * 通过改变该值触发位置的重新计算。
+			 * 主要是为了兼容各大平台位置获取的时机问题。
+			 * 在弹层里面，items能够很快拿到，
+			 * 但是不一定位置信息就可以立马拿到
+			 */
+			updateTime: {
+				type: Number,
+				default: 0
 			}
 		},
 		data() {
@@ -176,32 +276,26 @@
 			}
 		},
 		computed: {
-			mrTitleType() {
-				if (this.titleType && this.titleType.length > 0) {
-					return this.titleType
-				}
-				return this.bgType && this.bgType.length > 0 ? 'inverse' : ''
-			},
 			mrIndStyle() {
 				let _style = `border-radius:${this.indicatorRadius};`
+				_style += `height:${this.indicatorHeight};`
+				// #ifndef APP-NVUE
 				_style += `width:${this.dyIndicatorWidth}px;`
 				_style += `left:${this.dyIndicatorLeft}px;`
+				// #endif
 				return _style + this.indicatorStyle
 			},
 			spacePx() {
-				return uni.upx2px(parseInt(this.space||0))
+				return getPx(this.space)
 			},
 			scrollSizePx() {
-				if (this.scrollSize.indexOf('rpx') > 0) {
-					return uni.upx2px(parseInt(this.scrollSize||0))
-				}
-				return parseInt(this.scrollSize||0)
+				return getPx(this.scrollSize)
+			},
+			widthPx() {
+				return getPx(this.width)
 			},
 			heightPx() {
-				if (this.height.indexOf('rpx') > 0) {
-					return uni.upx2px(parseInt(this.height||0))
-				}
-				return parseInt(this.height||0)
+				return getPx(this.height)
 			},
 			fixedInd() {
 				const indW = parseInt(this.indicatorWidth)
@@ -226,73 +320,83 @@
 				return '0'
 			},
 			fixedIndWidthPx() {
-				const indW = parseInt(this.fixedIndWidth)
-				return uni.upx2px(indW)
+				return getPx(this.fixedIndWidth)
 			},
 			mrScrollStyle() {
 				let _style = "flex-direction:row;"
-				_style += "width:" + this.scrollSize + ';'
+				// #ifndef APP-NVUE
+				_style += 'display:flex;box-sizing:border-box;'
+				// #endif
+				_style += "width:" + this.scrollSizePx + 'px;'
 				return _style + this.boxStyle
 			},
 			mrTabsStyle() {
 				let _style = `flex-direction:row;justify-content:${this.justify};flex-wrap:nowrap;`
+				// #ifndef APP-NVUE
+				_style += 'display:flex;box-sizing:border-box;'
+				// #endif
 				if (this.justify != 'flex-start') {
 					_style += "width:" + this.scrollSizePx + 'px;'
 				}
-				return _style
+				return _style + this.tabsStyle
 			},
 			mrItemStyle() {
-				let _style = `height:${this.height};`
+				let _style = `height:${this.heightPx}px;`
 				const w = parseInt(this.width)
 				if (w > 0) {
-					_style += `width:${this.width};margin-right:${this.space};margin-left:${this.space};`
+					_style += `width:${this.widthPx}px;margin-right:${this.spacePx}px;`
 				} else {
-					_style += `margin-right:${this.space};margin-left:${this.space};`
+					_style += `margin-right:${this.spacePx}px;`
 				}
 				_style += "justify-content:center;align-items:center;"
+				// #ifndef APP-NVUE
+				_style += 'display:flex;box-sizing:border-box;flex-direction:column;'
+				// #endif
 				return _style + this.itemStyle
 			},
 			swiperWidthPx() {
-				if (this.swiperWidth.indexOf('rpx') > 0) {
-					return uni.upx2px(parseInt(this.swiperWidth||0))
-				}
-				return parseInt(this.swiperWidth||0)
+				return getPx(this.swiperWidth)
 			}
 		},
 		mounted() {
-			setTimeout(()=>{
-				this.toCurrentIndex(this.value)
-				// 这样的话要求mounted之后，所有item的宽度不会变化
-				// 所以适用于固定宽度的，或者动态宽度，但是元素生成之后宽度不变的
-				this.toCacheItemsSize()
-			}, 60)
+			this.toCacheItemsSize()
+			this.toCurrentIndex(this.value, true)
 		},
 		watch: {
 			value(newV) {
-				// this.toCurrentIndex(newV)
+				// #ifdef APP-NVUE
+				this.toCurrentIndex(newV)
+				// #endif
+				// #ifndef APP-NVUE
+				// 否则在点击过程中可能响应不正确
 				setTimeout(()=>{
 					this.toCurrentIndex(newV)
 				}, 0)
+				// #endif
 			},
 			items() {
 				// 清缓存
 				this.dyItems = {}
-				setTimeout(()=>{
-					this.toCurrentIndex(this.value)
-					this.toCacheItemsSize()
-				}, 60)
+				const that = this
+				this.$nextTick(()=>{
+					that.toCacheItemsSize()
+					that.toCurrentIndex(this.value, true)
+				})
 			},
 			offset(newV) {
 				this.toHandleSwiperScroll(newV)
+			},
+			updateTime() {
+				this.dyItems = {}
+				this.toCacheItemsSize()
+				this.toCurrentIndex(this.value, true)
 			}
 		},
 		methods: {
 			changeTab(index) {
-				// 不再支持v-model，因为我们需要在点击之后做额外的处理
-				// this.$emit("input", index)
 				this.$emit('change', index)
 			},
-			async toCurrentIndex(index) {
+			async toCurrentIndex(index, isInit=false) {
 				let nowWidth = 0
 				let _left = 0
 				let indWidth = 0
@@ -338,6 +442,27 @@
 				// 移动indicator
 				this.dyIndicatorWidth = indWidth
 				this.dyIndicatorLeft = indLeft
+				// #ifdef APP-NVUE
+				const indEl = this.$refs['myp-underline']
+				if (isInit) {
+					// ios下刚打开时发现总是靠最左侧。去掉duration就好了
+					animation.transition(indEl, {
+						styles: {
+							width: `${this.dyIndicatorWidth}px`,
+							transform: `translateX(${this.dyIndicatorLeft}px)`
+						},
+						duration: 0
+					})
+				} else {
+					animation.transition(indEl, {
+						styles: {
+							width: `${this.dyIndicatorWidth}px`,
+							transform: `translateX(${this.dyIndicatorLeft}px)`
+						},
+						duration: 200
+					})
+				}
+				// #endif
 				// 居中当前item
 				const scrollWidth = this.scrollSizePx
 				const offset = _width - (nowWidth / 2 + this.spacePx) - scrollWidth / 2
@@ -384,24 +509,27 @@
 				
 				this.dyIndicatorLeft = theItem.indLeft + (nextItem.indLeft - theItem.indLeft) / pg
 				this.dyIndicatorWidth = theItem.ind + (nextItem.ind - theItem.ind) / pg
+				
+				// #ifdef APP-NVUE
+				const indEl = this.$refs['myp-underline']
+				animation.transition(indEl, {
+					styles: {
+						width: `${this.dyIndicatorWidth}px`,
+						transform: `translateX(${this.dyIndicatorLeft}px)`
+					}
+				})
+				// #endif
 			},
 			async toCacheItemsSize() {
 				let scrollL = 0
 				try{
-					const cachedS = this.dyItems['scroll']
-					if (cachedS) {
-						scrollL = cachedS.left
-					} else {
-						const res = await this.getElSize(-100)
-						scrollL = res.left
-						this.dyItems['scroll'] = {left: scrollL}
-					}
+					const res = await this.getElSize(-100)
+					scrollL = res.left
+					this.dyItems['scroll'] = {left: scrollL}
 				}catch(e){
 					//TODO handle the exception
 				}
 				for (const i in this.items) {
-					const cached = this.dyItems['item'+i]
-					if (cached) continue;
 					try{
 						const result = await this.getElSize(i)
 						let indWidth = result.width
@@ -457,36 +585,24 @@
 
 <style lang="scss" scoped>
 	
-	/* #ifdef H5 */
+	/* #ifndef APP-NVUE */
 	.myp-tabs-scroll ::-webkit-scrollbar {
 	    display: none;
 	    width: 0 !important;
 	    height: 0 !important;
+		color: transparent;
 	    -webkit-appearance: none;
 	    background: transparent;
 	}
 	/* #endif */
 	
 	.myp-tab-item {
-		
-		&-indicator {
-			position: relative;
-			background-color: transparent;
-		}
-		
 		&-underline {
 			position: absolute;
-			top: 0;
 			bottom: 0;
 			left: 0;
 			width: 0;
-			/* #ifdef APP-NVUE */
-			transition-property: left, width;
-			transition-duration: 0.2s;
-			transition-timing-function: ease;
-			/* #endif */
 		}
-		
 		&-animation {
 			/* #ifndef APP-NVUE */
 			transition-property: left, width;

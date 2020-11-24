@@ -1,0 +1,13 @@
+{
+  "navigationBarTitleText": "互听内页",
+  "disableScroll": true,
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-popup": "/components/u-popup/u-popup",
+    "listenauthor": "/pagesC/listen_nei/components/listen_author",
+    "geci": "/pagesC/listen_nei/components/geci",
+    "drawer": "/pagesC/playPage/components/myp-drawer",
+    "gongdu": "/pagesC/listen_nei/components/gongdu",
+    "hutingplay": "/pagesC/listen_nei/components/listen_huting"
+  }
+}

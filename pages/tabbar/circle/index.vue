@@ -1,11 +1,8 @@
 <template>
 	<view class="quanzi">
-		<template v-if="isLogin">
-			<!-- <view>圈子</view> -->
-			<web-view :webview-styles="webviewStyles" :src="url" @message="message"></web-view>
-		</template>
-		<tabbar :list="tabbarData" :before-switch="beforeSwitch" height="55px" :mid-button="true" inactive-color="#cbcedd"
-		 active-color="#fe9503"></tabbar>
+		<web-view :webview-styles="webviewStyles" :style="webViewHeight" :src="url" @message="message"></web-view>
+		<tabbar :list="tabbarData" :border-top="true" :before-switch="beforeSwitch" height="55px" :mid-button="true"
+		 inactive-color="#cbcedd" active-color="#fe9503"></tabbar>
 	</view>
 </template>
 
@@ -18,8 +15,10 @@
 	import {
 		isLogin,
 		getCurrectStorg,
-		isApp
+		isApp,
+		getScreenHeight
 	} from '@/libs/hear-util/index.js'
+	import config from '@/libs/config/baseUrl.js'
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
 	import {
 		mapState,
@@ -30,16 +29,25 @@
 			tabbar
 		},
 		computed: {
+			
 			...mapState({
 				tabbarData: state => state.system.tabBarList
 			}),
+			
 			url() {
-				// return 'http://10.0.117.156:8080/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpZCI6IjE2Iiwib3JnaWQiOiIyOSIsIm5pY2tuYW1lIjoiXHU0ZjYwXHU1OTdkIiwiYXZhdGFyIjoiaHR0cHM6XC9cL2ltZzExLmlxaWx1LmNvbVwvMjAyMFwvMDZcLzA3XC8xMjJjYjNhOGZkZjc3ZDZiZTYxZjBiZWViYTdhZDhmNC5wbmcifQ.zBZk4iHTU35Zbh8dbmzWJ5Awc2-nsiVM_qm5PSvTg5A'
-				// return 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token
-				return 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
-					'&hearEnv=ok'
+				console.log(config.circle,this.token,'圈子地址和token');
+				return config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+					'&hearEnv=ok&orgId=' + config.orgid
+			},
+			
+			// 计算webview 的高度
+			webViewHeight() {
+				return {
+					height: 2 * (getScreenHeight() - 80) + 'rpx'
+				}
 			}
 		},
+		
 		onLoad() {
 			let token = getCurrectStorg('token')
 			if (!token) {
@@ -49,13 +57,13 @@
 			this.token = token
 			this.isLogin = true
 		},
+		
 		data() {
 			return {
 				webviewStyles: {
 					progress: {
-						color: '#FF3333',
-						width: '100%',
-						height: '100%'
+						// color: '#FF3333',
+						width: '100%'
 					}
 				},
 				isLogin: false,
@@ -79,8 +87,8 @@
 						WebBridgeApi.router({
 							route: 'webapp',
 							params: {
-								url: 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
-									'&hearEnv=ok'
+								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+									'&hearEnv=ok&orgId=' + config.orgid
 							}
 						})
 						return false;

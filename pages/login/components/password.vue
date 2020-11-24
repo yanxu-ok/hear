@@ -41,6 +41,7 @@
 	} from 'vuex'
 	import baseUrl from '@/libs/config/baseUrl.js'
 	export default {
+
 		data() {
 			return {
 				getCodeBtnColor: "#ffffff",
@@ -49,6 +50,7 @@
 				passwordTwo: null
 			}
 		},
+
 		onLoad() {
 			// this.checkGuide();
 		},
@@ -86,48 +88,31 @@
 
 			doLogin() {
 				let _this = this;
-				// uni.hideKeyboard()
-				// // 模板示例部分验证规则
-				// if (!(/^1(3|4|5|6|7|8|9)\d{9}$/.test(this.phone))) {
-				// 	uni.showToast({
-				// 		title: '请填写正确手机号码',
-				// 		icon: "none"
-				// 	});
-				// 	return false;
-				// }
 				if (!this.passwordOne || !this.passwordTwo) {
 					uni.showToast({
-						title: '密码不能为空'
+						title: '密码不能为空',
+						icon: 'none'
 					})
 					return;
 				}
+
 				if (this.passwordOne != this.passwordTwo) {
 					uni.showToast({
-						title: '两次输入密码不同'
+						title: '两次输入密码不同',
+						icon: 'none'
 					})
 					return;
 				}
 
 				uni.request({
-					url: baseUrl.BASE_Url + '/member/forgot',
+					url: baseUrl.BASE_Url + '/member/password',
 					data: {
-						'phone': _this.phone,
-						'code': _this.code,
-						'key': _this.key,
 						password: _this.passwordOne,
 						rePassword: _this.passwordTwo
 					},
 					method: 'POST',
-					header: {
-						// 'Content-Type': 'application/x-www-form-urlencoded',
-					},
 					success: (res) => {
-						console.log(res);
 						if (res.data.code) {
-							// uni.navigateTo({
-							// 	url:'/pages/'
-							// })
-							console.log(_this.token);
 							setCurrectStorg('token', _this.token)
 							uni.switchTab({
 								url: '/pages/tabbar/my/index'

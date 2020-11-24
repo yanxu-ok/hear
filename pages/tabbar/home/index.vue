@@ -21,12 +21,13 @@
 						 actionText="" @click="handleClickSearch" :disabled="search"></search>
 					</view>
 					<view class="history" :style="{ backgroundColor: changeBgcolor.searchColor}">
-						<view style="position: relative;">
-							<u-image width="35rpx" height="33rpx" src="@/static/images/xiaoxi.png"></u-image>
-							<badge :is-dot="true" type="error" is-center="true" size="mini"></badge>
+						<view style="position: relative;" @tap="handleNews">
+							<u-image width="35rpx" height="33rpx" src="https://img11.iqilu.com/29/2020/09/30/7012921fbaf6ab74f003ae110704a281.png"></u-image>
+							<badge :is-dot="true" :show-zero="getNewsRed.isShow" :count="getNewsRed.count" type="error" is-center="true"
+							 size="mini"></badge>
 						</view>
-						<u-image src="@/static/images/touying.png" width="10rpx" height="52rpx"></u-image>
-						<u-image width="34rpx" @click="handleMyClick" height="34rpx" src="@/static/images/lishi.png"></u-image>
+						<u-image src="https://img11.iqilu.com/29/2020/09/30/af0e82a7f5fefa317a39fe65e654216e.png" width="10rpx" height="52rpx"></u-image>
+						<u-image width="34rpx" @click="handleMyClick" height="34rpx" src="https://img11.iqilu.com/29/2020/09/30/d352be1cdc99231236b0b2b7ad3b0b23.png"></u-image>
 					</view>
 				</view>
 			</view>
@@ -52,8 +53,10 @@
 		</view>
 
 		<!-- tabbar -->
-		<tabbar :list="tabbarData" :before-switch="beforeSwitch" height="55px" :mid-button="true" inactive-color="#cbcedd"
-		 active-color="#fe9503"></tabbar>
+		<tabbar :list="tabbarData" :border-top="true" :before-switch="beforeSwitch" height="55px" :mid-button="true"
+		 inactive-color="#cbcedd" active-color="#fe9503"></tabbar>
+
+
 	</view>
 </template>
 
@@ -66,7 +69,8 @@
 	import {
 		isLogin,
 		getCurrectStorg,
-		isApp
+		isApp,
+		setCurrectStorg
 	} from '@/libs/hear-util/index.js'
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
 	import category from './components/categoryList.vue'
@@ -75,6 +79,7 @@
 	import search from '@/components/u-search/u-search.vue'
 	import badge from '@/components/u-badge/u-badge.vue'
 	import indexContent from './components/content.vue'
+	import config from '@/libs/config/baseUrl.js'
 	import {
 		mapState,
 		mapActions
@@ -105,13 +110,6 @@
 			}
 		},
 
-		// async onLoad() {
-		// 	let token = getCurrectStorg('token')
-		// 	// console.log(token);
-		// 	console.log(11111);
-		// 	this.token = token
-		// },
-
 		data() {
 			return {
 				tabList: [],
@@ -125,22 +123,45 @@
 				sColor: '#c6c4c8',
 				Ani: null,
 				search: true,
-				token: ''
+				token: null,
+				getNewsRed: {
+					isShow: false,
+					count: 0
+				}
 			}
 		},
 
 		async created() {
 			let token = getCurrectStorg('token')
-			// console.log(token);
 			this.token = token
-			// console.log(this.token);
 			this.getBanner(1)
+		},
+
+		async onShow() {
+			let token = getCurrectStorg('token')
+			this.token = token
+			this.token ? this.getNewsCount() : null
+
 			let list = await this.category() // 获取分类
+
 			list.unshift({
 				categoryName: '推荐',
 				categoryId: 0
 			})
+
 			this.tabList = list
+			let stringify = getCurrectStorg('tab')
+			let tab
+			if (stringify) {
+				tab = JSON.parse(stringify)
+			}
+			if (tab && list.length == tab.length) {} else {
+				// console.log(111111111111111, '11111111111111111111111111111111111111111');
+				this.swiperCurrent = 0
+				this.current = 0
+			}
+
+			setCurrectStorg('tab', JSON.stringify(list))
 		},
 
 		methods: {
@@ -160,8 +181,8 @@
 						WebBridgeApi.router({
 							route: 'webapp',
 							params: {
-								url: 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
-									'&hearEnv=ok'
+								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+									'&hearEnv=ok&orgId=' + config.orgid
 							}
 						})
 						return false;
@@ -185,13 +206,46 @@
 				}
 			},
 
-			handleMyClick() {
+
+			// 获取红点
+			async getNewsCount() {
+				const count = await this.get_new_msg_count()
+				if (count > 0) {
+					this.getNewsRed.count = count
+					this.getNewsRed.isShow = true
+				} else {
+					this.getNewsRed.count = 0
+					this.getNewsRed.isShow = false
+				}
+			},
+
+			// 进去消息列表
+			handleNews() {
+				if (!isLogin()) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				uni.navigateTo({
-					url: '/pages/listpage/listpage?name=' + "播放历史" + '&type=lishi'
+					url: '/pagesD/news/news'
 				})
 			},
 
-			...mapActions(['getBanner', 'category']),
+			// 历史点击列表
+			handleMyClick() {
+				if (!isLogin()) {
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
+				uni.navigateTo({
+					url: '/pagesD/listpage/listpage?name=' + "播放历史" + '&type=lishi'
+				})
+			},
+
+			...mapActions(['getBanner', 'category', 'get_new_msg_count']),
 
 			scroll(e) {
 				this.scrollTop = e.detail.scrollTop
@@ -215,15 +269,6 @@
 			// tabs通知swiper切换
 			tabsChange(index) {
 				this.swiperCurrent = index;
-				// let str = this.tabList[index].categoryName
-				// let categoryId = this.tabList[index].categoryId
-				// console.log(str);
-				// if (categoryId == 0) {
-				// 	return;
-				// }
-				// uni.navigateTo({
-				// 	url: "/pages/listpage/listpage?name=" + str + '&categoryId=' + categoryId,
-				// })
 			},
 
 			// swiper-item左右移动，通知tabs的滑块跟随移动
@@ -245,14 +290,15 @@
 				if (this.current == 0) {
 					return;
 				}
-
-				// let categoryId = this.tabList[this.current].categoryId
-				// console.log(this.$refs);
-				// this.$refs.catList[this.current--].downCallback()
-
 			},
 
 			onLoad() {
+				this.animation()
+				// this.deleteEndTabs()
+			},
+
+			// 动画
+			animation() {
 				this.Ani = uni.createAnimation();
 				uni.$on('animationfinish', (e) => {
 					this.currectBanner = e.detail.current
@@ -268,6 +314,7 @@
 					this.animationData = this.Ani.export();
 				})
 			},
+
 
 			hadnleFalse() {
 				// return false
@@ -295,7 +342,7 @@
 			handleClickSearch(e) {
 				console.log(1);
 				uni.navigateTo({
-					url: '/pages/search/search'
+					url: '/pagesB/search/search'
 				})
 			}
 

@@ -1,5 +1,5 @@
 {
-  "navigationBarTitleText": "手机号登录",
+  "navigationBarTitleText": "账号密码登录",
   "usingComponents": {
     "u-navbar": "/components/u-navbar/u-navbar"
   }

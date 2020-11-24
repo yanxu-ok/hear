@@ -1,160 +1,209 @@
 <template>
-	<view bubble="true" :class="['myp-button', 'myp-border-'+border, 'myp-bg-'+bgType, 'myp-height-'+height, 'myp-radius-'+radius, (disabled||loading)?'myp-disabled':'']" :style="mrBtnStyle" :hover-class="(!disabled && !loading) ? ('myp-hover-'+hover): ''" @click.stop="clickedButton">
+	<view bubble="true" :class="['myp-flex-row', 'myp-justify-center', 'myp-align-center', 'myp-position-relative', 'myp-border-'+border, 'myp-bg-'+bgType, 'myp-height-'+height, 'myp-radius-'+radius, (disabled||loading)?'myp-disabled':'']" :style="boxStyle" :hover-class="(!disabled && !loading) ? ('myp-hover-'+hover): ''" @click.stop="clickedButton">
 		<slot>
-			<view v-if="loading" :style="{width: loadingWidth, height: loadingHeight}">
-				<myp-loading-indicator :width="loadingWidth" :height="loadingHeight" :src="loadingSrc"></myp-loading-indicator>
-			</view>
-			<view v-if="!loading && icon && icon.length > 0">
-				<myp-icon :name="icon" :type="mrIconType" :mode="iconMode" :size="iconSize" :boxStyle="iconBoxStyle" :iconStyle="mrIconStyle" @iconClicked="clickedButton"></myp-icon>
-			</view>
-			<text v-if="text&&text.length>0" :class="['myp-color-'+mrTextType, 'myp-size-'+textSize]" :style="mrTextStyle">{{text}}</text>
+			<myp-loading-indicator v-if="loading" :width="loadingWidth" :height="loadingHeight" :src="loadingSrc"></myp-loading-indicator>
+			<myp-icon v-if="!loading && icon && icon.length > 0" :name="icon" :type="iconType" :size="iconSize" :boxStyle="iconBoxStyle" :iconStyle="iconStyle" @iconClicked="clickedButton"></myp-icon>
+			<text v-if="text&&text.length>0" :class="['myp-color-'+textType, 'myp-size-'+textSize]" :style="mrTextStyle">{{text}}</text>
+			<myp-icon v-if="icon2 && icon2.length > 0" :name="icon2" :type="icon2Type" :size="icon2Size" :boxStyle="mrIcon2BoxStyle" :iconStyle="icon2Style" @iconClicked="clickedButton"></myp-icon>
 		</slot>
+		<slot name="extra"></slot>
 	</view>
 </template>
 
 <script>
 	export default {
 		props: {
+			/**
+			 * 背景主题
+			 */
 			bgType: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 文字内容
+			 */
 			text: {
 				type: String,
-				default: '确定'
+				default: ''
 			},
+			/**
+			 * 左侧图标
+			 */
 			icon: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 右侧图标
+			 */
+			icon2: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 是否为loading状态
+			 */
 			loading: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * loading状态时显示的图片
+			 */
 			loadingSrc: {
 				type: String,
 				default: '/static/ui/loading.gif'
 			},
+			/**
+			 * 高度主题
+			 */
 			height: {
 				type: String,
 				default: 'l'
 			},
-			// hover: opacity/bg/bg-opacity
+			/**
+			 * 点击时的hover效果: opacity/bg/bg-opacity
+			 */
 			hover: {
 				type: String,
 				default: 'opacity'
 			},
+			/**
+			 * 圆角主题
+			 */
 			radius: {
 				type: String,
 				default: 'base'
 			},
+			/**
+			 * 边框主题
+			 */
 			border: {
 				type: String,
-				default: 'all'
+				default: ''
 			},
+			/**
+			 * 是否为禁用状态。禁用时不可点击
+			 */
 			disabled: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 是否为高亮状态
+			 */
 			highlight: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 文字与图标之间的间距
+			 */
 			space: {
 				type: String,
 				default: '12rpx'
 			},
+			/**
+			 * 文字颜色主题
+			 */
 			textType: {
 				type: String,
-				default: ''
+				default: 'text'
 			},
+			/**
+			 * 文字尺寸主题
+			 */
 			textSize: {
 				type: String,
-				default: ''
+				default: 'base'
 			},
-			iconMode: {
-				type: String,
-				default: 'aspectFill'
-			},
+			/**
+			 * 左侧图标颜色主题
+			 */
 			iconType: {
 				type: String,
-				default: ''
+				default: 'text'
 			},
+			/**
+			 * 左侧图标尺寸主题
+			 */
 			iconSize: {
 				type: String,
 				default: 'l'
 			},
+			/**
+			 * 右侧图标颜色主题
+			 */
+			icon2Type: {
+				type: String,
+				default: 'text'
+			},
+			/**
+			 * 右侧图标尺寸主题
+			 */
+			icon2Size: {
+				type: String,
+				default: 'l'
+			},
+			/**
+			 * 外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
 			},
-			disabledStyle: {
-				type: String,
-				default: ''
-			},
-			highlightStyle: {
-				type: String,
-				default: ''
-			},
+			/**
+			 * 文字样式
+			 */
 			textStyle: {
 				type: String,
 				default: ''
 			},
-			disabledTextStyle: {
-				type: String,
-				default: ''
-			},
-			highlightTextStyle: {
-				type: String,
-				default: ''
-			},
+			/**
+			 * 左侧图标外层样式
+			 */
 			iconBoxStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 左侧图标样式
+			 */
 			iconStyle: {
 				type: String,
 				default: ''
 			},
-			disabledIconStyle: {
+			/**
+			 * 右侧图标外层样式
+			 */
+			icon2BoxStyle: {
 				type: String,
 				default: ''
 			},
-			highlightIconStyle: {
+			/**
+			 * 右侧图标样式
+			 */
+			icon2Style: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * loading图标的宽度
+			 */
 			loadingWidth: {
 				type: String,
 				default: '36rpx'
 			},
+			/**
+			 * loading图标的高度
+			 */
 			loadingHeight: {
 				type: String,
 				default: '36rpx'
 			}
 		},
 		computed: {
-			mrIconType() {
-				if (this.iconType&&this.iconType.length>0) {
-					return this.iconType
-				}
-				return this.bgType&&this.bgType.length>0 ? 'inverse' : ''
-			},
-			mrTextType() {
-				if (this.textType&&this.textType.length>0) {
-					return this.textType
-				}
-				return this.bgType&&this.bgType.length>0 ? 'inverse' : ''
-			},
-			mrBtnStyle() {
-				let _style = this.boxStyle
-				if (this.loading || this.disabled) {
-					_style += this.disabledStyle
-				} else if (this.highlight) {
-					_style += this.highlightStyle
-				}
-				return _style
-			},
 			mrTextStyle() {
 				let _style = ''
 				if (this.text && this.text.length > 0) {
@@ -167,21 +216,12 @@
 					}
 				}
 				_style += this.textStyle
-				if (this.loading || this.disabled) {
-					_style += this.disabledTextStyle
-				} else if (this.highlight) {
-					_style += this.highlightTextStyle
-				}
 				return _style
 			},
-			mrIconStyle() {
-				let _style = this.iconStyle
-				if (this.loading || this.disabled) {
-					_style += this.disabledIconStyle
-				} else if (this.highlight) {
-					_style += this.highlightIconStyle
-				}
-				return _style
+			mrIcon2BoxStyle() {
+				let _style = ''
+				_style += `margin-left: ${this.space};`
+				return _style + this.icon2BoxStyle
 			}
 		},
 		methods: {
@@ -196,13 +236,4 @@
 </script>
 
 <style lang="scss" scoped>
-	.myp-button {
-		/* #ifndef APP-NVUE */
-		display: flex;
-		box-sizing: border-box;
-		/* #endif */
-		flex-direction: row;
-		align-items: center;
-		justify-content: center;
-	}
 </style>

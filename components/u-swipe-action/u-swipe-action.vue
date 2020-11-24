@@ -220,7 +220,7 @@ export default {
 </script>
 
 <style scoped lang="scss">
-@import "../../libs/css/style.components.scss";
+@import "@/libs/css/style.components.scss";
 	
 .u-swipe-action {
 	width: auto;
@@ -230,7 +230,7 @@ export default {
 }
 
 .u-swipe-view {
-	display: flex;
+	@include vue-flex;
 	height: initial;
 	position: relative;
 	/* 这一句很关键，覆盖默认的绝对定位 */

@@ -1,8 +1,14 @@
-// 通过mescroll来的，当时mescroll是一个 new function对象
-// 因为想灵活的控制高度以及方便快速调用，特意改成了mixin形式
+// #ifndef APP-NVUE
+import {getTouchPoint} from '../utils/element.js'
+// #endif
+
 export default {
 	data() {
 		return {
+			// #ifdef APP-NVUE
+			platform: '',
+			// #endif
+			// #ifndef APP-NVUE
 			mypScrollable: true,
 			mypDownHeight: 0,
 			mypStartPoint: null,
@@ -17,6 +23,10 @@ export default {
 			mypMoveTime: 0,
 			mypMoveTimeDiff: 0,
 			mypScrollTopDeviation: 100,  // scroll-view滚动到顶部时,此时的scroll-top不一定为0, 此值用于控制最大的误差
+			mypIsMoveDown: false,
+			mypDownMoveType: 0,
+			mypIsDownReset: false,  // 下拉刷新，是否显示重置的过渡动画
+			// #endif
 			mypIsDownLoading: false,  // 是否正在下拉刷新中
 			mypIsUpLoading: false,  // 是否正在上提加载
 			// down
@@ -26,9 +36,6 @@ export default {
 				inRate: 0.8,  // 下拉的距离小于offset时,改变下拉区域高度比例;0-1,越小,越难拉
 				outRate: 0.2  // 下拉的距离大于offset时,改变下拉区域高度比例;0-1,越小,越难拉
 			},
-			mypIsMoveDown: false,
-			mypDownMoveType: 0,
-			mypIsDownReset: false,  // 下拉刷新，是否显示重置的过渡动画
 			// up
 			mypUp: {
 				use: true,
@@ -40,6 +47,7 @@ export default {
 			mypPrePage: 0
 		}
 	},
+	// #ifndef APP-NVUE
 	computed: {
 		mypMrScrollContentStyle() {
 			let _style = 'position: relative;'
@@ -57,30 +65,13 @@ export default {
 			return this.mypDownHeight / (this.mypDown.offset || 80)
 		}
 	},
-	created() {
-		// config the down/up
-		this.mypDown = Object.assign({use: true,offset: uni.upx2px(140),inRate: 0.8,outRate: 0.2}, this.down)
-		this.mypUp = Object.assign({use: true,offset: 80}, this.up)
-		// emit this 会在mp端报错，且不建议
-		// this.$emit("inited", this)
-		// 注意：如果直接emit，外部监听到inited的时候，还不能通过ref获取到实例
-		// this.$emit("inited")
-		setTimeout(()=>{
-			this.$emit("inited")
-		}, 0)
-		if (this.autoUpdate) {
-			const that = this
-			setTimeout(() => {
-				// to refresh data
-				this.mypInitContentList()
-			}, 10)
-		}
-	},
+	// #endif
 	methods: {
+		// #ifndef APP-NVUE
 		// 手指开始触摸屏幕
 		mypTouchstartEvent(e) {
 			// if (!this.down.use) return;
-			this.mypStartPoint = this.mypGetPoint(e)
+			this.mypStartPoint = getTouchPoint(e)
 			this.mypStartTop = this.mypTheScrollTop || 0
 			this.mypLastPoint = this.mypStartPoint
 			this.mypInTouchend = false
@@ -100,7 +91,7 @@ export default {
 				this.mypMoveTimeDiff = 1000 / this.mypFps
 			}
 			const scrollTop = this.mypTheScrollTop
-			const currentPoint = this.mypGetPoint(e)
+			const currentPoint = getTouchPoint(e)
 			const moveY = currentPoint.y - this.mypStartPoint.y
 			
 			// (向下拉&&在顶部) scroll-view在滚动时不会触发touchmove,当触顶/底/左/右时,才会触发touchmove
@@ -155,7 +146,7 @@ export default {
 				this.mypDownMoveType = 0;
 				this.mypIsMoveDown = false;
 			} else if (this.mypTheScrollTop === this.mypStartTop) {  // 到顶/左/右/底的滑动事件
-				const isScrollUp = this.mypGetPoint(e).y - this.mypStartPoint.y < 0;  // 和起点比,移动的距离,大于0向下拉,小于0向上拉
+				const isScrollUp = getTouchPoint(e).y - this.mypStartPoint.y < 0;  // 和起点比,移动的距离,大于0向下拉,小于0向上拉
 				// 上滑 && 检查并触发上拉
 				isScrollUp && this.mypTriggerUpScroll();
 			}
@@ -197,6 +188,11 @@ export default {
 		mypLoad() {
 			this.mypPrePage = this.mypCurrentPage
 			this.mypCurrentPage += 1
+			this.mypGetContentList('load')
+		},
+		mypReload() {
+			this.mypPrePage = this.mypCurrentPage
+			this.mypCurrentPage = 1
 			this.mypGetContentList('load')
 		},
 		mypInitContentList() {
@@ -260,30 +256,6 @@ export default {
 				this.mypEndUpScroll()
 			}
 		},
-		mypGetPoint(e) {
-			if (!e) {
-				return {
-					x: 0,
-					y: 0
-				}
-			}
-			if (e.touches && e.touches[0]) {
-				return {
-					x: e.touches[0].pageX,
-					y: e.touches[0].pageY
-				}
-			} else if (e.changedTouches && e.changedTouches[0]) {
-				return {
-					x: e.changedTouches[0].pageX,
-					y: e.changedTouches[0].pageY
-				}
-			} else {
-				return {
-					x: e.clientX,
-					y: e.clientY
-				}
-			}
-		},
 		mypGetScrollBottom() {
 			// important!
 			// if u want to use this mixin, u must supply a mypScrollHeight in your props or computed or data
@@ -293,5 +265,6 @@ export default {
 			}
 			return contentHeight - this.mypTheScrollTop - this.mypScrollHeight
 		}
+		// #endif
 	}
 }

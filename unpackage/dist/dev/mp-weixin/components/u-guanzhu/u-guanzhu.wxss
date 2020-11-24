@@ -37,7 +37,7 @@
           align-items: center;
 }
 .shudan_list .shudan_list_title {
-  margin-left: 23rpx;
+  margin-left: 37rpx;
   display: block;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;

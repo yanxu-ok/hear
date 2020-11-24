@@ -1,10 +1,10 @@
 <template>
 	<view class="lyric-main" :style="{
 		background:cuAreaStyle.background}">
-		<scroll-view id="lyric-show" class="lyric-show" scroll-with-animation="true" :scroll-y="true" :scroll-into-view="showLyricId" @scroll="lyricScroll" 
+		<scroll-view id="lyric-show" class="lyric-show"  scroll-with-animation="true" :scroll-y="true" :scroll-into-view="showLyricId" @scroll="lyricScroll" 
 		:style="{
 		top:scrollView.top,
-		width:cuAreaStyle.width,
+
 		height:scrollView.height}">
 			<view class="lrc-item" v-for="(v, i) in mLyrics.lrcs" :key="i" @tap="select(v,i)" @longpress="itemLongpress(v,i)" 
 			@touchstart="textTouchstart" @touchcancel="textTouchEnd" @touchend="textTouchEnd">
@@ -71,7 +71,7 @@
 					selectedBGColor: 'inherit'
 				},
 				cuAreaStyle: {
-					width: '100vw',
+					width: 'auto',
 					height: '70vh',
 					background: 'linear-gradient(#8cc8b4, #ffaa7f, #8cc8b4)',
 				},
@@ -420,11 +420,13 @@
 		position: relative;
 		display: flex;
 		flex-direction: column;
+		width: 450rpx;
 	}
 	.lyric-show {
 		/* position: absolute; */
 		overflow-anchor: none;
 		display: flex;
+		width: auto;
 	}
 	.lyric-show ::-webkit-scrollbar{
 		display: none;
@@ -442,7 +444,7 @@
 		white-space: nowrap;
 		height: 32px;
 		font-size: 16px;
-		overflow: auto;
+		overflow: auto !important;
 	}
 	.center-view {
 		position: absolute;

@@ -21,6 +21,7 @@ $myp-bg-color-light: #F3F4F5;
 $myp-bg-color-dark: #F1F1F1;
 
 $myp-bg-color-hover: #F1F1F1;
+$myp-bg-color-hover-dark: rgba(0, 0, 0, 0.8);
 $myp-bg-color-mask: rgba(0, 0, 0, 0.2);
 $myp-bg-color-mask-dark: rgba(0, 0, 0, 0.8);
 
@@ -29,7 +30,12 @@ $myp-border-color-light: #F7F5F5;
 $myp-border-color-dark: #EBEBEB;
 $myp-border-color-inverse: #FFFFFF;
 
+/* #ifdef APP-NVUE */
 $myp-border-width: 1px;
+/* #endif */
+/* #ifndef APP-NVUE */
+$myp-border-width: 1px;
+/* #endif */
 
 $myp-height-ss: 40rpx;
 $myp-height-s: 60rpx;
@@ -43,11 +49,29 @@ $myp-font-size-base: 30rpx;
 $myp-font-size-l: 32rpx;
 $myp-font-size-ll: 36rpx;
 
+$myp-lh-ss: 34rpx;
+$myp-lh-s: 40rpx;
+$myp-lh-base: 42rpx;
+$myp-lh-l: 45rpx;
+$myp-lh-ll: 50rpx;
+
 $myp-border-radius-ss: 4rpx;
 $myp-border-radius-s: 6rpx;
 $myp-border-radius-base: 12rpx;
 $myp-border-radius-l: 24rpx;
 $myp-border-radius-ll: 60rpx;
+
+$myp-space-ss: 6rpx;
+$myp-space-s: 12rpx;
+$myp-space-base: 16rpx;
+$myp-space-l: 24rpx;
+$myp-space-ll: 32rpx;
+
+$myp-wing-ss: 12rpx;
+$myp-wing-s: 24rpx;
+$myp-wing-base: 32rpx;
+$myp-wing-l: 36rpx;
+$myp-wing-ll: 40rpx;
 
 $myp-opacity-disabled: 0.5;
 $myp-opacity-hover: 0.5;
@@ -55,7 +79,7 @@ $myp-opacity-hover: 0.5;
 $myp-nav-title-color: #000000;
 $myp-nav-title-size: 16px;
 $myp-nav-icon-color: #4C4C4C;
-$myp-nav-icon-size: 16px;
+$myp-nav-icon-size: 20px;
 $myp-nav-item-color: #4C4C4C;
 $myp-nav-item-size: 14px;
 $myp-nav-bg-color: #FFFFFF;

@@ -5,7 +5,7 @@
 			backgroundColor: bgColor,
 		}"
 		 :class="{
-			'u-border-top': borderTop
+			'tabbar-border-top': borderTop
 		}">
 			<view class="u-tabbar__content__item" v-for="(item, index) in list" :key="index" :class="{
 				'u-tabbar__content__circle': midButton &&item.midButton
@@ -33,8 +33,9 @@
 
 			</view>
 			<view v-if="midButton" class="u-tabbar__content__circle__border" :class="{
-				'u-border': borderTop,
-			}" :style="{
+				'tabbar-u-border': borderTop,
+			}"
+			 :style="{
 				backgroundColor: bgColor,
 				left: midButtonLeft
 			}">
@@ -266,7 +267,7 @@
 				transform: translateX(-50%);
 
 				&:after {
-					border-radius: 100px;
+					border-radius: 200rpx;
 				}
 			}
 
@@ -320,5 +321,30 @@
 				}
 			}
 		}
+	}
+
+	.tabbar-border-top::after {
+		/* #ifndef APP-NVUE */
+		content: ' ';
+		/* #endif */
+		position: absolute;
+		left: 0;
+		top: 0;
+		pointer-events: none;
+		box-sizing: border-box;
+		-webkit-transform-origin: 0 0;
+		transform-origin: 0 0;
+		// 多加0.1%，能解决有时候边框缺失的问题
+		width: 199.8%;
+		height: 199.7%;
+		transform: scale(0.5, 0.5);
+		border: 0 solid $u-border-color;
+		z-index: 2;
+		-webkit-box-shadow: 2px 2px 20px #E9E9E9;
+		box-shadow: 2px 2px 20px #E9E9E9;
+	}
+
+	.tabbar-u-border {
+		box-shadow: 2px 2px 20px #E9E9E9;
 	}
 </style>

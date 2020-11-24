@@ -4,15 +4,20 @@
 		mapState,
 		mapMutations
 	} from 'vuex'
+	import {
+		getCurrectStorg
+	} from '@/libs/hear-util/index.js'
+	import userInfo from 'multi-platform-toolkit/src/getUserInfo.ts'
 	export default {
 		onLaunch: function() {
-			console.log('App Launch')
+			// console.log(Platform)
+			new userInfo()
 		},
 		onShow: function() {
-			console.log('App Show')
+			// console.log('App Show')
 		},
 		onHide: function() {
-			console.log('App Hide')
+			// console.log('App Hide')
 		},
 		data() {
 			return {
@@ -21,23 +26,11 @@
 		},
 		methods: {
 			...mapActions(['update_history']),
-			// format(num) {
-			// 	try {
-			// 		return (
-			// 			'0'.repeat(2 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(
-			// 				num % 60)).length) + Math.floor(num % 60)
-			// 		);
-			// 	} catch (e) {
-			// 		return (
-			// 			'0'.repeat(3 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(
-			// 				num % 60)).length) + Math.floor(num % 60)
-			// 		);
-			// 	}
-			// }
 
 			//轮询定时器
 			startHstoryTimer() {
 				this.timer = setInterval(this.history, 4000)
+
 			},
 
 			// 清除定时器
@@ -55,7 +48,7 @@
 						listenProgress: this.$audio.currentTime
 					}
 					let reult = await this.update_history(data)
-					console.log('记录播放进度', reult);
+					// console.log('记录播放进度', reult);
 				} else { // 互听播放
 					console.log(this.audioInfo, '互听、播放');
 					let data = {
@@ -64,10 +57,11 @@
 						listenProgress: this.$audio.currentTime
 					}
 					let reult = await this.update_history(data)
-					console.log('记录播放进度', reult);
+					// console.log('记录播放进度', reult);
 				}
 			}
 		},
+
 		computed: {
 			...mapState({
 				currectPlayIndex: state => state.play.currectPlayIndex,
@@ -81,7 +75,11 @@
 		watch: {
 			//  是否暂停
 			paused(newvalue, oldvalue) {
-				console.log(newvalue);
+				let token = getCurrectStorg('token')
+				// console.log(newvalue,token);
+				if (!token) {
+					return;
+				}
 				newvalue ? this.cleanHstoryTimer() : this.startHstoryTimer()
 			}
 		},

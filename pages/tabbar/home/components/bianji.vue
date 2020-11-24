@@ -13,12 +13,12 @@
 						</view>
 						<view class="bianji_content_author">
 							<view class="bianji_content_author_color">
-								<image style="width:19rpx; height:20rpx" src="@/static/images/author.png"></image>
+								<image style="width:19rpx; height:20rpx" src="https://img11.iqilu.com/29/2020/09/30/70ef65303326f43756654241a1a270bf.png"></image>
 								<view style="margin-left: 10rpx;">{{item.nickName ? item.nickName : '无名氏' | titleFilter(3) }}</view>
 							</view>
 							<view class="bianji_content_author_color1">
-								<image style="width:17rpx; height:20rpx" src="@/static/images/play.png"></image>
-								<!-- <u-image width="17rpx" height="20rpx" src="@/static/images/play.png"></u-image> -->
+								<image style="width:17rpx; height:20rpx" src="https://img11.iqilu.com/29/2020/09/30/224104618812ae11f6484e7303d6d5a1.png"></image>
+								<!-- <u-image width="17rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/224104618812ae11f6484e7303d6d5a1.png"></u-image> -->
 								<view style="margin-left: 10rpx;">{{item.topicReadAmount | numFormat}}播放</view>
 							</view>
 						</view>
@@ -83,6 +83,7 @@
 					color: #999999;
 					line-height: 36rpx;
 				}
+				
 			}
 
 			& .bianji_content_author {

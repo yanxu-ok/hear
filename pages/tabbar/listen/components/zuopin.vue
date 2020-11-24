@@ -22,10 +22,10 @@
 							<template>
 								<view class="bodan_content_author">
 									<view style="width: 19rpx; height: 20rpx;">
-										<u-image width="19rpx" height="20rpx" src="@/static/images/play.png"></u-image>
+										<u-image width="19rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/224104618812ae11f6484e7303d6d5a1.png"></u-image>
 									</view>
 									<view class="bodan_content_author_name" style="color: #999999;">{{item.audioReadAmount | numFormat }}播放</view>
-									<u-image width="17rpx" height="20rpx" src="@/static/images/shijian.png" style="margin-left: 20rpx;"></u-image>
+									<u-image width="17rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/e2b6da3e4c665c2c46322fea23f1f1f0.png" style="margin-left: 20rpx;"></u-image>
 									<view class="bodan_content_author_count">{{item.audioTime |s_to_hs}}</view>
 								</view>
 							</template>
@@ -132,7 +132,7 @@
 			// 列表点击事件
 			handleClickHuting(item) {
 				uni.navigateTo({
-					url: '/pages/listen_nei/listen_nei?audioId=' + item.audioId + '&type=audio' + '&authorId=' + item.userId
+					url: '/pagesC/listen_nei/listen_nei?audioId=' + item.audioId + '&type=audio' + '&authorId=' + item.userId
 				})
 			}
 

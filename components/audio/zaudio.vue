@@ -135,7 +135,7 @@
 				this.$store.commit('setpause', true); //记录音频正常停止 true
 				this.$audio.startTime = 0;
 				this.current = this.format('0');
-				this.current_value = '0';
+				this.current_value = 0;
 				this.saveplay('current', this.current);
 				this.saveplay('current_value', this.current_value);
 				// console.log('音频正常停止');
@@ -204,10 +204,10 @@
 							num % 60)).length) + Math.floor(num % 60)
 					);
 				} catch (e) {
-					return (
-						'0'.repeat(3 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(
-							num % 60)).length) + Math.floor(num % 60)
-					);
+					// return (
+					// 	'0'.repeat(3 - String(Math.floor(num / 60)).length) + Math.floor(num / 60) + ':' + '0'.repeat(2 - String(Math.floor(
+					// 		num % 60)).length) + Math.floor(num % 60)
+					// );
 				}
 			},
 

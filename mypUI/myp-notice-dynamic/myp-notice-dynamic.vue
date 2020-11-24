@@ -1,5 +1,5 @@
 <template>
-	<view ref="myp-notice" v-if="showing" :hack="hackShow" :class="['myp-notice', 'myp-bg-'+mrBgType]" :style="mrBoxStyle + noWeexAnimation">
+	<view ref="myp-notice" v-if="showing" :hack="hackShow" :class="['myp-notice', 'myp-flex-row', 'myp-align-center', 'myp-justify-center', 'myp-bg-'+mrBgType]" :style="mrBoxStyle + noWeexAnimation">
 		<slot>
 			<myp-icon :name="mrIcon" :iconStyle="iconStyle" :type="iconType" :size="iconSize" :boxStyle="iconBoxStyle"></myp-icon>
 			<text :class="['myp-size-'+textSize, 'myp-color-'+textType]" :style="mrTextStyle">{{text}}</text>
@@ -9,12 +9,11 @@
 
 <script>
 	// #ifdef APP-NVUE
-	const animation = weex.requireModule('animation')
+	const animation = uni.requireNativePlugin('animation')
 	// #endif
-	import windowMixin from '../myp-mixin/windowMixin.js'
+	import {getHeight, getScreenHeight} from '../utils/system.js'
 	
 	export default {
-		mixins: [windowMixin],
 		data() {
 			return {
 				showing: false,
@@ -42,13 +41,13 @@
 		},
 		computed: {
 			screenHeight() {
-				return this.mypGetScreenHeight()
+				return getScreenHeight()
 			},
 			offsetPx() {
-				return this.mypGetHeight(this.offset)
+				return getHeight(this.offset)
 			},
 			heightPx() {
-				return this.mypGetHeight(this.height)
+				return getHeight(this.height)
 			},
 			hackShow() {
 				this.handleHackShow()
@@ -114,6 +113,7 @@
 				this.noWeexAppearPopup(bool, duration)
 				// #endif
 			},
+			// #ifndef APP-NVUE
 			noWeexAppearPopup(bool, duration = 300) {
 				// add css transition properties
 				let _style = "transform:" + this.getTransform(!bool) + ';'
@@ -127,6 +127,8 @@
 					}
 				}, duration)
 			},
+			// #endif
+			// #ifdef APP-NVUE
 			weexAppearPopup(bool, duration = 300) {
 				const popupEl = this.$refs['myp-notice']
 				if (!popupEl) {
@@ -146,6 +148,7 @@
 					}
 				})
 			},
+			// #endif
 			getTransform(toClose) {
 				let _size = 0
 				if (!toClose) {
@@ -169,8 +172,5 @@
 		position: fixed;
 		left: 0;
 		right: 0;
-		align-items: center;
-		justify-content: center;
-		flex-direction: row;
 	}
 </style>

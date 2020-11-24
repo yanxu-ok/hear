@@ -4,6 +4,7 @@ let http = request.http
 
 let http1 = request.http1
 
+
 // 前端-根据专题获取章节列表（带分页）
 // topicId	true	number	null	话题id
 export const get_chapter_list_by_topic = ({
@@ -156,3 +157,102 @@ export const update_history = ({
 		listenProgress
 	})
 }
+
+// 获取评论（圈子，用户前台）
+// 参数名称	是否必须	数据类型	默认值	描述
+// programId	true	number	null	文稿id
+// classifyKey	true	string	null	评论的内容所属的栏目分类key
+// orgKey	true	string	null	评论的内容所属的机构key
+// platformKey	true	string	null	评论的内容所属的平台key
+// pageSize	false	number	10	
+// offset	false	number	1
+export const get_comment_list = (obj) => {
+	return http.get(
+		'/comment_page/get_comment_list', {
+			params: obj
+		}
+	)
+}
+
+// 回复评论/新增评论数据
+// 参数名称	是否必须	数据类型	默认值	描述
+// programId	true	number	null	文稿id
+//commentContent 	false	string	null	评论内容，该字段和下面的图片存储地址最少有一个是必填，前端控制
+// atCommentKey	false	string	null	@的评论key，该字段在回复评论时需要传入1楼评论的评论key
+// classifyKey	true	string	null	评论的内容所属的栏目分类key
+// orgKey	true	string	null	评论的内容所属的机构key
+// platformKey	true	string	null	评论的内容所属的平台key
+export const save_comment = (obj) => {
+	return http.post(
+		'/comment_page/save_comment', obj)
+}
+
+// 将听见的token转为评论的token
+export const get_comment_manager_token = () => {
+	return http.get(
+		'/common/get_comment_manager_token')
+}
+
+// 前台-新增用户消息通知记录
+// 新增消息通知类型:
+// - 平台通知类：新版本更新(11)、会员充值成功(12)、到期提醒(13)、内容推荐(14)
+// - 互动类：点赞(1)、评论章节/回复(2)、谁发了您的互听(3)
+// 例子: 
+// majorId说明: ID集合[逗号隔开](根据major_id_type指定对应ID)  
+// majorIdType说明: 类型ID集合[逗号隔开](1:专题 2:章节 3:互听)
+// majorId值: 23,d129aa803d8dg11eaa577005056a83sf
+// majorIdType值: 1,2
+// majorIdType中1表示专题2表示章节, 那么majorId对应的23为专题ID, d129aa803d8dg11eaa577005056a83sf为章节ID
+// (两个字段一一对应关系,逗号隔开)
+
+// userInformId	true	number	参考值: 7108675	待通知的用户ID
+// majorIdType	true	string	参考值: "1,2"	类型ID集合[逗号隔开](1:专题 2:章节 3:互听)
+// majorId	true	string	参考值: "23,d129aa803d8dg11eaa577005056a83sf"	ID集合[逗号隔开](根据major_id_type指定对应ID)
+// msgType	true	number	参考值: 1	类型 1: 点赞 2: 评论章节 3:谁发了您的互听 11:新版本更新 12:会员充值成功 13:到期提醒 14: 内容推荐
+// msgClassify	true	number	参考值: 2	消息类型(1:消息通知 2:互动通知)
+// msgContent	true	string	参考值: "赞了您的<亚索>-七里香 - 周杰伦"	消息体内容
+// topicListenName	false	string	参考值: 专题名	专题或互听文稿昵称
+export const insert_message = (obj) => {
+	return http.post(
+		'/msg/insert_message', obj)
+}
+
+
+// 评论点赞
+// 请求参数
+// commentKey	true	string	null	评论主键
+export const praise = (obj) => {
+	return http.post(
+		'/comment_page/praise', obj)
+}
+
+// 评论取消点赞
+// 请求参数
+// commentKey	true	string	null	评论主键
+export const cancel_praise = (obj) => {
+	return http.post(
+		'/comment_page/cancel_praise', obj)
+}
+
+// 查询用户下的评论列表（查看当前用户所有评论）
+// 请求参数
+// 参数名称	是否必须	数据类型	默认值	描述
+// classifyKey	false	string	null	评论的内容所属的栏目key
+// orgKey	true	string	null	评论的内容所属的机构key
+// platformKey	true	string	null	评论的内容所属的平台key
+export const get_comment_page = (obj) => {
+	return http.get(
+		'/comment_page/get_mine_comment', {
+			params: obj
+	})
+}
+
+// 查询文章下的所有的评论的数量
+export const get_comment_total = (obj) => {
+	return http.get(
+		'/comment_page/get_comment_total', {
+			params: obj
+	})
+}
+
+

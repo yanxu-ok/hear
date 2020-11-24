@@ -9,7 +9,11 @@ import {
 	get_search_category,
 	get_topic_by_categoryid,
 	get_user_play_history,
-	get_topic_list_by_type
+	get_topic_list_by_type,
+	get_new_msg_count,
+	get_user_message,
+	update_message_read,
+	update_category_status
 } from '@/api/index/index.js'
 
 import {
@@ -136,7 +140,7 @@ export default {
 				})
 			})
 		},
-		
+
 		// 分类下的专题
 		get_topic_by_categoryid({
 			state,
@@ -145,12 +149,12 @@ export default {
 		}, obj) {
 			return new Promise((resolve, reject) => {
 				get_topic_by_categoryid(obj).then(res => {
-					console.log(res, "搜索下的专题");
+					// console.log(res, "搜索下的专题");
 					resolve(res.data.data)
 				})
 			})
 		},
-		
+
 		// 播放历史
 		get_user_play_history({
 			state,
@@ -159,12 +163,11 @@ export default {
 		}, obj) {
 			return new Promise((resolve, reject) => {
 				get_user_play_history(obj).then(res => {
-					console.log(res, "播放历史");
 					resolve(res.data.data)
 				})
 			})
 		},
-		
+
 		// 根据分类获取专题列表（带分页）
 		get_topic_list_by_type({
 			state,
@@ -173,12 +176,67 @@ export default {
 		}, obj) {
 			return new Promise((resolve, reject) => {
 				get_topic_list_by_type(obj).then(res => {
-					console.log(res, "根据分类获取专题列表");
+					// console.log(res, "根据分类获取专题列表");
 					resolve(res.data.data)
 				})
 			})
 		},
-		
+
+		// 前台-消息记录红点提醒
+		get_new_msg_count({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				get_new_msg_count(obj).then(res => {
+					// console.log(res, "前台-消息记录红点提醒");
+					resolve(res.data.data)
+				})
+			})
+		},
+
+		// 前台-查询用户消息通知记录
+		get_user_message({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				get_user_message(obj).then(res => {
+					// console.log(res, "前台-查询用户消息通知记录");
+					resolve(res.data.data)
+				})
+			})
+		},
+
+		// 前台-用户消息通知已读标记
+		update_message_read({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				update_message_read(obj).then(res => {
+					// console.log(res, "前台-用户消息通知已读标记");
+					resolve(res.data)
+				})
+			})
+		},
+
+		// 前端-自定义分类（更新状态）
+		update_category_status({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				update_category_status(obj).then(res => {
+					// console.log(res, "前台-用户消息通知已读标记");
+					resolve(res.data)
+				})
+			})
+		}
 		
 	}
 }

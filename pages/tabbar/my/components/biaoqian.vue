@@ -37,8 +37,6 @@
 </template>
 
 <script>
-	import pic1 from '@/static/biaoqian/men.png'
-	import pic2 from '@/static/biaoqian/man.png'
 	import {
 		mapActions,
 		mapMutations,
@@ -73,8 +71,10 @@
 
 
 		methods: {
-			...mapActions(['get_label', 'insert_user_label', 'get_user_count']),
-			radioChangeStatus1(val) {
+			...mapActions(['get_label', 'insert_user_label', 'get_user_count','update_user_msg']),
+			radioChangeStatus1({
+				val
+			}) {
 				console.log(val);
 				this.subAgeList = []
 				if (!val) {
@@ -86,7 +86,10 @@
 					"typeId": this.userInfo.userId
 				})
 			},
-			radioChangeStatus(val) {
+			
+			radioChangeStatus({
+				val
+			}) {
 				console.log(val);
 				this.subXingquList = []
 				if (val.length == 0) {
@@ -100,15 +103,25 @@
 					})
 				})
 			},
+			
 			// 点击保存触发  组合在一块
 			async handleSave() {
 				let data = [...this.subSexList, ...this.subAgeList, ...this.subXingquList]
-				console.log(data);
+				console.log(data,this.subSexList);
+				if(this.subSexList[0].labelId == 1){}
+				let updata = {
+					userSex: this.subSexList[0].labelId,
+				}
+				
+				let upresult = await this.update_user_msg(updata)
+				console.log(upresult);
+				// 先调用 获取更新用户的信息的接口
 				let result = await this.insert_user_label(data)
 				this.show = false;
 				if (result.success) {
 					uni.showToast({
-						title: '保存成功'
+						title: '保存成功',
+						icon:'none'
 					})
 				}
 			},
@@ -127,10 +140,15 @@
 
 			// 获取标签
 			async getBiaoqian() {
+				
 				let result = await this.get_label({
 					labelType: null
 				})
-				let arr = [pic2, pic1]
+
+				let arr = ['https://img11.iqilu.com/29/2020/09/30/1e266a1092304bd344bce70005e89a06.png',
+					'https://img11.iqilu.com/29/2020/09/30/4dbc7d76feaff25651cb261091070f03.png'
+				]
+				
 				result.slice(0, 2).forEach((item, index) => {
 					item.image = arr[index]
 				})
@@ -147,12 +165,14 @@
 					item.value = item.labelId;
 					item.checked = 0;
 				})
+				
 				this.listDatas = result.slice(2, 8)
 				result.slice(8, 14).forEach((item, index) => {
 					item.name = item.labelName;
 					item.value = item.labelId;
 					item.checked = 0;
 				})
+				
 				this.listDatas1 = result.slice(8, 13)
 			}
 		}

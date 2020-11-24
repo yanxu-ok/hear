@@ -3,7 +3,7 @@
 		<view ref="myp-popo-overlay" :class="['myp-popo-over', 'myp-bg-'+overlay.bgType]" @tap.stop="overlayClose" :style="mrOverlayStyle + overlayNoWeexAni">
 			<slot name="overlay"></slot>
 		</view>
-		<view ref="myp-popo" @tap.stop="toPrevent" :class="['myp-popo', 'myp-bg-'+bgType]" :style="boxStyle+mrPopStyle + noWeexAni">
+		<view ref="myp-popo" @tap.stop="toPrevent" :class="['myp-popo', 'myp-flex-column', 'myp-bg-'+bgType]" :style="boxStyle+mrPopStyle + noWeexAni">
 			<slot></slot>
 		</view>
 	</view>
@@ -15,31 +15,44 @@
 	// 支持standout
 	//
 	// #ifdef APP-NVUE
-	const animation = weex.requireModule('animation');
+	const animation = uni.requireNativePlugin('animation');
 	// #endif
 	
-	import windowMixin from '../myp-mixin/windowMixin.js'
+	import {getHeight, getPx, getScreenHeight} from '../utils/system.js'
 	// TODO: add height animation: height-0->height
 	export default {
-		mixins: [windowMixin],
 		props: {
+			/**
+			 * 是否打开/展示
+			 */
 			show: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 定位位置
+			 */
 			pos: {
 				type: String,
 				default: 'bottom'
 			},
+			/**
+			 * 背景主题
+			 */
 			bgType: {
 				type: String,
 				default: 'none'
 			},
+			/**
+			 * 动画周期
+			 */
 			duration: {
 				type: Number,
 				default: 300
 			},
-			// in mp, we do not support v-bind="overlay". we need to list it
+			/**
+			 * 遮罩层设置
+			 */
 			overlay: {
 				type: Object,
 				default: () => ({
@@ -49,57 +62,102 @@
 					bgType: 'mask'
 				})
 			},
+			/**
+			 * 自定义高度
+			 */
 			height: {
-				type: [Number, String],
-				default: 0
-			},
-			standout: {
-				type: [Number, String],
+				type: String,
 				default: '0'
 			},
-			// 打开后与边框的距离. 可以通过其它方式实现，比如内容高度增加，然后背景色透明
+			/**
+			 * 需要从屏幕高度额外减去的高度
+			 */
+			extra: {
+				type: String,
+				default: '0'
+			},
+			/**
+			 * 提前显示在可见屏幕内的高度
+			 */
+			standout: {
+				type: String,
+				default: '0'
+			},
+			/**
+			 * 内容与屏幕左侧的距离
+			 */
 			leftOffset: {
-				type: [Number, String],
-				default: -1
+				type: String,
+				default: '-1'
 			},
+			/**
+			 * 内容与屏幕右侧的距离
+			 */
 			rightOffset: {
-				type: [Number, String],
-				default: -1
+				type: String,
+				default: '-1'
 			},
+			/**
+			 * 内容与屏幕底部的距离
+			 */
 			bottomOffset: {
-				type: [Number, String],
-				default: -1
+				type: String,
+				default: '-1'
 			},
+			/**
+			 * 内容与屏幕顶部的距离
+			 */
 			topOffset: {
-				type: [Number, String],
-				default: -1
+				type: String,
+				default: '-1'
 			},
+			/**
+			 * 自定义宽度
+			 */
 			width: {
-				type: [Number, String],
-				default: 750
+				type: String,
+				default: '750rpx'
 			},
+			/**
+			 * 动画函数
+			 */
 			animation: {
 				type: Object,
 				default: () => ({
 					timingFunction: 'ease-in-out'
 				})
 			},
+			/**
+			 * 遮罩与屏幕左侧的距离
+			 */
 			left: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 遮罩与屏幕顶部的距离
+			 */
 			top: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 遮罩与屏幕右侧的距离
+			 */
 			right: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 遮罩与屏幕底部的距离
+			 */
 			bottom: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 内容外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
@@ -111,7 +169,8 @@
 				helpShow: false,
 				overlayNoWeexAni: '',
 				noWeexAni: '',
-				isShow: false
+				isShow: false,
+				screenWidth: uni.upx2px(750)
 			}
 		},
 		watch: {
@@ -120,11 +179,8 @@
 			}
 		},
 		computed: {
-			screenWidth() {
-				return uni.upx2px(750)
-			},
 			screenHeight() {
-				return this.mypGetScreenHeight()
+				return getScreenHeight()
 			},
 			overlayHeight() {
 				return this.screenHeight - this.topPx - this.bottomPx
@@ -209,52 +265,55 @@
 				return _style
 			},
 			heightPx() {
-				const h = this.mypGetHeight(this.height)
+				const h = getHeight(this.height)
 				if (h > 1) {
-					return h
+					return h - this.extraPx
 				}
 				if (h <= 0) {
-					return this.screenHeight - this.topPx - this.bottomPx - (this.topOffsetPx>=0?this.topOffsetPx:0) - (this.bottomOffsetPx>=0?this.bottomOffsetPx:0)
+					return this.screenHeight - this.topPx - this.bottomPx - (this.topOffsetPx>=0?this.topOffsetPx:0) - (this.bottomOffsetPx>=0?this.bottomOffsetPx:0) - this.extraPx
 				}
-				return this.screenHeight * h
+				return this.screenHeight * h - this.extraPx
+			},
+			extraPx() {
+				return getHeight(this.extra)
 			},
 			widthPx() {
-				const w = this.mypToPx(this.width)
+				const w = getPx(this.width)
 				if (w <= 0) {
 					return this.screenWidth - this.leftPx - this.rightPx - (this.leftOffsetPx>=0?this.leftOffsetPx:0) - (this.rightOffsetPx>=0?this.rightOffsetPx:0)
 				}
 				return w
 			},
 			standoutPx() {
-				return this.mypGetHeight(this.standout)
+				return getHeight(this.standout)
 			},
 			leftOffsetPx() {
-				if (this.leftOffset === -1) return -1;
-				return this.mypToPx(this.leftOffset)
+				if (this.leftOffset === '-1') return -1;
+				return getPx(this.leftOffset)
 			},
 			topOffsetPx() {
-				if (this.topOffset === -1) return -1;
-				return this.mypGetHeight(this.topOffset)
+				if (this.topOffset === '-1') return -1;
+				return getHeight(this.topOffset)
 			},
 			rightOffsetPx() {
-				if (this.rightOffset === -1) return -1;
-				return this.mypToPx(this.rightOffset)
+				if (this.rightOffset === '-1') return -1;
+				return getPx(this.rightOffset)
 			},
 			bottomOffsetPx() {
-				if (this.bottomOffset === -1) return -1;
-				return this.mypGetHeight(this.bottomOffset)
+				if (this.bottomOffset === '-1') return -1;
+				return getHeight(this.bottomOffset)
 			},
 			leftPx() {
-				return this.mypToPx(this.left)
+				return getPx(this.left)
 			},
 			topPx() {
-				return this.mypGetHeight(this.top)
+				return getHeight(this.top)
 			},
 			rightPx() {
-				return this.mypToPx(this.right)
+				return getPx(this.right)
 			},
 			bottomPx() {
-				return this.mypGetHeight(this.bottom)
+				return getHeight(this.bottom)
 			}
 		},
 		methods: {

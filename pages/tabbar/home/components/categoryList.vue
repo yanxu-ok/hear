@@ -37,11 +37,11 @@
 			return {
 				scrollTop: 0,
 				downOption: {
-					// auto: false
+					auto: false
 				},
 				// 上拉加载的配置(可选)
 				upOption: {
-					// auto: false
+					auto: false
 				},
 				// pageNum: 1,
 				// pageSize: 10,
@@ -57,14 +57,33 @@
 				type: Object
 			}
 		},
+		watch: {
+			
+			// 监听对象发生变化重新请求
+			categoryCurrect: {
+				handler(newValue, oldValue) {
+					if (this.mescroll) {
+						this.downCallback()
+					}
+				},
+				// 立即处理 进入页面就触发
+				immediate: true
+			},
+
+			// 监听下拉刷新mesoll对象
+			mescroll(newValue, oldValue) {
+				this.downCallback()
+			}
+			
+		},
 		methods: {
+
 			...mapActions(['get_recently_topic', 'get_topic_list_by_type']),
 
 			// 点击内容事件
 			handleContentClick(item) {
-				console.log(item);
 				uni.navigateTo({
-					url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userAuthorId
+					url: '/pagesC/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userAuthorId
 				})
 			},
 

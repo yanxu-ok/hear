@@ -4,10 +4,11 @@ import store from './store/index.js'
 import uView from './index.js'
 Vue.use(uView);
 
+import config from '@/libs/config/baseUrl'
+Vue.prototype.$config = config
 Vue.config.productionTip = false
 
 // 自定义的过滤器
-
 import {
 	filter
 } from '@/libs/filter/index.js'

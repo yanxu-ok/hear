@@ -1,117 +1,147 @@
-import xBarMixin from '../myp-mixin/xBarMixin.js'
-import pxMixin from '../myp-mixin/pxMixin.js'
+import {getHeight} from '../utils/system.js'
+// #ifndef APP-NVUE
+import {getScreenHeight} from '../utils/system.js'
+// #endif
 
 export default {
-	mixins: [xBarMixin, pxMixin],
 	props: {
-		includeStatus: {
+		/**
+		 * 是否显示scrollbar
+		 */
+		showScrollbar: {
 			type: Boolean,
-			default: false
+			default: true
 		},
-		includeNav: {
-			type: Boolean,
-			default: false
-		},
-		tabHeight: {
-			type: Number,
-			default: 0 // px
-		},
-		// 补充高度
-		extra: {
-			type: [Number, String],
-			default: 0
-		},
-		// 设置了height，会直接使用height，忽略其它的计算
-		height: {
-			type: [Number, String],
-			default: '0'
-		},
-		useFlex: {
-			type: Boolean,
-			default: false
-		},
-		width: {
-			type: String,
-			default: '750rpx'
-		},
-		// foot悬浮在scroll之上，滚动到底部时，foot可能遮挡住scroll的内容，我们给scroll加一个底部空白高度
-		footToken: {
-			type: String,
-			default: '0px'  // 占位的高度
-		},
-		boxStyle: {
-			type: String,
-			default: ''
-		},
-		scrollStyle: {
-			type: String,
-			default: ''
-		},
+		/**
+		 * 背景主题
+		 */
 		bgType: {
 			type: String,
 			default: 'page'
 		},
-		// foot会导致xBar区域不可点击
-		hasFoot: {
-			type: Boolean,
-			default: false
-		},
-		// 我们通过footBottom来设置bottom的距离
-		footBottom: {
+		/**
+		 * 定位
+		 */
+		position: {
 			type: String,
-			default: '0px'
+			default: 'static'
 		},
-		footStyle: {
+		/**
+		 * 定位的top
+		 */
+		top: {
+			type: String,
+			default: '0'
+		},
+		/**
+		 * 定位的bottom
+		 */
+		bottom: {
+			type: String,
+			default: '0'
+		},
+		/**
+		 * 外层样式
+		 */
+		boxStyle: {
 			type: String,
 			default: ''
+		},
+		// #ifndef APP-NVUE
+		/**
+		 * 需要从屏幕高度减去的高度
+		 */
+		extra: {
+			type: String,
+			default: 'status-nav'
+		},
+		/**
+		 * 设置了height，会直接使用height，忽略其它的计算
+		 */
+		height: {
+			type: String,
+			default: '0'
 		}
+		// #endif
 	},
 	computed: {
+		mrBoxStyle() {
+			let _style = ''
+			if (this.position != 'absolute' && this.position != 'fixed') {
+				// #ifdef APP-NVUE
+				return this.boxStyle
+				// #endif
+				// #ifndef APP-NVUE
+				return `height:${this.mypScrollHeight}px;` + this.boxStyle
+				// #endif
+			}
+			if (this.top != '-1') {
+				_style += 'top:' + getHeight(this.top) + 'px;'
+			}
+			if (this.bottom != '-1') {
+				_style += 'bottom:' + getHeight(this.bottom) + 'px;'
+			}
+			return _style + this.boxStyle
+		},
+		// #ifndef APP-NVUE
 		mypScrollHeight() {
-			if (this.useFlex) return 0;
-			if (this.heightPx !== 0) {
-				return this.heightPx
+			if (this.position === 'absolute' || this.position === 'fixed') {
+				let h = getScreenHeight()
+				if (this.top != '-1') {
+					h -= getHeight(this.top)
+				}
+				if (this.bottom != '-1') {
+					h -= getHeight(this.bottom)
+				}
+				return h
 			}
-			let _height = this.mypGetScreenHeight()
-			if (_height === 0) {
-				_height = this.mypGetScreenHeight()
+			const heightPx = getHeight(this.height)
+			if (heightPx !== 0) {
+				return heightPx
 			}
-			if (!this.includeStatus) {
-				_height = _height - this.mypGetStatusBarHeight()
-			}
-			if (!this.includeNav) {
-				_height = _height - this.mypGetNavHeight()
-			}
-			if (!this.includeXBar) {
-				_height = _height - this.mypGetXBarHeight()
-			} else if (this.includeXBar && !this.overrideXBar) {
-				_height = _height - this.mypGetXBarHeight()
-			}
-			_height = _height - this.tabHeight - this.extraPx
-			if (_height <= 0) {
-				return 0
-			}
-			return _height
+			const extraPx = getHeight(this.extra)
+			const screenH = getScreenHeight()
+			return screenH - extraPx
+		}
+		// #endif
+	},
+	data() {
+		return {
+			mypCurrentView: null,
+			mypScrollTop: 0
+		}
+	},
+	methods: {
+		mypScrollToBottom() {
+			// #ifdef APP-NVUE
+			const ref = this.$refs['myp-list-bottom']
+			dom.scrollToElement(ref, {offset: 0, animated: true})
+			// #endif
+			// #ifndef APP-NVUE
+			this.mypCurrentView = 'myp-list-bottom'
+			// #endif
 		},
-		heightPx() {
-			return this.mypToPx(this.height)
+		mypScrollToTop() {
+			// #ifdef APP-NVUE
+			const ref = this.$refs['myp-list-top']
+			dom.scrollToElement(ref, {offset: 0, animated: true})
+			// #endif
+			// #ifndef APP-NVUE
+			this.mypCurrentView = 'myp-list-top'
+			// #endif
 		},
-		mrScrollStyle() {
-			if (this.useFlex) {
-				return `width:${this.width};`+this.scrollStyle
+		mypScrollToElement(ref, options={offset: 0, animated: true}) {
+			// #ifdef APP-NVUE
+			dom.scrollToElement(ref, options)
+			// #endif
+			// #ifndef APP-NVUE
+			this.mypCurrentView = null
+			if (this.mypScrollTop === ref) {
+				this.mypScrollTop = ref + 0.1
+			} else {
+				this.mypScrollTop = ref
 			}
-			return `width:${this.width};height:${this.mypScrollHeight}px;`+this.scrollStyle
-		},
-		extraPx() {
-			return this.mypToPx(this.extra)
-		},
-		mrFootStyle() {
-			let bt = this.mypToPx(this.footBottom)
-			if (this.includeXBar&&this.hasFoot) {
-				const xh = this.mypGetXBarHeight()
-				bt = bt + xh
-			}
-			return this.footStyle + 'bottom:' + bt + 'px;'
+			// #endif
 		}
 	}
 }

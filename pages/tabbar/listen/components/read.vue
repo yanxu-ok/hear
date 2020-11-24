@@ -1,7 +1,7 @@
 <template>
 	<view class="all_and_listen">
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
-		 :up="upOption" style="height: 100%;">
+		 :up="upOption" style="height: 100%;margin: 0 auto;">
 			<!-- 	// @init="mescrollInit" @down="downCallback" @up="upCallback"为固定值,不可删改(与mescroll-mixins保持一致)
 			// :down="downOption" :up="upOption" 绝大部分情况无需配置
 			// :top="顶部偏移量" :bottom="底部偏移量" :topbar="状态栏" :safearea="安全区" (常用)
@@ -18,6 +18,9 @@
 </template>
 
 <script>
+	import {
+		isLogin
+	} from '@/libs/hear-util/index.js'
 	import {
 		mapState,
 		mapActions,
@@ -133,14 +136,20 @@
 
 			// 列表点击事件
 			handleClickHuting(item) {
+				if(!isLogin()){
+					uni.navigateTo({
+						url: '/pages/login/login'
+					})
+					return;
+				}
 				if (this.rindex == 1) {
 					uni.navigateTo({
-						url: '/pages/listen_nei/listen_nei?' + '&type=article' + '&authorId=' + item.userId + '&item=' +
+						url: '/pagesC/listen_nei/listen_nei?' + '&type=article' + '&authorId=' + item.userId + '&item=' +
 							encodeURIComponent(JSON.stringify(item))
 					})
 				} else {
 					uni.navigateTo({
-						url: '/pages/listen_nei/listen_nei?audioId=' + item.audioId + '&type=audio' + '&authorId=' + item.userId
+						url: '/pagesC/listen_nei/listen_nei?audioId=' + item.audioId + '&type=audio' + '&authorId=' + item.userId
 					})
 				}
 			}

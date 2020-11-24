@@ -1,32 +1,53 @@
 <template>
-	<view :class="['myp-bg-'+bgType]" :style="mrBoxStyle"></view>
+	<view :class="['myp-bg-'+bgType, 'myp-border-'+border, 'myp-radius-'+radius]" :style="'height:'+heightPx+'px;'+boxStyle">
+		<slot></slot>
+	</view>
 </template>
 
 <script>
-	import windowMixin from '../myp-mixin/windowMixin.js'
+	import {getHeight} from '../utils/system.js'
 	
 	export default {
 		props: {
+			/**
+			 * 自定义高度。允许status-nav-100rpx-12px写法
+			 */
 			height: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 背景颜色主题
+			 */
 			bgType: {
 				type: String,
 				default: 'none'
 			},
+			/**
+			 * 边框主题
+			 */
+			border: {
+				type: String,
+				default: 'none'
+			},
+			/**
+			 * 圆角主题
+			 */
+			radius: {
+				type: String,
+				default: 'none'
+			},
+			/**
+			 * 外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
 			}
 		},
-		mixins: [windowMixin],
 		computed: {
 			heightPx() {
-				return this.mypGetHeight(this.height)
-			},
-			mrBoxStyle() {
-				return `height:${this.heightPx}px;` + this.boxStyle
+				return getHeight(this.height)
 			}
 		}
 	}

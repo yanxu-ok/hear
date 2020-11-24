@@ -1,91 +1,157 @@
 <template>
-	<view v-if="showing" bubble="true" :class="['myp-noticebar', 'myp-bg-'+bgType, 'myp-height-'+height, 'myp-border-'+border, 'myp-radius-'+radius]" :style="boxStyle" @tap.stop="noticeBarClicked">
-		<view v-if="icon" :style="{'margin-right': space}">
-			<myp-icon :name="icon" :type="mrIconType" :size="iconSize" :iconStyle="iconStyle" @iconClicked="noticeBarClicked"></myp-icon>
-		</view>
-		<text :class="['myp-noticebar-text', 'myp-size-'+textSize, 'myp-color-'+mrTextType]" :style="textStyle">{{text}}</text>
-		<view v-if="indicator" bubble="true" :style="{'margin-left': space}" @tap.stop="indicatorClicked">
-			<myp-icon :name="indicator" :type="mrIndicatorType" :size="indicatorSize" :iconStyle="indicatorStyle" @iconClicked="indicatorClicked"></myp-icon>
-		</view>
+	<view v-if="showing" :class="['myp-flex-row', 'myp-align-center', 'myp-noticebar', 'myp-bg-'+bgType, 'myp-height-'+height, 'myp-border-'+border, 'myp-radius-'+radius]" :style="boxStyle" bubble="true" @tap.stop="noticeBarClicked">
+		<myp-icon v-if="icon" :name="icon" :type="iconType" :size="iconSize" :iconStyle="iconStyle" :boxStyle="'margin-right:'+space+';'+iconBoxStyle" @iconClicked="noticeBarClicked"></myp-icon>
+		<text :class="['myp-flex-one', 'myp-lines-one', 'myp-size-'+textSize, 'myp-color-'+textType]" :style="textStyle">{{text}}</text>
+		<myp-icon v-if="indicator" :name="indicator" :type="indicatorType" :size="indicatorSize" :iconStyle="indicatorStyle" :boxStyle="'margin-left:'+space+';'+indicatorBoxStyle" @iconClicked="indicatorClicked"></myp-icon>
 	</view>
 </template>
 
 <script>
 	export default {
 		props: {
-			text: {
-				type: String,
-				default: ''
-			},
-			textSize: {
-				type: String,
-				default: 'base'
-			},
-			bgType: {
-				type: String,
-				default: ''
-			},
-			textType: {
-				type: String,
-				default: ''
-			},
-			iconType: {
-				type: String,
-				default: ''
-			},
-			height: {
-				type: String,
-				default: 'base'
-			},
-			border: {
-				type: String,
-				default: 'none'
-			},
-			radius: {
-				type: String,
-				default: ''
-			},
+			/**
+			 * 左侧图标
+			 */
 			icon: {
 				type: String,
 				default: null
 			},
-			iconSize: {
-				type: String,
-				default: 'll'
-			},
-			iconStyle: {
+			/**
+			 * 文字内容
+			 */
+			text: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 右侧图标
+			 */
 			indicator: {
 				type: String,
 				default: null
 			},
+			/**
+			 * 背景主题
+			 */
+			bgType: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 高度主题
+			 */
+			height: {
+				type: String,
+				default: 'base'
+			},
+			/**
+			 * 边框主题
+			 */
+			border: {
+				type: String,
+				default: 'none'
+			},
+			/**
+			 * 圆角主题
+			 */
+			radius: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 文字颜色主题
+			 */
+			textType: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 文字尺寸主题
+			 */
+			textSize: {
+				type: String,
+				default: 'base'
+			},
+			/**
+			 * 图标主题
+			 */
+			iconType: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 图标尺寸主题
+			 */
+			iconSize: {
+				type: String,
+				default: 'll'
+			},
+			/**
+			 * 图标样式
+			 */
+			iconStyle: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 右侧图标颜色主题
+			 */
 			indicatorType: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 右侧图标尺寸主题
+			 */
 			indicatorSize: {
 				type: String,
 				default: 'll'
 			},
+			/**
+			 * 右侧图标样式
+			 */
 			indicatorStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 间距
+			 */
 			space: {
 				type: String,
 				default: '12rpx'
 			},
-			// color, lines, text-align...
+			/**
+			 * 文字样式
+			 */
 			textStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 图标外层样式
+			 */
+			iconBoxStyle: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 右侧图标外层样式
+			 */
+			indicatorBoxStyle: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 是否可以关闭
+			 */
 			closable: {
 				type: Boolean,
 				default: false
@@ -94,26 +160,6 @@
 		data: () => ({
 			showing: true
 		}),
-		computed: {
-			mrTextType() {
-				if (this.textType && this.textType.length > 0) {
-					return this.textType
-				}
-				return this.bgType && this.bgType.length > 0 ? 'inverse' : 'text'
-			},
-			mrIconType() {
-				if (this.iconType && this.iconType.length > 0) {
-					return this.iconType
-				}
-				return this.bgType && this.bgType.length > 0 ? 'inverse' : 'text'
-			},
-			mrIndicatorType() {
-				if (this.indicatorType && this.indicatorType.length > 0) {
-					return this.indicatorType
-				}
-				return this.bgType && this.bgType.length > 0 ? 'inverse' : 'text'
-			}
-		},
 		methods: {
 			show() {
 				this.showing = true
@@ -140,17 +186,5 @@
 	.myp-noticebar {
 		padding-left: 32rpx;
 		padding-right: 32rpx;
-		flex-direction: row;
-		align-items: center;
-		
-		&-text {
-			flex: 1;
-			lines: 1;
-			overflow: hidden;
-			text-overflow: ellipsis;
-			/* #ifndef APP-NVUE */
-			white-space: nowrap;
-			/* #endif */
-		}
 	}
 </style>

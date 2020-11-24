@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "播放",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-image": "/components/u-image/u-image",
+    "quanzi": "/pagesC/playPage/components/quanzi",
+    "playimg": "/pagesC/playPage/components/playimg",
+    "indexdrawer": "/pagesC/playPage/components/drawer",
+    "zaudio": "/components/audio/zaudio"
+  }
+}

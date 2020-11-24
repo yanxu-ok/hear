@@ -1,7 +1,7 @@
 <template>
 	<view class="style-flex style-flex-wrap">
-		<filter-radio-item v-for="(item, idx) in items" :key="idx" :name="item.name" :value="item.value" :checked="item.checked"
-		 @change="radioChange"></filter-radio-item>
+		<filter-radio-item v-for="(item, idx) in items" :key="idx" :name="item.name" :index="idx" :value="item.value"
+		 :checked="item.checked" @change="radioChange"></filter-radio-item>
 	</view>
 </template>
 
@@ -23,7 +23,7 @@
 		},
 		data() {
 			return {
-				items:[],
+				items: [],
 				resMulti: [],
 			};
 		},
@@ -78,9 +78,11 @@
 				this.items = arr
 			},
 			radioChange: function(e) {
-				console.log('radio发生change事件，携带value值为：' + e)
+
+				// console.log('radio发生change事件，携带value值为：' + e)
+
 				// 改变单击项 
-				this.handleChange(e)
+				this.handleChange(e.value)
 				const re = []
 				if (this.multi) {
 					this.items.forEach(function(val) {
@@ -90,11 +92,14 @@
 					})
 				}
 				let r = this.items.find((val) => {
-					return val.value === e
+					return val.value === e.value
 				})
-				let result = this.multi ? re : r.checked ? e : null
+				let result = this.multi ? re : r.checked ? e.value : null
 				// 返回选择项
-				this.$emit('change', result)
+				this.$emit('change', {
+					val: result,
+					index: e.index
+				})
 			},
 			reset: function() {
 				this.items = this.list

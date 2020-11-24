@@ -1,11 +1,11 @@
 <template>
-	
+
 	<!-- 排行榜元素-->
 	<view class="paihang_contain">
 		<!-- 头部 -->
 		<view class="paihang_contain_header">
 			<view class="paihang_contain_title_contain">
-				<u-image width="29rpx" height="39rpx" src="@/static/images/hot.png"></u-image>
+				<u-image width="29rpx" height="39rpx" src="https://img11.iqilu.com/29/2020/09/30/7e4421f01aa492b01eccad9133ee3969.png"></u-image>
 				<view class="paihang_contain_title">{{type}}榜单</view>
 			</view>
 			<view class="paihang_contain_header_right" @tap="quanbu(type)">
@@ -19,7 +19,7 @@
 		<!-- 描述 -->
 		<view class="paihang_contain_desc">
 			<!-- 万本好书包月听，更实惠 -->
-			</view>
+		</view>
 
 		<!-- 线条 -->
 		<u-line color="#E5E5E5" margin="0 0 19rpx 0"></u-line>
@@ -40,9 +40,9 @@
 				</block>
 			</template>
 		</view>
-		
+
 	</view>
-	
+
 </template>
 
 <script>
@@ -77,7 +77,9 @@
 		border-radius: 10rpx;
 		margin-right: 27rpx;
 		padding: 30rpx 20rpx 45rpx 22rpx;
-		margin-bottom: 10rpx;
+		margin-bottom: 20rpx;
+		margin-top: 20rpx;
+		margin-left: 20rpx;
 
 		& .paihang_contain_header {
 			display: flex;
@@ -138,6 +140,7 @@
 
 			& .paihang_contain_content_div_title {
 				margin-left: 35rpx;
+				font-size: $uni_font_30;
 			}
 		}
 	}

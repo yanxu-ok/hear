@@ -1,1 +1,0 @@
-<view class="pb_bottom"><view class="input">欢迎发表你的观点</view><u-image style="margin-left:39rpx;" vue-id="92febe3e-1" width="41rpx" height="38rpx" src="/static/images/comment.png" bind:__l="__l"></u-image><u-image style="margin-left:50rpx;" vue-id="92febe3e-2" width="38rpx" height="38rpx" src="/static/images/zhuanfa.png" bind:__l="__l"></u-image></view>

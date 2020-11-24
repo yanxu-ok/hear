@@ -1,12 +1,10 @@
 // 传进一个数组    返回一个 新的数组
-
 export const changeArr = (arr) => {
 	let newArr = []
 
 	arr.forEach((item, index) => {
 		item.image = item.bannerImage
 	})
-
 	return arr
 }
 
@@ -15,14 +13,17 @@ export const setCurrectStorg = (key, value) => {
 	uni.setStorageSync(key, value);
 }
 
+
+// 获取缓存
 export const getCurrectStorg = (key) => {
 	const value = uni.getStorageSync(key);
 	return value
 }
 
+// 清楚缓存
 export const cleanStorg = () => {
 	// const value = uni.getStorageSync(key);
-	 uni.clearStorageSync();
+	uni.clearStorageSync();
 	// return value
 }
 
@@ -48,6 +49,7 @@ export const formatDate = (key, value) => {
 	return _data
 }
 
+// 判断是否是在创奇中
 export const isApp = () => {
 	if (navigator.userAgent.toLowerCase().match(/MicroMessenger/i) == 'micromessenger') {
 		return 'weixin'
@@ -111,10 +113,52 @@ export const s_to_hs = (s) => {
 	return h + ':' + s;
 }
 
+// 判断是否登录
 export const isLogin = () => {
 	const token = uni.getStorageSync('token');
 	if (!token) {
 		return false
 	} else
 		return true
+}
+
+// 获取设备高度
+export const getScreenHeight = () => {
+	let height = uni.getSystemInfoSync().windowHeight
+	// console.log(height);
+	return height
+}
+
+// 获取状态栏和导航栏高度
+export const getStatusBarHeight = () => {
+	const res = uni.getSystemInfoSync()
+	// console.log(res);
+	const system = res.platform
+	// #ifdef H5
+	return 88
+	// #endif
+	// #ifdef MP-WEIXIN
+	return 88 + res.statusBarHeight
+	// #endif
+}
+
+// 两个数组取差集和交集
+export const arrChaji = (arr2, arr1) => {
+	let arr3 = []
+	arr1.map((item1) => {
+		arr2.map((item2) => {
+			if (item1.categoryId == item2.categoryId) {
+				//添加属性用来标记相同的对象
+				item1.isRepeat = true;
+			}
+		})
+	});
+	arr1.map((item) => {
+		//通过标记筛选对象
+		if (!item.isRepeat) {
+			arr3.push(item);
+		}
+	});
+	// console.log(arr3, 'aaa');
+	return arr3
 }

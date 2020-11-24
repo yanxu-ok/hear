@@ -1,9 +1,16 @@
 <template>
 	<view class="all_and_listen_div" @tap="handleClickGendu">
-		<u-image width="690rpx" height="690rpx" :src="brankGroudImg" style="all_and_listen_div_img" border-radius="20rpx"></u-image>
-		<view class="all_and_listen_div_title">{{title | titleFilter(10)}}</view>
-		<view class="all_and_listen_div_author">{{gendu ? '' : "文稿作者:"+ author | titleFilter(9)}}· 阅读量:{{peopleCount | numFormat}} ·
-			{{count | numFormat}}字 预计阅读时间:{{time | dateFormat}}分钟</view>
+		<view class="all_and_listen_div_img">
+			<u-image width="690rpx" height="690rpx" :src="brankGroudImg" border-radius="20rpx"></u-image>
+		</view>
+
+		<view class="all_and_listen_div_title">{{title | titleFilter(20)}}</view>
+
+		<view class="all_and_listen_div_author">{{gendu ? '' : "文稿作者:"+ author + '·' | titleFilter(9)}} 阅读量:{{peopleCount | numFormat}}
+			·
+			{{count | numFormat}}字 预计阅读时间:{{time | dateFormat}}分钟
+		</view>
+
 		<view class="all_and_listen_div_gendu">
 			<view style="88rpx" height="88rpx">
 				<u-image width="88rpx" height="88rpx" shape="circle" :src="avatar" style="margin-left: 27rpx;"></u-image>
@@ -13,7 +20,8 @@
 				<view class="all_and_listen_div_gendu_zuozhe">作者</view>
 			</view>
 			<view class="gendu_contain">
-				<u-image width="24rpx" height="37rpx" src="@/static/listen/yuyin.png" style="margin: 0 auto;"></u-image>
+				<u-image width="24rpx" height="37rpx" src="https://img11.iqilu.com/29/2020/09/30/dd606a58d277898ee81d8943bb95e48b.png"
+				 style="margin: 0 auto;"></u-image>
 				<view class="gendu_contain_text">{{genduText}}</view>
 			</view>
 		</view>
@@ -81,23 +89,40 @@
 <style lang="scss">
 	.all_and_listen_div {
 		display: flex;
-		justify-content: center;
+		flex-direction: column;
 		position: relative;
 		margin-bottom: 24rpx;
+		width: 690rpx;
+		height: 690rpx;
 
-		& .all_and_listen_div_img {
-			margin: 0 auto;
-		}
-
-		& .all_and_listen_div_title {
-			position: absolute;
-			top: 52rpx;
-			left: 63rpx;
+		& .all_and_listen_div_position {
+			// position: absolute;
+			// top: 52rpx;
+			// left: 34rpx;
 			font-size: 46rpx;
 			font-family: PingFang SC;
 			font-weight: 400;
 			color: rgba(255, 255, 255, 1);
 			width: 518rpx;
+		}
+
+		& .all_and_listen_div_img {
+			position: absolute;
+			left: 0;
+			margin: auto;
+			right: 0;
+			bottom: 0;
+			top: 0;
+			z-index: -1;
+		}
+
+		& .all_and_listen_div_title {
+			font-size: 46rpx;
+			font-family: PingFang SC;
+			font-weight: 400;
+			color: #FFFFFF;
+			display: flex;
+			margin: 52rpx 138rpx 0 34rpx;
 		}
 
 		& .all_and_listen_div_author {
@@ -106,22 +131,18 @@
 			font-family: PingFang SC;
 			font-weight: 300;
 			color: rgba(255, 255, 255, 1);
-			position: absolute;
-			top: 190rpx;
-			left: 63rpx
+			margin: 34rpx auto 0 35rpx;
 		}
 
 		& .all_and_listen_div_gendu {
 			width: 624rpx;
 			height: 135rpx;
-			position: absolute;
-			background: rgba(216, 214, 214, 0.5);
-			bottom: 40rpx;
-			left: 63rpx;
+			background: rgba(255, 255, 255, 0.7);
 			border-radius: 10rpx;
 			display: flex;
 			flex-direction: row;
 			align-items: center;
+			margin: auto auto 40rpx auto;
 
 			& .all_and_listen_div_gendu_contain {
 				margin-left: 33rpx;

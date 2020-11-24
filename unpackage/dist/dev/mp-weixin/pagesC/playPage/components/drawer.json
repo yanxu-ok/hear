@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "drawer": "/pagesC/playPage/components/myp-drawer",
+    "drawerheader": "/pagesC/playPage/components/drawerheader",
+    "playlist": "/pagesC/playPage/components/playlist",
+    "pdbottom": "/pagesC/playPage/components/pdbottom"
+  }
+}

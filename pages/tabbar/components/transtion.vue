@@ -60,13 +60,14 @@
 					let result = this.gloalImg
 					return result
 				} else {
-					return require('@/static/images/video.png')
+					return 'https://img11.iqilu.com/29/2020/09/30/c129d718fffac63651e9294410e60140.png'
 				}
 			},
 
 			//是否暂停
 			iszanting() {
-				let result = this.paused ? require('@/static/images/allPlay.png') : require('@/static/images/allzanting.png')
+				let result = this.paused ? 'https://img11.iqilu.com/29/2020/09/30/9d0c6571f86a186bb8455da737e311ff.png' :
+					'https://img11.iqilu.com/29/2020/09/30/f00747596d9c6cb734b0219a594bd87b.png'
 				return result
 			}
 
@@ -90,12 +91,12 @@
 				// 	}
 				// 	if (topicId) {
 				// 		uni.navigateTo({
-				// 			url: '/pages/playPage/playPage?topicId=' + topicId
+				// 			url: '/pagesC/playPage/playPage?topicId=' + topicId
 				// 		})
 				// 	}
 				// 	else{
 				// 		uni.navigateTo({
-				// 			url: '/pages/playPage/playPage?topicId=23'
+				// 			url: '/pagesC/playPage/playPage?topicId=23'
 				// 		})
 				// 	}
 				// } catch (e) {
@@ -108,12 +109,12 @@
 				if (this.type == 'zhangjie') {
 					if (play) { // 判断vuex中有没有topicId
 						uni.navigateTo({
-							// url: '/pages/playPage/playPage?topicId=' + this.topicId,
-							url: '/pages/playPage/playPage?topicId=' + play.topicId + '&authorId=' + play.userId + '&chapterId=' + play.chapterId
+							// url: '/pagesC/playPage/playPage?topicId=' + this.topicId,
+							url: '/pagesC/playPage/playPage?topicId=' + play.topicId + '&authorId=' + play.userId + '&chapterId=' + play.chapterId
 						})
 					} else {
 						uni.navigateTo({
-							url: '/pages/playPage/playPage?topicId=23' + '&authorId=' + 1 + '&chapterId=' +
+							url: '/pagesC/playPage/playPage?topicId=23' + '&authorId=' + 1 + '&chapterId=' +
 								'hd129aa803d8dg11eaa577005056584'
 						})
 					}
@@ -121,12 +122,12 @@
 					// audioId=787a5410f7fe11eaa577005056a8394c&type=audio&authorId=1
 					if (this.audioOrauthor) { // 
 						uni.navigateTo({
-							url: '/pages/listen_nei/listen_nei?audioId=' + this.audioOrauthor.audioId + '&type=audio&authorId=' + this.audioOrauthor
+							url: '/pagesC/listen_nei/listen_nei?audioId=' + this.audioOrauthor.audioId + '&type=audio&authorId=' + this.audioOrauthor
 								.authorId
 						})
 					} else {
 						uni.navigateTo({
-							url: '/pages/listen_nei/listen_nei?audioId=' + '787a5410f7fe11eaa577005056a8394c' + '&type=audio&authorId=' +
+							url: '/pagesC/listen_nei/listen_nei?audioId=' + '787a5410f7fe11eaa577005056a8394c' + '&type=audio&authorId=' +
 								1
 						})
 					}

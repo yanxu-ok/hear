@@ -160,7 +160,7 @@
 			quanbu(type) {
 				console.log(type);
 				uni.navigateTo({
-					url: '/pages/listpage/listpage?name=' + type
+					url: '/pagesD/listpage/listpage?name=' + type
 				})
 			}
 		}

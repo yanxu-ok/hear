@@ -32,14 +32,15 @@
 					backgroundColor: bgColor,
 				}, inputStyle]"
 			/>
-			<view class="u-icon-wrap">
-				<u-icon class="u-clear-icon" :size="30" :name="searchIcon" :color="searchIconColor ? searchIconColor : color"></u-icon>
-			</view>
 			<view class="u-close-wrap" v-if="keyword && clearabled && focused" @touchstart="clear">
 				<u-icon class="u-clear-icon" name="close-circle-fill" size="34" color="#c0c4cc"></u-icon>
 			</view>
+			<view class="u-icon-wrap" @click="handleIcon">
+				<u-icon class="u-clear-icon" :size="30" :name="searchIcon" :color="searchIconColor ? searchIconColor : color"></u-icon>
+			</view>
+		
 		</view>
-		<!-- <view :style="[actionStyle]" class="u-action" 
+	<!-- 	<view :style="[actionStyle]" class="u-action" 
 			:class="[showActionBtn || show ? 'u-action-active' : '']" 
 			@touchstart.stop.prevent="custom"
 		>{{ actionText }}</view> -->
@@ -274,6 +275,9 @@ export default {
 		// 点击搜索框，只有disabled=true时才发出事件，因为禁止了输入，意味着是想跳转真正的搜索页
 		clickHandler() {
 			if(this.disabled) this.$emit('click');
+		},
+		handleIcon(){
+			this.$emit('handleIcon', this.keyword);
 		}
 	}
 };

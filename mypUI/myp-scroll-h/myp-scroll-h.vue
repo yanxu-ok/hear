@@ -1,63 +1,71 @@
 <template>
-	<scroll-view :scroll="false" :scroll-x="true" :scroll-with-animation="true" :show-scrollbar="false" :class="['myp-bg-'+bgType]" :style="mrScrollStyle">
-		<view :style="mrContentStyle">
+	<scroll-view :scroll="false" :scroll-x="true" :scroll-left="leftPx" :scroll-with-animation="true" :show-scrollbar="false" :class="['myp-bg-'+bgType]" :style="mrScrollStyle">
+		<view class="myp-flex-row myp-wrap-nowrap" :style="contentStyle">
 			<slot></slot>
 		</view>
 	</scroll-view>
 </template>
 
 <script>
-	import pxMixin from '../myp-mixin/pxMixin.js'
+	import {getPx} from '../utils/system.js'
 	
 	export default {
-		mixins: [pxMixin],
 		props: {
+			/**
+			 * 背景主题
+			 */
 			bgType: {
 				type: String,
 				default: ''
 			},
-			justify: {
-				type: String,
-				default: 'flex-start'
-			},
+			/**
+			 * 自定义宽度
+			 */
 			width: {
-				type: [String, Number],
+				type: String,
 				default: '750rpx'
 			},
+			/**
+			 * 自定义高度
+			 */
 			height: {
-				type: [String, Number],
+				type: String,
 				default: '260px'
 			},
+			/**
+			 * scroll-left
+			 */
+			left: {
+				type: String,
+				default: '0'
+			},
+			/**
+			 * 外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * 内容样式。如果vue页面下无法滚动（内容有压缩），
+			 * 请设置内容总宽度
+			 */
 			contentStyle: {
 				type: String,
 				default: ''
 			}
 		},
 		computed: {
+			leftPx() {
+				return getPx(this.left)
+			},
 			mrScrollStyle() {
-				let _style = "width:" + this.widthPx + 'px;'
-				_style += "height:" + this.heightPx + 'px;'
+				let _style = "width:" + this.width + ';'
+				_style += "height:" + this.height + ';'
 				// #ifdef APP-NVUE
-				_style += `flex-direction:row;justify-content:${this.justify};`
+				_style += `flex-direction:row;`
 				// #endif
 				return _style + this.boxStyle
-			},
-			mrContentStyle() {
-				let _style = `flex-direction:row;justify-content:${this.justify};flex-wrap:nowrap;`
-				if (this.justify != 'flex-start') {
-					_style += "width:" + this.widthPx + 'px;'
-				}
-				return _style + this.contentStyle
-			},
-			widthPx() {
-				return this.mypToPx(this.width)
-			},
-			heightPx() {
-				return this.mypToPx(this.height)
 			}
 		}
 	}

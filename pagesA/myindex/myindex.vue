@@ -3,7 +3,8 @@
 		<!-- 		<view :style="{background: 'url(' + userInfo.avatar + ') no-repeat' }" class="myindex_img"></view> -->
 		<!-- <u-image width="100%" height="429rpx" src="userInfo.avatar"></u-image> -->
 		<view style="width: 100%;height: 400rpx;position: relative;" :class="{back:priv==3}">
-			<image :src="userInfo.avatar" style="width: 100%;height: 100%;position: absolute;top: 0; filter: blur(40rpx);z-index: -1;"></image>
+			<image :src="userInfo.avatar ? userInfo.avatar : 'https://img11.iqilu.com/1/2020/11/02/05d832673acd3a70ea86004f56d368de.png' "
+			 style="width: 100%;height: 100%;position: absolute;top: 0; filter: blur(40rpx);z-index: -1;"></image>
 
 			<!-- 	<view class="myindex_img"> -->
 			<u-navbar background="" title-color="#ffffff" back-icon-color="#ffffff">
@@ -20,7 +21,8 @@
 						</view>
 						<!-- <u-image height="10rpx" width="10rpx" :src="userInfo.avatar"></u-image> -->
 					</view>
-					<view class="count" v-if="priv ==1 || priv ==2 ">关注:{{guanzhuCount | numFormat}} 粉丝: {{fensiCount | numFormat}} </view>
+					<view class="count" v-if="priv ==1 || priv ==2 ">关注:{{guanzhuCount | numFormat}} 粉丝: {{fensiCount | numFormat}}
+					</view>
 					<!-- <view class="count">关注:{{guanzhuCount}} 粉丝: {{fensiCount}} </view> -->
 				</view>
 				<u-button type="error" size="mini" :custom-style="customStyle" :style="{ display: lei || priv != 3? 'none':'block' }"
@@ -72,7 +74,7 @@
 	import dongtai from './components/dongtai.vue'
 	import ruzhuzhubo from './components/ruzhuzhubo.vue'
 	import mytabs from './components/mytabs.vue'
-	import drawer from '@/pages/playPage/components/myp-drawer.vue'
+	import drawer from '@/pagesC/playPage/components/myp-drawer.vue'
 	import guanzhu from '@/components/u-guanzhu/u-guanzhu.vue'
 	export default {
 

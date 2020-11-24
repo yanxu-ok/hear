@@ -4,17 +4,17 @@
 			<view class="imgs-view" v-for="(v,i) in imgArray" :key="i">
 				<image @click="preview(v,i)" :src="v.url"></image>
 				<view class="del-btn" @click="delImg(i)">
-					<image src="@/static/delete.png"></image>
+					<image src="https://img11.iqilu.com/29/2020/09/30/af0444aa008d98e74ca80725eaae51dd.png"></image>
 				</view>
 				<view class="uploading flex_xy_center" v-if="!v.upload&&loading&&startUpload">
 					<view>
-						<image src="@/static/uploading4.png"></image>
+						<image src="https://img11.iqilu.com/29/2020/09/30/19e9f9900536a3ee126121a5cf07c6c0.png"></image>
 						<view class="upload-txt">上传中...</view>
 					</view>
 				</view>
 			</view>
 			<view v-if="imgArray.length<imgCount" class="upload-img-view flex_xy_center" @click="upPhoto">
-				<image src="@/static/jia.png"></image>
+				<image src="https://img11.iqilu.com/29/2020/09/30/18ab8ded5afa478f74a3b8d97f86d0c9.png"></image>
 			</view>
 		</view>
 		<!-- <view v-if="!closeTip&&!prompt" class="tip">* 最多上传{{imgCount}}张图片(<label> {{imgArray.length}} </label>/{{imgCount}})</view>

@@ -33,7 +33,7 @@
 		<block v-if="type=='advert'">
 			<view class="advert-view">
 				<image :src="mData.src" class="image confirm" @tap.stop="tapConfirm" :style="{width:mData.width?mData.width:'500rpx',height:mData.height?mData.height:'700rpx'}"></image>
-				<image class="image cancel" @tap.stop="tapCancel" src="../../static/chunLei-modal/close.png"></image>
+				<image class="image cancel" @tap.stop="tapCancel" src="https://img11.iqilu.com/29/2020/09/30/ce8bfb490fe4f12bc5177b529938c297.png"></image>
 			</view>
 		</block>
 		<block v-if="type=='notify'">

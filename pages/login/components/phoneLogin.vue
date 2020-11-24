@@ -6,14 +6,14 @@
 		<view class="login-main">
 
 			<view class="login-logo">
-				手机号登录
+				账号密码登录
 			</view>
 
 			<view class="login-list flex border-all">
 				<!-- <view>+86</view> -->
 				<view class="iconfont icon-shoujihao flex"></view>
 				<view class="login-input">
-					<input type="password" placeholder="请输入手机号" class="is-input1" v-model="passwordOne" />
+					<input type="text" placeholder="请输入手机号" class="is-input1" v-model="passwordOne" />
 				</view>
 			</view>
 
@@ -52,21 +52,6 @@
 		},
 		methods: {
 
-			// isLogin() {
-			// 	// 判断缓存中是否登录过，直接登录
-			// 	try {
-			// 		const value = uni.getStorageSync('access_token');
-			// 		if (value) {
-			// 			//有登录信息
-			// 			console.log("已登录用户：", value);
-			// 			uni.switchTab({
-			// 				url: '/pages/index/index'
-			// 			});
-			// 		}
-			// 	} catch (e) {
-
-			// 	}
-			// },
 			Timer() {},
 
 			getCode() {
@@ -74,6 +59,7 @@
 			},
 
 			doLogin() {
+				// console.log(1);
 				let _this = this;
 				uni.hideKeyboard()
 				// 模板示例部分验证规则
@@ -99,21 +85,15 @@
 						'password': _this.passwordTwo
 					},
 					method: 'POST',
-					header: {
-						// 'Content-Type': 'application/x-www-form-urlencoded',
-					},
 					success: (res) => {
-						console.log(res);
 						if (res.data.code) {
-							
 							uni.switchTab({
 								url: '/pages/tabbar/my/index'
 							})
-							
 							setCurrectStorg('token', res.data.data.token) // 将token放入
 						} else {
 							uni.showToast({
-								title: '登录失败',
+								title: res.data.errmsg,
 								icon: 'none'
 							})
 						}
@@ -154,7 +134,6 @@
 		padding: 0 70rpx;
 
 		.login-logo {
-			width: 248rpx;
 			padding-bottom: 50rpx;
 			margin: 100rpx 0 0 0;
 			font-size: 48rpx;

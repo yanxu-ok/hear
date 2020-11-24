@@ -1,6 +1,6 @@
 <template>
-	<refresh class="myp-refresher" @refresh="onRefresh" @pullingdown="onPullingDown" :display="refreshing ? 'show' : 'hide'">
-		<view v-if="!usingDefault" class="myp-cycle-container" ref="cycle">
+	<refresh class="myp-refresher myp-flex-row myp-justify-center" @refresh="onRefresh" @pullingdown="onPullingDown" :display="refreshing ? 'show' : 'hide'" :style="boxStyle">
+		<view class="myp-cycle-container" ref="cycle">
 			<view class="myp-u-cover myp-u-c1" ref="cover1">
 				<view class="myp-u-cover-cycle myp-u-cover1"></view>
 			</view>
@@ -8,8 +8,7 @@
 				<view class="myp-u-cover-cycle" ref="cover-cycle"></view>
 			</view>
 		</view>
-		<image v-if="!usingDefault" class="myp-arrow-down" ref="arrow" :src="downIcon" mode="aspectFill"></image>
-		<loading-indicator v-if="usingDefault&&refreshing" class="myp-indicator" :animating="refreshing"></loading-indicator>
+		<image class="myp-arrow-down" ref="arrow" :src="downIcon" mode="aspectFill"></image>
 		<text class="myp-u-txt">{{ refresherText }}</text>
 	</refresh>
 </template>
@@ -20,43 +19,62 @@
 	// list中无此问题
 	//
 	// #ifdef APP-NVUE
-	const animation = weex.requireModule('animation');
+	const animation = uni.requireNativePlugin('animation');
 	const bindingX = uni.requireNativePlugin('bindingx');
 	// #endif
 	
-	import systemMixin from '../myp-mixin/systemMixin.js'
+	import {getPlatform} from '../utils/system.js'
 	
 	const HEIGHT_RPX = 140
 	const HEIGHT = uni.upx2px(140)
 
 	export default {
-		mixins: [systemMixin],
 		props: {
+			/**
+			 * 对应的list/scroll的ref
+			 */
 			scrollerRef: String,
+			/**
+			 * 超时时间。0表示不会超时
+			 */
 			maxTime: {
 				type: Number,
 				default: 0
 			},
+			/**
+			 * 下拉文字提示
+			 */
 			mainText: {
 				type: String,
-				default: '下拉即可刷新...'
+				default: '下拉触发刷新...'
 			},
+			/**
+			 * 满足是否刷新时文字提示
+			 */
 			pullingText: {
 				type: String,
 				default: '释放即可刷新...'
 			},
+			/**
+			 * 刷新时文字提示
+			 */
 			refreshingText: {
 				type: String,
-				default: '加载中...'
+				default: '正在努力加载...'
 			},
+			/**
+			 * 下拉的图标
+			 */
 			downIcon: {
 				type: String,
 				default: '/static/ui/down.png'
 			},
-			// 非default样式需要支持bindingX
-			usingDefault: {
-				type: Boolean,
-				default: false
+			/**
+			 * 外层样式
+			 */
+			boxStyle: {
+				type: String,
+				default: ''
 			}
 		},
 		data() {
@@ -75,9 +93,9 @@
 			}
 		},
 		created() {
-			const system = this.mypGetPlatform()
+			const system = getPlatform()
 			this.isAndroid = system === 'android';
-			!this.usingDefault && this.animationBinding();
+			this.animationBinding();
 		},
 		beforeDestroy() {
 			this.bindingsDestroy();
@@ -89,7 +107,7 @@
 				// 在onRefresh阶段，再次下拉不会二次触发onRefresh，不需要做保护
 				this.$emit('refresh', event);
 				this.refreshing = true;
-				!this.usingDefault && this.cycleGoRound();
+				this.cycleGoRound();
 				if (this.maxTime <= 0) return;
 				this.timeoutSto && clearTimeout(this.timeoutSto);
 				const that = this
@@ -231,8 +249,6 @@
 	.myp-refresher {
 		height: 140rpx;
 		width: 750rpx;
-		flex-direction: row;
-		justify-content: center;
 		padding-top: 50rpx;
 	}
 

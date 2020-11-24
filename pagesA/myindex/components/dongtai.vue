@@ -2,38 +2,49 @@
 	<view class="dongtai">
 		<mescroll-uni ref="mescrollRef" :fixed="false" @init="mescrollInit" @down="downCallback" @up="upCallback" :down="downOption"
 		 :up="upOption" style="flex: 1; ">
-			<view v-for="(item,index) in 10" :key="index">
+			<view v-for="(item,index) in dataList" :key="index">
 				<view class="dongtai_header">
-					<u-image width="85rpx" height="83rpx" src=""></u-image>
+					<u-image width="85rpx" height="83rpx" src="" border-radius="50%"></u-image>
 					<view style="margin-left: 20rpx;">
-						<view>网友8998</view>
-						<view>03-19 09:40</view>
+						<view style="display: flex;align-items: center;">
+							<text clicleName>{{item.userName}}</text>
+							<view style="display: flex;align-items: center;">
+								<u-image width="27rpx" height="27rpx" border-radius="50%" :src="item.circleHeadImage" style="margin-left: 22rpx;"></u-image>
+								<view clicleName style="margin-left: 10rpx;">{{item.circleName}}</view>
+							</view>
+						</view>
+						<view clicleDate>{{item.createTime}}</view>
 					</view>
-					<u-image width="27rpx" height="27rpx" src="" style="margin-left: 22rpx;"></u-image>
-					<view style="margin-left: 10rpx;">圈子名称</view>
-					<u-image width="25rpx" height="5rpx" src="" style="margin-left: 200rpx;"></u-image>
+
+					<!-- <u-image width="25rpx" height="5rpx" src="" style="margin-left: 200rpx;"></u-image> -->
 				</view>
 
-				<view style="margin: 30rpx 29rpx;">分享了我的播单</view>
+				<view style="margin: 30rpx 29rpx;">{{item.dynamicContent}}</view>
 
 				<view class="fenxiang">
 					<view class="fenxaing_div">
-						<u-image width="31rpx" height="28rpx" src=""></u-image>
-						<view>123</view>
+						<u-image width="31rpx" height="28rpx" src="https://img11.iqilu.com/1/2020/11/06/a4e8e049f2a771de94d825a8587a4c72.png"></u-image>
+						<!-- <view>123</view> -->
 					</view>
 					<view class="fenxaing_div">
-						<u-image width="33rpx" height="29rpx" src=""></u-image>
-						<view>123</view>
+						<u-image width="33rpx" height="29rpx" src="https://img11.iqilu.com/1/2020/11/06/f5bf4ab883b7c1e1bd5dc4f5cc1b0519.png"></u-image>
+						<!-- <view>123</view> -->
 					</view>
 					<view class="fenxaing_div">
-						<u-image width="31rpx" height="29rpx" src=""></u-image>
-						<view>123</view>
+						<u-image width="31rpx" height="29rpx" :src="isParse(item)"></u-image>
+						<!-- https://img11.iqilu.com/1/2020/11/06/7f59b879e0030e31263c3dea61047558.png
+						https://img11.iqilu.com/29/2020/09/30/52dd0b42935d1212161bcd55b17b8741.png -->
+						<view>{{item.dynamicLikeCount}}</view>
 					</view>
 				</view>
 
-				<u-gap height="10" bg-color="#F5F5F5" style="margin-top: 21rpx;"></u-gap>
+				<view style="margin-top: 21rpx;">
+					<u-gap height="10" bg-color="#F5F5F5"></u-gap>
+				</view>
+
+
 			</view>
-			
+
 		</mescroll-uni>
 	</view>
 </template>
@@ -74,9 +85,20 @@
 				type: Number
 			}
 		},
+
+		computed: {
+
+		},
+
 		methods: {
+
+			// 是否已点赞
+			isParse(status) {
+				return 'https://img11.iqilu.com/1/2020/11/06/7f59b879e0030e31263c3dea61047558.png'
+			},
+
 			...mapActions(['get_dynamic_by_userid']),
-			
+
 			/*下拉刷新的回调*/
 			async downCallback() {
 				this.mescroll.resetUpScroll(); // 重置列表为第一页 (自动执行 page.num=1, 再触发upCallback方法 )
@@ -90,15 +112,15 @@
 				// let pageSize = page.size; // 页长, 默认每页10条
 				let result = await this.getList(page)
 				console.log(result);
-				let curPageData = result.list; //接口返回的当前页数据列表 (数组)
-				let curPageLen = result.list.length; //// 接口返回的当前页数据长度 (如列表有26个数据,当前页返回8个,则curPageLen=8)
-				let totalPage = result.pages; // 接口返回的总页数
-				let totalSize = result.total; //  接口返回的总数据量
+				let curPageData = result; //接口返回的当前页数据列表 (数组)
+				let curPageLen = result.length; //// 接口返回的当前页数据长度 (如列表有26个数据,当前页返回8个,则curPageLen=8)
+				// let totalPage = result.pages; // 接口返回的总页数
+				// let totalSize = result.total; //  接口返回的总数据量
 
 				//设置列表数据
 				if (page.num == 1) this.dataList = []; //如果是第一页需手动置空列表
 				this.dataList = this.dataList.concat(curPageData); //追加新数据
-				this.mescroll.endByPage(curPageLen, totalPage);
+				this.mescroll.endByPage(curPageLen, 10);
 			},
 
 			async getList(page) {
@@ -111,7 +133,7 @@
 				let result = await this.get_dynamic_by_userid(data)
 				return result
 			}
-			
+
 
 		},
 	}
@@ -131,8 +153,22 @@
 			align-items: center;
 			padding: 0 30rpx 0 30rpx;
 			margin-top: 38rpx;
-
 		}
+	}
+
+	text[clicleName] {
+		font-size: 32rpx;
+	}
+
+	view[clicleName] {
+		font-size: 32rpx;
+		color: rgb(254, 139, 22);
+	}
+
+	view[clicleDate] {
+		font-size: 24rpx;
+		color: #999999;
+		opacity: 0.5;
 	}
 
 	.fenxiang {
@@ -143,5 +179,10 @@
 
 	.fenxaing_div {
 		display: flex;
+		view {
+			margin-left: 12rpx;
+			font-size: 28rpx;
+			opacity: 0.8;
+		}
 	}
 </style>

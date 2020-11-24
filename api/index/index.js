@@ -4,8 +4,6 @@ let http = request.http
 
 let http1 = request.http1
 
-
-
 // 首页标签
 // bannerType	true	number	null	广告类型 1-首页banner
 export const banner = (bannerType) => {
@@ -21,7 +19,7 @@ export const banner = (bannerType) => {
 export const category = (loginId) => {
 	return http.get('/category/get_all_main_category', {
 		params: {
-			
+
 		}
 	})
 }
@@ -130,11 +128,36 @@ export const get_topic_list_by_type = ({
 }) => {
 	return http.get('/topic/get_topic_list_by_type', {
 		params: {
-			// userId: 1,
 			pageNum,
 			pageSize,
 			sortType,
 			categoryId
 		}
 	})
+}
+
+
+// 前台-消息记录红点提醒
+export const get_new_msg_count = () => {
+	return http.get('/msg/get_new_msg_count')
+}
+
+// 前台-查询用户消息通知记录
+export const get_user_message = (data) => {
+	return http.get('/msg/get_user_message', {
+		params: data
+	})
+}
+
+// 前台-用户消息通知已读标记
+export const update_message_read = () => {
+	return http.put('/msg/update_message_read')
+}
+
+// 前端-自定义分类（更新状态）
+// loginId	true	string	null	用户id，后期修改为token中获取
+// categoryIdListStr	true	string	null	选中的分类id字符串
+// allCategoryIdListStr	true	string	null	所有分类id字符串
+export const update_category_status = (obj) => {
+	return http.put('/category/update_category_status', obj)
 }

@@ -1,7 +1,0 @@
-{
-  "navigationBarTitleText": "海报",
-  "usingComponents": {
-    "u-navbar": "/components/u-navbar/u-navbar",
-    "haibao": "/components/lime-painter/index"
-  }
-}

@@ -1,27 +1,45 @@
 <template>
-	<view :class="['myp-foot', fixed&&'myp-foot-fixed']" :style="mrBoxStyle">
+	<view :class="[fixed?'myp-position-fixed':'myp-position-absolute', 'myp-bg-'+bgType]" :style="mrBoxStyle">
 		<slot></slot>
 	</view>
 </template>
 
 <script>
-	import windowMixin from '../myp-mixin/windowMixin.js'
+	import {getHeight} from '../utils/system.js'
 	
 	export default {
-		mixins: [windowMixin],
 		props: {
+			/**
+			 * 是否fixed定位
+			 */
 			fixed: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 定位的位置
+			 */
 			pos: {
 				type: String,
 				default: 'bottom'
 			},
+			/**
+			 * 定位的偏移量
+			 */
 			offset: {
 				type: String,
 				default: '0px'
 			},
+			/**
+			 * 背景主题
+			 */
+			bgType: {
+				type: String,
+				default: 'none'
+			},
+			/**
+			 * 外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
@@ -29,21 +47,14 @@
 		},
 		computed: {
 			offsetPx() {
-				return this.mypGetHeight(this.offset)
+				return getHeight(this.offset)
 			},
 			mrBoxStyle() {
-				return this.boxStyle + (this.pos === 'top' ? `top:${this.offsetPx}px;` : `bottom:${this.offsetPx}px;`)
+				return (this.pos === 'top' ? `top:${this.offsetPx}px;` : `bottom:${this.offsetPx}px;`) + this.boxStyle
 			}
 		}
 	}
 </script>
 
-<style lang="scss" scoped>
-	.myp-foot {
-		position: absolute;
-		
-		&-fixed {
-			position: fixed;
-		}
-	}
+<style>
 </style>

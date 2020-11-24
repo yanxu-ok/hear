@@ -1,9 +1,8 @@
 <template>
 	<view class="tabs_listen">
 
-		<view>
-			<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false" swiperWidth="750"
-			 active-color="#F8A942"></u-tabs-swiper>
+		<view style="width: 550rpx;">
+			<u-tabs-swiper ref="uTabs" :list="list" :current="current" @change="tabsChange" :is-scroll="false" active-color="#F8A942"></u-tabs-swiper>
 		</view>
 
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" class="listen_swiper">
@@ -18,6 +17,9 @@
 </template>
 
 <script>
+	import {
+		isLogin
+	} from '@/libs/hear-util/index.js'
 	import zuopin from './zuopin.vue'
 	import read from './read.vue'
 	export default {
@@ -52,6 +54,14 @@
 			// 由于swiper的内部机制问题，快速切换swiper不会触发dx的连续变化，需要在结束时重置状态
 			// swiper滑动结束，分别设置tabs和swiper的状态
 			animationfinish(e) {
+				if(e.detail.current == 2){
+					if(!isLogin()){
+						uni.navigateTo({
+							url: '/pages/login/login'
+						})
+						return;
+					}
+				}
 				let current = e.detail.current;
 				this.$refs.uTabs.setFinishCurrent(current);
 				this.swiperCurrent = current;

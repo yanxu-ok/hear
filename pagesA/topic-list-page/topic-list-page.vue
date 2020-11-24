@@ -27,9 +27,9 @@
 										</view>
 										<!-- 播放次数 -->
 										<view class="jiemu_content_count">
-											<u-image width="17rpx" height="20rpx" src="@/static/images/play.png"></u-image>
+											<u-image width="17rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/224104618812ae11f6484e7303d6d5a1.png"></u-image>
 											<view class="jiemu_content_count_img">{{item.chapterReadAmount | numFormat }}次播放</view>
-											<u-image width="20rpx" height="20rpx" src="@/static/images/shijian.png"></u-image>
+											<u-image width="20rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/e2b6da3e4c665c2c46322fea23f1f1f0.png"></u-image>
 											<view style="margin-left: 12rpx; color: #9A9A9A;
 				font-size: 24rpx;">{{item.chapterTime | s_to_hs}}</view>
 										</view>
@@ -141,7 +141,7 @@
 			handleZhangjie(index, item) {
 				this.currectPlayIndex = index
 				uni.navigateTo({
-					url: '/pages/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId +
+					url: '/pagesC/playPage/playPage?topicId=' + item.topicId + '&authorId=' + item.userId +
 						'&chapterId=' + item.chapterId
 				})
 			},

@@ -60,7 +60,7 @@ opacity:0.6;">
 
 				<view class="privilege">
 					<view class="privilege-item" v-for="(item, index) in privilegeList" :key="index" hover-class="hover" @click="privilegeClick(index)">
-						<image class="privilege-item-pic" src="../../../static/my/pinglun.png" mode=""></image>
+						<image class="privilege-item-pic" src="https://img11.iqilu.com/29/2020/09/30/864cbcbf21bb19aaf789d6027ae2f0af.png" mode=""></image>
 						<text class="privilege-item-text">{{ item.text }}</text>
 					</view>
 				</view>

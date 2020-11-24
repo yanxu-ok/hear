@@ -1,0 +1,10 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "playlistitem": "/pagesC/playPage/components/playlist-item",
+    "jianjie": "/pagesC/playPage/components/jianjie",
+    "comment": "/pagesC/playPage/components/comment",
+    "pdbottom": "/pagesC/playPage/components/pdbottom"
+  }
+}

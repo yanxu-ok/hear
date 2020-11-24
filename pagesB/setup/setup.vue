@@ -10,23 +10,43 @@
 				<u-icon name="arrow-right" color="#999999" size="28"></u-icon>
 			</view>
 		</view>
+
+
+		<!-- <backH></backH> -->
 	</view>
 </template>
 
 <script>
+	// import backH from './springBack.vue'
 	import {
 		cleanStorg
 	} from '@/libs/hear-util/index.js'
 	export default {
 		methods: {
 			handleLoginOut() {
-				cleanStorg()
+				uni.showModal({
+				    title: '退出',
+				    content: '确定要退出?',
+				    success: function (res) {
+				        if (res.confirm) {
+				            console.log('用户点击确定');
+							cleanStorg()
+							
+							// 跳转到 首页
+							uni.switchTab({
+								url: '/pages/tabbar/home/index'
+							})
+							
+				        } else if (res.cancel) {
+				            // console.log('用户点击取消');
+				        }
+				    }
+				});
 				
-				// 跳转到 首页
-				uni.switchTab({
-					url: '/pages/tabbar/home/index'
-				})
 			}
+		},
+		components: {
+			// backH
 		}
 	}
 </script>

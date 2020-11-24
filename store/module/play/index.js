@@ -8,7 +8,15 @@ import {
 	delete_collect,
 	delete_collect_chapter,
 	insert_history,
-	update_history
+	update_history,
+	get_comment_list,
+	save_comment,
+	get_comment_manager_token,
+	insert_message,
+	praise,
+	cancel_praise,
+	get_comment_page,
+	get_comment_total
 } from '@/api/play/index.js'
 
 import {
@@ -26,17 +34,17 @@ export default {
 		chapterId: null // 点击播放页需要把章节存起来，用于直接播放当章节 
 	},
 	mutations: {
-		
+
 		// 修改专题
 		setTopicId(state, value) {
 			state.topicId = value
 		},
-		
+
 		// 章节lsit
 		setZhangjieList(state, value) {
 			state.zhangjieList = value
 		},
-		
+
 		setZhangjieObj(state, value) {
 			state.zhangjieObj = value
 		},
@@ -94,7 +102,7 @@ export default {
 		}, obj) {
 			return new Promise((resolve, reject) => {
 				insert_praise_add(obj).then(res => {
-					console.log(res.data, "前台-用户对章节/互听点赞");
+					// console.log(res.data, "前台-用户对章节/互听点赞");
 					resolve(res.data)
 				})
 			})
@@ -192,11 +200,122 @@ export default {
 		}, obj) {
 			return new Promise((resolve, reject) => {
 				update_history(obj).then(res => {
-					console.log(res.data, "更新历史数据");
+					// console.log(res.data, "更新历史数据");
 					resolve(res.data)
 				})
 			})
 		},
 
-	},
+		// 获取评论列表
+		get_comment_list({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				get_comment_list(obj).then(res => {
+					// console.log(res, "获取评论列表");
+					resolve(res.data)
+				})
+			})
+		},
+
+		// 发表评论
+		save_comment({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				save_comment(obj).then(res => {
+					// console.log(res, "获取评论列表");
+					resolve(res.data)
+				})
+			})
+		},
+
+		// 听见转化评论token
+		get_comment_manager_token({
+			state,
+			commit,
+			rootState
+		}) {
+			return new Promise((resolve, reject) => {
+				get_comment_manager_token().then(res => {
+					// console.log(res, "听见转化评论token");
+					resolve(res.data.data)
+				})
+			})
+		},
+
+		// 前台-新增用户消息通知记录
+		insert_message({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				insert_message(obj).then(res => {
+					console.log(res, "前台-新增用户消息通知记录");
+					resolve(res.data.data)
+				})
+			})
+		},
+		
+		// 评论点赞
+		praise({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				praise(obj).then(res => {
+					console.log(res, "评论点赞");
+					resolve(res.data)
+				})
+			})
+		},
+		
+		// 取消点赞
+		cancel_praise({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				cancel_praise(obj).then(res => {
+					console.log(res, "取消点赞");
+					resolve(res.data)
+				})
+			})
+		},
+		
+		// 查询评论列表（查看当前用户所有评论）
+		get_comment_page({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				get_comment_page(obj).then(res => {
+					// console.log(res, "查询评论列表（查看当前用户所有评论）");
+					resolve(res.data)
+				})
+			})
+		},
+		
+		// 查询评论数量
+		get_comment_total({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				get_comment_total(obj).then(res => {
+					console.log(res, "查询评论数量");
+					resolve(res.data.data)
+				})
+			})
+		},
+	}
 }

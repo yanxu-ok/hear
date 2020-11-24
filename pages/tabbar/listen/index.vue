@@ -9,7 +9,7 @@
 		<listentabs style="flex: 1;"></listentabs>
 
 		<tabbar :list="tabbarData" :before-switch="beforeSwitch" height="55px" :mid-button="true" inactive-color="#cbcedd"
-		 active-color="#fe9503"></tabbar>
+		 active-color="#fe9503" :border-top="true"></tabbar>
 
 	</view>
 </template>
@@ -25,6 +25,7 @@
 		getCurrectStorg,
 		isApp
 	} from '@/libs/hear-util/index.js'
+	import config from '@/libs/config/baseUrl.js'
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
 	import listenheader from './components/listen_header.vue'
 	import listentabs from './components/listen_tabs.vue'
@@ -78,8 +79,8 @@
 						WebBridgeApi.router({
 							route: 'webapp',
 							params: {
-								url: 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
-									'&hearEnv=ok'
+								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+									'&hearEnv=ok&orgId=' + config.orgid
 							}
 						})
 						return false;

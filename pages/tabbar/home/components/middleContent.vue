@@ -10,7 +10,7 @@
 			
 			<!-- 底部刷新 -->
 			<view class="refsh"  @tap="handlePrecurrect(type)">
-				<u-image width="27rpx" height="27rpx" src="@/static/images/shuaxin.png"></u-image>
+				<u-image width="27rpx" height="27rpx" src="https://img11.iqilu.com/29/2020/09/30/75d045b2da54540d51bc9dcffd625496.png"></u-image>
 				<view class="refsh_text">换一批</view>
 			</view>
 			

@@ -80,7 +80,7 @@
 			handleAvatar(item) {
 				// console.log(item);
 				uni.navigateTo({
-					url: '/pagesA/myindex/myindex?priv=' + item.userRole + '&userId=' + item.userFocusId
+					url: '/pagesA/myindex/myindex?priv=' + item.userRole + '&userId=' + item.userId
 				})
 			},
 

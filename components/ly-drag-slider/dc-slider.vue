@@ -162,7 +162,7 @@ export default {
 		};
 	},
 	mounted() {
-		console.log(this.blockColor.indexOf('#'))
+		// console.log(this.blockColor.indexOf('#'))
 		//#ifndef APP-PLUS-NVUE
 		const query = uni.createSelectorQuery().in(this);
 		query

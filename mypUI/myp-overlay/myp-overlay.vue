@@ -6,54 +6,85 @@
 
 <script>
 	// #ifdef APP-NVUE
-	const animation = weex.requireModule('animation');
+	const animation = uni.requireNativePlugin('animation');
 	// #endif
-	import windowMixin from '../myp-mixin/windowMixin.js'
+	import {getPx, getHeight} from '../utils/system.js'
 	
 	export default {
-		mixins: [windowMixin],
 		props: {
+			/**
+			 * 是否打开
+			 */
 			show: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 是否有动画
+			 */
 			hasAnimation: {
 				type: Boolean,
 				default: true
 			},
+			/**
+			 * 动画周期
+			 */
 			duration: {
-				type: [Number, String],
+				type: Number,
 				default: 400
 			},
+			/**
+			 * 动画函数
+			 */
 			timingFunction: {
 				type: Array,
 				default: () => (['ease-in', 'ease-out'])
 			},
+			/**
+			 * 背景主题
+			 */
 			bgType: {
 				type: String,
 				default: 'mask'
 			},
+			/**
+			 * 自定义背景色
+			 */
 			bg: {
 				type: String,
 				default: ''
 			},
-			// 点击之后是否自动关闭overlay
+			/**
+			 * 点击之后是否自动关闭overlay
+			 */
 			canAutoClose: {
 				type: Boolean,
 				default: true
 			},
+			/**
+			 * 与屏幕左侧距离
+			 */
 			left: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 与屏幕顶部距离
+			 */
 			top: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 与屏幕右侧距离
+			 */
 			right: {
 				type: String,
 				default: '0'
 			},
+			/**
+			 * 与屏幕底部距离
+			 */
 			bottom: {
 				type: String,
 				default: '0'
@@ -69,16 +100,16 @@
 				return _style
 			},
 			leftPx() {
-				return this.mypToPx(this.left)
+				return getPx(this.left)
 			},
 			topPx() {
-				return this.mypGetHeight(this.top)
+				return getHeight(this.top)
 			},
 			rightPx() {
-				return this.mypToPx(this.right)
+				return getPx(this.right)
 			},
 			bottomPx() {
-				return this.mypGetHeight(this.bottom)
+				return getHeight(this.bottom)
 			}
 		},
 		watch: {
@@ -138,6 +169,7 @@
 				this.noWeexAppearOverlay(bool, duration, fromOverlay)
 				// #endif
 			},
+			// #ifndef APP-NVUE
 			// fromOverlay means if clicked the overlay to close
 			noWeexAppearOverlay(bool, duration = this.duration, fromOverlay = false) {
 				const {
@@ -185,6 +217,8 @@
 					}
 				}
 			},
+			// #endif
+			// #ifdef APP-NVUE
 			// fromOverlay means if clicked the overlay to close
 			weexAppearOverlay(bool, duration = this.duration, fromOverlay = false) {
 				const {
@@ -233,6 +267,7 @@
 					}
 				}
 			}
+			// #endif
 		}
 	}
 </script>

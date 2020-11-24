@@ -55,7 +55,6 @@ page {
   padding: 0 70rpx;
 }
 .login-main .login-logo {
-  width: 248rpx;
   padding-bottom: 50rpx;
   margin: 100rpx 0 0 0;
   font-size: 48rpx;

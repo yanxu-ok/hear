@@ -1,28 +1,39 @@
 <template>
-	<view class="myp-tab-page" :style="{top: topPx+'px'}">
-		<view class="myp-tab-page-container" ref="tab-container" :style="mrTabContainerStyle+noWeexTransform">
+	<view class="myp-tab-page myp-flex-column" :style="{top: topPx+'px'}">
+		<view class="myp-tab-page-container myp-flex-row" ref="tab-container" :style="mrTabContainerStyle+noWeexTransform">
 			<slot></slot>
 		</view>
-		<slot name="tabs">
-			<view v-if="tabStyle.image" class="myp-tabs-img" :style="mrTabsImageBoxStyle">
-				<image :src="tabStyle.image" :style="tabStyle.imageStyle" mode="aspectFill"></image>
+		<view v-if="isSeize">
+			<view :style="{height: tabHeightPx + 'px'}"></view>
+			<myp-xbar v-if="considerXBar" bgType="none"></myp-xbar>
+		</view>
+		<!-- tabs bg -->
+		<slot name="bg">
+			<view v-if="tabStyle.image" class="myp-tabs-img" :style="tabStyle.imageBoxStyle||''">
+				<image :src="tabStyle.image" :style="tabStyle.imageStyle||''" mode="aspectFill"></image>
+				<myp-xbar v-if="considerXBar&&!tabStyle.imageWidthXBar" :bgType="xBarBgType" :boxStyle="xBarStyle"></myp-xbar>
 			</view>
-			<view class="myp-tabs" :style="mrTabsBoxStyle">
-				<view bubble="true" class="myp-tabs-item" v-for="(item, idx) in tabs" :key="idx" :ref="'myp-tab-'+idx" :style="mrItemStyle" @tap="setPage(idx)">
-					<view v-if="!item.isHump" class="myp-tabs-item-icon" :style="'width:'+(item.iconBoxWidth||mrIconWidth)+';'">
-						<myp-icon :name="currentPage===idx?(item.selectedIcon || item.icon):item.icon" :iconStyle="currentPage===idx?((tabStyle.selectedIconStyle||'')+(item.selectedIconStyle||'')):((tabStyle.iconStyle||'')+(item.iconStyle||''))" @iconClicked="setPage(idx)"></myp-icon>
-						<view v-if="item.badge" class="myp-tabs-item-badge" :style="(tabStyle.badgeStyle||'')+(item.badgeStyle||'')">
-							<text class="myp-tabs-item-badge-text" :style="(tabStyle.badgeTextStyle||'')+(item.badgeTextStyle||'')">{{item.badge}}</text>
+		</slot>
+		<slot name="tabs">
+			<view class="myp-tabs myp-flex-column" :style="tabStyle.boxStyle||''">
+				<view class="myp-tabs-items myp-flex-row" :style="tabStyle.tabsStyle||''">
+					<view bubble="true" class="myp-tabs-item myp-flex-column myp-flex-one myp-align-center myp-justify-between" v-for="(item, idx) in tabs" :key="idx" :ref="'myp-tab-'+idx" :style="mrItemStyle" @tap="setPage(idx)">
+						<view v-if="!item.isHump" class="myp-tabs-item-icon myp-flex-row myp-justify-center myp-align-center" :style="'width:'+(item.iconBoxWidth||mrIconWidth)+';'">
+							<image :src="currentPage===idx?item.selectedIcon:item.icon" :style="currentPage===idx?((tabStyle.selectedIconStyle||'')+(item.selectedIconStyle||'')):((tabStyle.iconStyle||'')+(item.iconStyle||''))"></image>
+							<view v-if="item.badge" class="myp-tabs-item-badge" :style="(tabStyle.badgeStyle||'')+(item.badgeStyle||'')">
+								<text class="myp-tabs-item-badge-text" :style="(tabStyle.badgeTextStyle||'')+(item.badgeTextStyle||'')">{{item.badge}}</text>
+							</view>
+							<view v-if="item.dot && !item.badge" class="myp-tabs-item-dot" :style="(tabStyle.dotStyle||'')+(item.dotStyle||'')"></view>
 						</view>
-						<view v-if="item.dot && !item.badge" class="myp-tabs-item-dot" :style="(tabStyle.dotStyle||'')+(item.dotStyle||'')"></view>
+						<text v-if="!item.isHump" :class="['myp-tabs-item-text', currentPage===idx&&'myp-tabs-item-text-selected']" :style="currentPage===idx?((tabStyle.selectedTitleStyle||'')+(item.selectedTitleStyle||'')):((tabStyle.titleStyle||'')+(item.titleStyle||''))">{{currentPage===idx ? item.selectedTitle : item.title}}</text>
 					</view>
-					<text v-if="!item.isHump" :class="['myp-tabs-item-text', currentPage===idx&&'myp-tabs-item-text-selected']" :style="currentPage===idx?((tabStyle.selectedTitleStyle||'')+(item.selectedTitleStyle||'')):((tabStyle.titleStyle||'')+(item.titleStyle||''))">{{currentPage===idx ? item.selectedTitle : item.title}}</text>
 				</view>
+				<myp-xbar v-if="considerXBar&&!tabStyle.imageWidthXBar" :bgType="xBarBgType" :boxStyle="xBarStyle"></myp-xbar>
 			</view>
 			<!-- hump -->
-			<view bubble="true" v-if="hasHump" class="myp-tabs-item-hump" :style="mrHumpStyle||''" @tap="setPage(humpIndex)">
-				<view class="myp-tabs-item-icon" :style="'width:'+(humpItem.iconBoxWidth||mrIconWidth)+';'">
-					<myp-icon :name="currentPage===humpIndex?(humpItem.selectedIcon || humpItem.icon):humpItem.icon" :iconStyle="currentPage===humpIndex?((tabStyle.selectedIconStyle||'')+(humpItem.selectedIconStyle||'')):((tabStyle.iconStyle||'')+(humpItem.iconStyle||''))" @iconClicked="setPage(humpIndex)"></myp-icon>
+			<view bubble="true" v-if="hasHump" class="myp-tabs-hump myp-flex-column myp-align-center myp-justify-center" :style="mrHumpStyle||''" @tap="setPage(humpIndex)">
+				<view class="myp-tabs-item-icon myp-flex-row myp-justify-center myp-align-center" :style="'width:'+(humpItem.iconBoxWidth||mrIconWidth)+';'">
+					<image :src="currentPage===humpIndex?humpItem.selectedIcon:humpItem.icon" :style="currentPage===humpIndex?((tabStyle.selectedIconStyle||'')+(humpItem.selectedIconStyle||'')):((tabStyle.iconStyle||'')+(humpItem.iconStyle||''))"></image>
 					<view v-if="humpItem.badge" class="myp-tabs-item-badge" :style="(tabStyle.badgeStyle||'')+(humpItem.badgeStyle||'')">
 						<text class="myp-tabs-item-badge-text" :style="(tabStyle.badgeTextStyle||'')+(humpItem.badgeTextStyle||'')">{{humpItem.badge}}</text>
 					</view>
@@ -36,24 +47,31 @@
 
 <script>
 	// #ifdef APP-NVUE
-	const animation = weex.requireModule('animation');
+	const animation = uni.requireNativePlugin('animation');
 	// #endif
 	
-	import xBarMixin from '../myp-mixin/xBarMixin.js'
-	import pxMixin from '../myp-mixin/pxMixin.js'
-
+	import {getPx, getXBarHeight, getHeight, getStatusBarHeight, getNavbarHeight} from '../utils/system.js'
+	
 	export default {
-		mixins: [xBarMixin, pxMixin],
 		props: {
-			// 可以为每一个tab单独设置
-			// isHump 表示是否凸起, noPage 表示点击当前tab时不切换，依然停留在原tab内容, hump具备humpStyle,hump有humpBottom(就是距离底部的距离px)
-			// icon,selectedIcon,title,selectedTitle,badge,dot,isHump,noPage,humpStyle,humpBottom
-			// iconStyle,selectedIconStyle,titleStyle,selectedTitleStyle,badgeStyle,badgeTextStyle,dotStyle,iconBoxWidth
+			/**
+			 * tabs的内容以及个性化的配置。
+			 * isHump表示是否凸起,
+			 * noPage表示点击当前tab时不切换，依然停留在原tab内容。
+			 * hump具备humpStyle,hump有humpBottom(就是距离底部的距离px)。
+			 * icon,selectedIcon,title,selectedTitle,
+			 * badge,dot,
+			 * isHump,noPage,humpStyle,humpBottom
+			 * iconStyle,selectedIconStyle,titleStyle,selectedTitleStyle,
+			 * badgeStyle,badgeTextStyle,dotStyle,iconBoxWidth
+			 */
 			tabs: {
 				type: Array,
 				default: () => ([])
 			},
-			// global tabs set
+			/**
+			 * 全局tabs的样式设置。tabs中可以单独设置进行覆盖
+			 */
 			tabStyle: {
 				type: Object,
 				default: ()=>{
@@ -63,6 +81,7 @@
 						titleStyle: '',
 						selectedTitleStyle: '',
 						boxStyle: '',
+						tabsStyle: '',
 						itemStyle: '',
 						height: 50,  // px
 						badgeStyle: '',
@@ -73,29 +92,58 @@
 						image: null,
 						imageStyle: '',
 						imageBoxStyle: '',
+						imageWidthXBar: false
 					}
 				}
 			},
-			// 高度计算时是否包含statusBar
-			includeStatus: {
-				type: Boolean,
-				default: true
-			},
-			includeNav: {
-				type: Boolean,
-				default: true
-			},
+			/**
+			 * 页面切换的动画周期
+			 */
 			duration: {
-				type: [Number, String],
+				type: Number,
 				default: 300
 			},
+			/**
+			 * 页面切换的动画函数
+			 */
 			timingFunction: {
 				type: String,
 				default: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
 			},
+			/**
+			 * 距离顶部的距离
+			 */
 			top: {
-				type: [Number, String],
-				default: 0
+				type: String,
+				default: '0'
+			},
+			/**
+			 * tabs以及xbar的高度是否有占位
+			 */
+			isSeize: {
+				type: Boolean,
+				default: true
+			},
+			/**
+			 * 是否考虑xbar
+			 */
+			considerXBar: {
+				type: Boolean,
+				default: true
+			},
+			/**
+			 * xbar的背景主题
+			 */
+			xBarBgType: {
+				type: String,
+				default: 'inverse'
+			},
+			/**
+			 * xbar的样式
+			 */
+			xBarStyle: {
+				type: String,
+				default: ''
 			}
 		},
 		data: () => ({
@@ -105,22 +153,12 @@
 			defaultIconBoxWidth: '46px'
 		}),
 		computed: {
-			containerHeight() {
-				let _height = this.mypGetScreenHeight()
-				if (_height === 0) {
-					// try again
-					_height = this.mypGetScreenHeight()
-				}
-				if (_height === 0) {
-					return 0
-				}
-				const xBarHeight = this.includeXBar ? this.mypGetXBarHeight() : 0
-				return _height - this.tabHeightPx - xBarHeight - this.topPx
-			},
 			mrHumpStyle() {
 				if (!this.humpItem) return '';
 				let btm = this.humpItem.humpBottom || 12
-				btm += this.mypGetXBarHeight()
+				if (this.considerXBar) {
+					btm += getXBarHeight()
+				}
 				const style = this.humpItem.humpStyle || ''
 				return style + `bottom:${btm}px;`
 			},
@@ -152,9 +190,7 @@
 				return -1
 			},
 			topPx() {
-				const st = this.includeStatus ? 0 : this.mypGetStatusBarHeight()
-				const nh = this.includeNav ? 0 : this.mypGetNavHeight()
-				return this.mypToPx(this.top) + st + nh
+				return getHeight(this.top)
 			},
 			tabHeightPx() {
 				if (this.tabStyle && this.tabStyle.height) {
@@ -171,7 +207,7 @@
 				}
 				const width = (_length || 1) * 750
 				let _style = `width:${width}rpx;`
-				return _style + `height:${this.containerHeight}px;`
+				return _style
 			},
 			mrItemStyle() {
 				const _height = this.tabHeightPx
@@ -182,16 +218,6 @@
 					return this.tabStyle.iconBoxWidth
 				}
 				return this.defaultIconBoxWidth
-			},
-			mrTabsBoxStyle() {
-				let _style = (this.tabStyle && this.tabStyle.boxStyle) || ''
-				_style += `padding-bottom:${this.mypGetXBarHeight()}px;`
-				return _style
-			},
-			mrTabsImageBoxStyle() {
-				let _style = (this.tabStyle && this.tabStyle.imageBoxStyle) || ''
-				_style += `padding-bottom:${this.mypGetXBarHeight()}px;`
-				return _style
 			}
 		},
 		methods: {
@@ -211,12 +237,12 @@
 			},
 			setPage(page, animated = true) {
 				if (page === this.noPageIndex) {
-					this.$emit('selected', {page})
+					this.$emit('tabClicked', {page})
 					return
 				}
 				this.currentPage = page;
 				this._animateTransformX(page, animated);
-				this.$emit('selected', {
+				this.$emit('tabClicked', {
 					page
 				});
 			},
@@ -264,44 +290,38 @@
 		
 		&-container {
 			width: 750rpx;
-			flex-direction: row;
+			flex: 1;
+			position: relative;
 		}
 	}
-
 	.myp-tabs {
+		position: fixed;
+		left: 0;
+		bottom: 0;
 		width: 750rpx;
-		flex-direction: row;
-		background-color: #FFFFFF;
 		
 		&-img {
 			position: fixed;
 			width: 750rpx;
 			left: 0;
+			bottom: 0;
 		}
-		
+		&-items {
+			width: 750rpx;
+			background-color: #FFFFFF;
+		}
+		&-hump {
+			position: fixed;
+			left: 375rpx;
+			bottom: 0;
+			transform: translateX(-50%);
+		}
 		&-item {
-			flex-direction: column;
-			justify-content: space-between;
-			align-items: center;
-			flex: 1;
 			padding: 5px;
-			
-			&-hump {
-				position: fixed;
-				left: 375rpx;
-				bottom: 0;
-				transform: translateX(-50%);
-				justify-content: center;
-				align-items: center;
-			}
 			
 			&-icon {
 				position: relative;
-				flex-direction: row;
-				justify-content: center;
-				align-items: center;
 			}
-			
 			&-text {
 				font-size: 13px;
 				color: #333232;
@@ -310,7 +330,6 @@
 					color: #01A9F0;
 				}
 			}
-			
 			&-badge {
 				position: absolute;
 				right: 0;
@@ -320,7 +339,6 @@
 					font-size: 12px;
 				}
 			}
-			
 			&-dot {
 				position: absolute;
 				right: 6px;

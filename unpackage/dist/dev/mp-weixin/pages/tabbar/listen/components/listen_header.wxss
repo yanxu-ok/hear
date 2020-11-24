@@ -40,4 +40,7 @@
 .listen_header .listen_header_search {
   width: 545rpx;
 }
+.listen_header .listen_header_text {
+  font-size: 18rpx;
+}
 

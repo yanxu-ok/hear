@@ -68,7 +68,9 @@
 		},
 		methods: {
 			...mapMutations(['setPhoneKey', 'setPhoneCode', 'setPhone', 'setToken']),
+
 			checkGuide() {
+
 				// 思路： 检测是否有启动缓存，如果没有，就是第一次启动，第一次启动就去 启动介绍页面
 				const launchFlag = uni.getStorageSync('launchFlag');
 				if (launchFlag) {
@@ -177,6 +179,7 @@
 					});
 					return false;
 				}
+				console.log(_this.code);
 
 				_this.setPhoneCode(_this.code)
 
@@ -188,6 +191,7 @@
 					});
 					return false;
 				}
+
 				uni.request({
 					url: baseUrl.BASE_Url + '/member/login?_orgid_=' + baseUrl.orgid,
 					data: {
@@ -218,25 +222,11 @@
 							}
 						} else {
 							uni.showToast({
-								title: '登录失败',
+								title: res.data.errmsg,
 								icon: 'none'
 							})
 						}
 
-						// if (res.data.code) {
-						// 	_this.login(true, res.data.data, function() {
-						// 		_this.getRongyToken();
-						// 	});
-						// 	if (res.data.data.needPassword) {
-
-						// 	}
-						// } else {
-						// 	uni.showToast({
-						// 		title: '验证码不正确',
-						// 		icon: "none"
-						// 	});
-						// 	return false;
-						// }
 					}
 				});
 			},

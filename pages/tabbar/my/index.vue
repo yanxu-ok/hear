@@ -5,12 +5,12 @@
 			<view class="my_contain_touxiang">
 				<view style="display: flex;flex-direction: column;width: 490rpx;">
 					<view class="my_header_name">{{userInfo ? userInfo.nickName : ''}}</view>
-					<view class="my_header_desc">{{userInfo ? userInfo.userDescribe  : '' | titleFilter(39)}}</view>
+					<view class="my_header_desc">{{userInfo ? userInfo.userSignature  : '' | titleFilter(39)}}</view>
 				</view>
 				<view style="width: 171rpx;height: 171rpx;position: relative">
 					<u-image width="171rpx" height="171rpx" :src="userInfo ? userInfo.avatar : '' " shape="circle" @click="handleImg"
 					 style="box-shadow:0 0 3px #AAA;"></u-image>
-					<image src="@/static/my/xiugai.png" class="my_contain_touxiang_edit"></image>
+					<image src="https://img11.iqilu.com/29/2020/09/30/8ecaa8cc16e40e34b802a141c70581fc.png" class="my_contain_touxiang_edit"></image>
 				</view>
 			</view>
 			<view class="my_guanzhu">
@@ -29,7 +29,7 @@
 			</view>
 			<view class="vip" @tap="handleHuiyuan">
 				<view>
-					<u-image width="95rpx" height="31rpx" src="@/static/my/vip.png"></u-image>
+					<u-image width="95rpx" height="31rpx" src="https://img11.iqilu.com/29/2020/09/30/6ed81101591c4737a6fa9749c754e956.png"></u-image>
 					<view style="font-size:20rpx;
 			font-family:PingFang SC;
 			font-weight:300;
@@ -44,19 +44,19 @@
 
 		<view class="my_caozuo">
 			<view class="my_caozuo_div" @tap="handleMyClick(0)">
-				<u-image width="40rpx" height="39rpx" src="@/static/my/zhuye.png"></u-image>
+				<u-image width="40rpx" height="39rpx" src="https://img11.iqilu.com/29/2020/09/30/165d14daecc7887c34d6ef5d7d5a8bf9.png"></u-image>
 				<view class="my_caozuo_text">{{userInfo && userInfo.userRole != 3 ? '个人主页' : '机构主页' }}</view>
 			</view>
 			<view class="my_caozuo_div" @tap="handleMyClick(1)">
-				<u-image width="38rpx" height="39rpx" src="@/static/my/lishi.png"></u-image>
+				<u-image width="38rpx" height="39rpx" src="https://img11.iqilu.com/29/2020/09/30/8d10cc5cb304942b01bd0295313a2375.png"></u-image>
 				<view class="my_caozuo_text">历史记录</view>
 			</view>
 			<view class="my_caozuo_div" @tap="handleMyClick(2)">
-				<u-image width="41rpx" height="38rpx" src="@/static/my/pinglun.png"></u-image>
+				<u-image width="41rpx" height="38rpx" src="https://img11.iqilu.com/29/2020/09/30/864cbcbf21bb19aaf789d6027ae2f0af.png"></u-image>
 				<view class="my_caozuo_text">评论</view>
 			</view>
 			<view class="my_caozuo_div" @tap="handleMyClick(3)">
-				<u-image width="41rpx" height="40rpx" src="@/static/my/shezhi.png"></u-image>
+				<u-image width="41rpx" height="40rpx" src="https://img11.iqilu.com/29/2020/09/30/7caf8e1683c7c5921563db2aa4006046.png"></u-image>
 				<view class="my_caozuo_text">设置</view>
 			</view>
 		</view>
@@ -78,7 +78,8 @@
 						</block>
 					</template>
 					<view class="addshudan" @tap="handleAddshudan">
-						<u-image width="120rpx" height="120rpx" src="@/static/my/chuangjian.png" border-radius="10rpx"></u-image>
+						<u-image width="110rpx" height="110rpx" src="https://img11.iqilu.com/29/2020/09/30/e93598c3cca6ff11ba00c107b86ff1fa.png"
+						 border-radius="10rpx"></u-image>
 						<view class="addshudan_text">创建播单</view>
 					</view>
 				</view>
@@ -99,7 +100,7 @@
 		<biaoqian ref="biaoqian"></biaoqian>
 
 		<tabbar :list="tabbarData" height="55px" :before-switch="beforeSwitch" :mid-button="true" inactive-color="#cbcedd"
-		 active-color="#fe9503"></tabbar>
+		 active-color="#fe9503" :border-top="true"></tabbar>
 
 	</view>
 </template>
@@ -117,6 +118,7 @@
 	} from '@/libs/hear-util/index.js'
 	import MescrollMixin from "@/components/mescroll-uni/mescroll-mixins.js";
 	import MescrollUni from "@/components/mescroll-uni/mescroll-uni.vue";
+	import config from '@/libs/config/baseUrl.js'
 	import {
 		mapActions,
 		mapState
@@ -163,33 +165,38 @@
 			}
 		},
 
-		async onLoad() {
-			let token = getCurrectStorg('token')
-			// if (!token) {
-			// 	this.isLogin = false
-			// 	return;
-			// }
-			this.token = token
-
+		computed: {
+			...mapState({
+				tabbarData: state => state.system.tabBarList,
+				// userInfo: state => state.my.userInfo
+			})
+		},
+		
+		onLoad() {
+			// 判断用户是否登录
+			if(!isLogin()){
+				uni.switchTab({
+					url:'/pages/tabbar/home/index'
+				})
+				return;
+			}
+		},
+		
+		async onShow() {
+		
+			// console.11
 			// 判断用户是否是第一次登录
 			let count = await this.get_user_count()
 
 			let res = await this.get_user_msg({
-				// userId: 1,
 				otherUserId: null
 			})
 
 			this.userInfo = res
 			uni.setStorageSync('user', JSON.stringify(res));
-			// uni.setStorage({
-			// 	key: 'user',
-			// 	data: JSON.stringify(res),
-			// 	success: function() {
-			// 		// console.log('success');
-			// 	}
-			// })
-			console.log(count, '用户登录的次数');
 
+			console.log(count, '用户登录的次数');
+			
 			if (count == 0) {
 				this.$refs.biaoqian.show = true
 				this.$refs.biaoqian.getBiaoqian() // tan
@@ -200,18 +207,6 @@
 			this.init() // 获取作品啥的
 			this.downCallback()
 			// this.getZhuanTiList()
-
-		},
-
-		computed: {
-			...mapState({
-				tabbarData: state => state.system.tabBarList,
-				// userInfo: state => state.my.userInfo
-			})
-
-		},
-
-		onShow() {
 			this.canReset && this.downCallback()
 			this.canReset = true
 		},
@@ -233,8 +228,8 @@
 						WebBridgeApi.router({
 							route: 'webapp',
 							params: {
-								url: 'http://10.0.117.248:9998/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
-									'&hearEnv=ok'
+								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+									'&hearEnv=ok&orgId=' + config.orgid
 							}
 						})
 						// .then(({
@@ -322,7 +317,6 @@
 
 			/*上拉加载的回调*/
 			async upCallback(page) {
-				console.log(1);
 				// let pageNum = page.num; // 页码, 默认从1开始
 				// let pageSize = page.size; // 页长, 默认每页10条
 				let result = await this.ifType(page)
@@ -339,15 +333,12 @@
 
 			async ifType(page) {
 				if (this.shudanIndex == 0) {
-					console.log(this.userInfo);
 					let data = {
-						// userAuthorId: this.userInfo.userId,
 						topicType: 2,
 						pageNum: page.num,
 						pageSize: page.size,
 						otherUserId: this.userInfo.userId
 					}
-					console.log(data);
 					let result = await this.get_user_play_single(data)
 					return result
 				} else {
@@ -370,7 +361,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: '/pages/shudan/shudan?userId=' + this.userInfo.userId
+					url: '/pagesD/shudan/shudan?userId=' + this.userInfo.userId
 				})
 			},
 
@@ -385,8 +376,15 @@
 				}
 				let str = item.type
 				if (str == 'bodan') {
+					if (item.item.chapterCount == 0) {
+						uni.showToast({
+							title: '下面没有内容哦',
+							icon: 'none'
+						})
+						return;
+					}
 					uni.navigateTo({
-						url: '/pages/list_page_zhang/list_page_zhang?name=播单列表&type=zj&topicId=' + item.item.topicId
+						url: '/pagesD/list_page_zhang/list_page_zhang?name=播单列表&type=zj&topicId=' + item.item.topicId
 					})
 				} else {
 					uni.navigateTo({
@@ -442,16 +440,18 @@
 					})
 					return;
 				}
-				console.log(this.userInfo);
 				if (index == 0) {
 					uni.navigateTo({
 						url: '/pagesA/myindex/myindex?priv=' + this.userInfo.userRole + '&userId=' + this.userInfo.userId
 					})
 				} else if (index == 1) {
 					uni.navigateTo({
-						url: '/pages/listpage/listpage?name=' + "播放历史" + '&type=lishi'
+						url: '/pagesD/listpage/listpage?name=' + "播放历史" + '&type=lishi'
 					})
 				} else if (index == 2) {
+					uni.navigateTo({
+						url: '/pagesC/my_comment/my_comment'
+					})
 
 				} else if (index == 3) {
 					uni.navigateTo({
@@ -469,7 +469,7 @@
 					return;
 				}
 				uni.navigateTo({
-					url: '/pages/myinfo/myinfo'
+					url: '/pagesB/myinfo/myinfo'
 				})
 			},
 
@@ -512,7 +512,7 @@
 
 		& .my_contain_beijing {
 			height: 579rpx;
-			background: url('@/static/my/beijing.png');
+			background: url('https://img11.iqilu.com/29/2020/09/30/5d25e1c2058bc20cf458c93e3b136ee4.png');
 			position: relative;
 			width: 100%;
 		}

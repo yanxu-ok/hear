@@ -8,7 +8,8 @@ import {
 	insert_audio,
 	insert_article,
 	get_all_category,
-	increase_read_amount
+	increase_read_amount,
+	get_article_by_id
 } from '@/api/huting/index.js'
 
 export default {
@@ -200,7 +201,7 @@ export default {
 		}) {
 			return new Promise((resolve, reject) => {
 				get_all_category().then(res => {
-					console.log(res.data, "获取标签");
+					// console.log(res.data, "获取标签");
 					resolve(res.data.data)
 				})
 			})
@@ -214,11 +215,25 @@ export default {
 		}, obj) {
 			return new Promise((resolve, reject) => {
 				increase_read_amount(obj).then(res => {
-					console.log(res, "给文稿阅读量加一");
+					// console.log(res, "给文稿阅读量加一");
 					resolve(res)
 				})
 			})
-		}
+		},
+		
+		// 根据 文稿id 获取文稿信息
+		get_article_by_id({
+			state,
+			commit,
+			rootState
+		}, obj) {
+			return new Promise((resolve, reject) => {
+				get_article_by_id(obj).then(res => {
+					// console.log(res, "根据 文稿id 获取文稿信息");
+					resolve(res.data.data)
+				})
+			})
+		},
 
 	}
 }

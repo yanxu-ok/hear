@@ -1,79 +1,103 @@
 <template>
-	<view :class="[checked ? 'myp-bg-'+checkedType : 'myp-bg-'+bgType, disabled && 'myp-disabled']" :style="mrSwitchStyle" @click.stop.prevent="handleClick">
-		<view :class="['myp-bg-'+animateType]" :style="mrAnimateStyle"></view>
-		<view :class="['myp-bg-'+ballType]" :style="mrBallStyle"></view>
+	<view :class="[value?'myp-bg-'+onBgType:'myp-bg-'+bgType, disabled&&'myp-disabled']" :style="mrSwitchStyle" @click.stop="handleClick">
+		<view :class="['myp-bg-'+animateBgType]" :style="mrAnimateStyle"></view>
+		<view :class="['myp-bg-'+ballBgType]" :style="mrBallStyle"></view>
 	</view>
 </template>
 
 <script>
 	export default {
 		props: {
-			// it means checked
+			/**
+			 * 值/是否打开
+			 */
 			value: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 是否禁用
+			 */
 			disabled: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 关闭时的背景主题
+			 */
 			bgType: {
 				type: String,
 				default: 'border'
 			},
-			// 控制checked时的背景色
-			checkedType: {
+			/**
+			 * 打开时的背景主题
+			 */
+			onBgType: {
 				type: String,
 				default: 'primary'
 			},
-			ballType: {
+			/**
+			 * 移动球的背景主题
+			 */
+			ballBgType: {
 				type: String,
 				default: ''
 			},
-			animateType: {
+			/**
+			 * 动画层背景主题
+			 */
+			animateBgType: {
 				type: String,
 				default: ''
 			},
-			// 整体宽度
+			/**
+			 * 自定义宽度
+			 */
 			width: {
 				type: String,
 				default: '102rpx'
 			},
-			// 因为这个需要用到这个高度来做计算，所以没有使用 scss-height style
+			/**
+			 * 自定义高度
+			 */
 			height: {
 				type: String,
 				default: '62rpx'
 			},
-			// 移动圆球的大小
+			/**
+			 * 移动球的自定义宽高
+			 */
 			ballSize: {
 				type: String,
 				default: '58rpx'
 			},
-			// 移动圆球的背景色
+			/**
+			 * 移动球的自定义背景色
+			 */
 			ballBg: {
 				type: String,
 				default: ''
 			},
-			// 可收缩背景的背景色
+			/**
+			 * 动画层的自定义背景色
+			 */
 			animateBg: {
 				type: String,
 				default: ''
 			},
-			// 开关的背景，一般用于露出部分作为边框色彩
+			/**
+			 * 关闭时的自定义背景色
+			 */
 			bg: {
 				type: String,
 				default: ''
 			},
-			// 开关打开时的背景色
-			checkedBg: {
+			/**
+			 * 打开时的自定义背景色
+			 */
+			onBg: {
 				type: String,
 				default: ''
-			}
-		},
-		data() {
-			return {
-				// 可以自响应。即使没有绑定v-model或者value
-				checked: this.value
 			}
 		},
 		computed: {
@@ -85,17 +109,17 @@
 				}
 				return _style
 			},
-			switchCheckedStyle() {
+			switchOnStyle() {
 				let _style = ""
-				if (this.checkedBg && this.checkedBg.length > 0) {
-					_style += `background-color:${this.checkedBg};`
+				if (this.onBg && this.onBg.length > 0) {
+					_style += `background-color:${this.onBg};`
 				}
 				return _style
 			},
 			mrSwitchStyle() {
 				let _style = this.switchNormalStyle
-				if (this.checked) {
-					_style += this.switchCheckedStyle
+				if (this.value) {
+					_style += this.switchOnStyle
 				}
 				return _style
 			},
@@ -108,18 +132,18 @@
 				_style += `left:${this.ballSpace}rpx;`
 				return _style
 			},
-			ballCheckedStyle() {
-				return `left:${this.ballCheckedSpace}rpx;`
+			ballOnStyle() {
+				return `left:${this.ballOnSpace}rpx;`
 			},
 			mrBallStyle() {
-				return this.checked ? (this.ballStyle + this.ballCheckedStyle) : this.ballStyle
+				return this.value ? (this.ballStyle + this.ballOnStyle) : this.ballStyle
 			},
 			ballSpace() {
 				const sh = parseInt(this.height)
 				const bh = parseInt(this.ballSize)
 				return (sh - bh) * 0.5
 			},
-			ballCheckedSpace() {
+			ballOnSpace() {
 				const sw = parseInt(this.width)
 				const bw = parseInt(this.ballSize)
 				return sw - bw - this.ballSpace
@@ -139,27 +163,20 @@
 			},
 			mrAnimateStyle() {
 				const aniCS = "transform:scale(0);"
-				return this.checked ? (this.animateStyle + aniCS) : this.animateStyle
+				return this.value ? (this.animateStyle + aniCS) : this.animateStyle
 			}
 		},
 		methods: {
 			handleClick(e) {
 				if (!this.disabled) {
-					this.checked = !this.checked
-					this.$emit('input', this.checked)
-					this.$emit('change', this.checked)
+					this.$emit('input', !this.value)
+					this.$emit('change', !this.value)
 				}
-				e.stopPropagation()
-			}
-		},
-		watch: {
-			value(newVal) {
-				this.checked = newVal
+				e.stopPropagation && e.stopPropagation()
 			}
 		}
 	}
 </script>
 
 <style lang="scss" scoped>
-	@import '../base.scss';
 </style>

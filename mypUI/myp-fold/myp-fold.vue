@@ -1,59 +1,85 @@
 <template>
-	<view id="myp-fold" ref="myp-fold" :class="['myp-border-'+border, 'myp-radius-'+radius]" :style="boxStyle">
+	<view id="myp-fold" ref="myp-fold" :class="['myp-bg-'+bgType, 'myp-border-'+border, 'myp-radius-'+radius]" :style="boxStyle">
 		<view :style="headStyle" @tap="toToggleBody">
 			<slot name="head"></slot>
 		</view>
-		<view class="myp-fold-body" id="myp-fold-body" ref="myp-fold-body" :style="bodyStyle+noWeexAni">
+		<view id="myp-fold-body" ref="myp-fold-body" :style="'overflow: hidden;'+bodyStyle+noWeexAni">
 			<slot name="body"></slot>
 		</view>
 	</view>
 </template>
 
 <script>
-	// animation的transtion中 needLayout (boolean)：动画执行是否影响布局，默认值是false
-	// 当然考虑到低端机器的兼容（打开会卡），暂时关闭，配合style来处理占位问题
-	// 后期考虑直接使用needLayout
-	// 
 	// #ifdef APP-NVUE
-	const dom = weex.requireModule('dom');
-	const animation = weex.requireModule('animation');
+	const dom = uni.requireNativePlugin('dom');
+	const animation = uni.requireNativePlugin('animation');
 	// #endif
 	
 	export default {
 		props: {
-			// 初始状态,是否打开
+			/**
+			 * 初始状态,是否打开
+			 */
 			isOpen: {
 				type: Boolean,
 				default: false
 			},
+			/**
+			 * 动画周期
+			 */
 			duration: {
 				type: Number,
 				default: 300
 			},
+			/**
+			 * 动画效果
+			 */
 			timingFunction: {
 				type: String,
 				default: 'ease-in'
 			},
+			bgType: {
+				type: String,
+				default: ''
+			},
+			/**
+			 * 边框主题
+			 */
 			border: {
 				type: String,
 				default: 'all'
 			},
+			/**
+			 * 圆角主题
+			 */
 			radius: {
 				type: String,
 				default: 'base'
 			},
+			/**
+			 * 刷新高度/重新计算
+			 */
 			updateTime: {
 				type: Number,
 				default: 0
 			},
+			/**
+			 * 外层样式
+			 */
 			boxStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * head样式
+			 */
 			headStyle: {
 				type: String,
 				default: ''
 			},
+			/**
+			 * body样式
+			 */
 			bodyStyle: {
 				type: String,
 				default: ''
@@ -70,10 +96,12 @@
 			}
 		},
 		created() {
-			// init
+			this.opened = this.isOpen
+		},
+		mounted() {
 			setTimeout(() => {
 				this.initOpenState()
-			}, 50)
+			}, 0)
 		},
 		watch: {
 			async updateTime(newV) {
@@ -174,6 +202,7 @@
 				})
 			},
 			// #endif
+			// #ifndef APP-NVUE
 			async noWeexToggleBody(opened) {
 				let _style = `transition-property:height;transition-duration:${this.duration}ms;transition-timing-function:${this.timingFunction};`
 				if (opened) {
@@ -188,6 +217,7 @@
 					that.$emit("toggle", opened)
 				}, this.duration)
 			},
+			// #endif
 			getElHeight(name) {
 				return new Promise((res, rej) => {
 					// #ifdef APP-NVUE
@@ -212,8 +242,5 @@
 	}
 </script>
 
-<style lang="scss" scoped>
-	.myp-fold-body {
-		overflow: hidden;
-	}
+<style lang="scss">
 </style>

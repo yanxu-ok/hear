@@ -19,9 +19,9 @@
 								</view> -->
 			<!-- 	<template>
 									<view class="bodan_content_author">
-										<u-image width="19rpx" height="20rpx" src="@/static/images/author.png"></u-image>
+										<u-image width="19rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/70ef65303326f43756654241a1a270bf.png"></u-image>
 										<view class="bodan_content_author_name">{{item.nickName}}</view>
-										<u-image width="17rpx" height="20rpx" src="@/static/images/play.png" style="margin-left: 20rpx;"></u-image>
+										<u-image width="17rpx" height="20rpx" src="https://img11.iqilu.com/29/2020/09/30/224104618812ae11f6484e7303d6d5a1.png" style="margin-left: 20rpx;"></u-image>
 										<view class="bodan_content_author_count">{{item.topicReadAmount}}次播放</view>
 									</view>
 								</template> -->
