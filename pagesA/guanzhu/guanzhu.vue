@@ -8,8 +8,8 @@
 		</view>
 		<swiper :current="swiperCurrent" @transition="transition" @animationfinish="animationfinish" style="flex: 1;">
 			<swiper-item class="swiper-item" v-for="(item, index) in list" :key="index">
-				<guanzhulist v-if="item.name == '粉丝'" :rindex="index" type="fensi" :list="fensiList" @handleGuanzhu="handleGuanzhu"></guanzhulist>
-				<guanzhulist v-if="item.name == '关注' " :rindex="index" type="guanzhu" :list="fensiList" @handleGuanzhu="handleGuanzhu"></guanzhulist>
+				<guanzhulist v-if="item.name == '粉丝' && index == current " :rindex="index" type="fensi" :list="fensiList" @handleGuanzhu="handleGuanzhu"></guanzhulist>
+				<guanzhulist v-if="item.name == '关注' && index == current " :rindex="index" type="guanzhu" :list="fensiList" @handleGuanzhu="handleGuanzhu"></guanzhulist>
 			</swiper-item>
 		</swiper>
 	</view>

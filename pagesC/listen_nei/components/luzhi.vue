@@ -173,6 +173,10 @@
 				console.log('录音结束');
 				recorderManager.stop();
 				this.setVoicePath('')
+				uni.showToast({
+					title: '请先录制音频',
+					icon: 'none'
+				})
 			},
 
 			playVoice() {
@@ -242,6 +246,11 @@
 			endRecord() {
 				this.luzhi = false
 				console.log('录音结束');
+				uni.showToast({
+					title: '请先录制音频',
+					icon: 'none'
+				})
+
 				// 一县一端
 				WebBridgeApi.audioRecord({
 					start: false
@@ -263,11 +272,9 @@
 						result
 					}) => {
 						_this.luzhi = true
-						// this.$refs.myClock.end();
 						console.log(err, result);
 					});
 				} else {
-					// console.log(1);
 					_this.luzhi = true
 					this.$refs.myClock.start();
 					WebBridgeApi.audioRecord({
@@ -286,8 +293,8 @@
 					});
 				}
 			},
-			
 			// #endif
+
 			handleChonglu() {
 				let _this = this
 				this.luzhi = false;

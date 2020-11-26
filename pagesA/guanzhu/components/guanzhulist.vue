@@ -87,42 +87,37 @@
 			// //点击关注的事件
 			async handleGuanzhu(item) {
 				console.log(item, '关注的当前项');
-
-				if (this.type == 'fensi') { // 这些是粉丝
-					if (item.flag == 1) { // 说明是没有关注他  要调用关注接口 
-						let result = await this.insert_focus(item.userId)
-						if (result.success) {
-							// this.fensiList = await this.getFensiList()
-							this.downCallback()
-							uni.showToast({
-								title: '关注成功',
-								icon: 'none'
-							})
-
-						}
-					} else { // 说明已经关注 要调用取消关注接口
-						let result = await this.delete_focus(item.fansId)
-						if (result.success) {
-							// this.fensiList = await this.getFensiList()
-							this.downCallback()
-							uni.showToast({
-								title: '取消成功',
-								icon: 'none'
-							})
-						}
-					}
-				} else { // 说明已经关注
-					let result = await this.delete_focus(item.fansId)
+				
+				if (item.flag == 1) { // 说明是没有关注他  要调用关注接口
+					let result = await this.insert_focus(item.userId)
 					if (result.success) {
 						// this.fensiList = await this.getFensiList()
 						this.downCallback()
+						uni.showToast({
+							title: '关注成功',
+							icon: 'none'
+						})
+					}
+				} else {
+					const index = this.getCurrectIndex(this.dataList, item.fansId)
+					let result = await this.delete_focus(item.fansId)
+					if (result.success) {
+						// this.fensiList = await this.getFensiList()
+						this.dataList[index].flag = 1
 						uni.showToast({
 							title: '取消成功',
 							icon: 'none'
 						})
 					}
 				}
+				
+			},
 
+			// 获取当前已经取消的索引
+			getCurrectIndex(arr, fansId) {
+				return arr.findIndex((item, index) => {
+					return item.fansId == fansId
+				})
 			},
 
 			/*下拉刷新的回调*/

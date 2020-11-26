@@ -1,6 +1,8 @@
 <template>
 	<view class="quanzi">
-		<web-view :webview-styles="webviewStyles" :style="webViewHeight" :src="url" @message="message"></web-view>
+		<template v-if="isLogin && token">
+			<web-view :webview-styles="webviewStyles" :style="webViewHeight" :src="url" @message="message"></web-view>
+		</template>
 		<tabbar :list="tabbarData" :border-top="true" :before-switch="beforeSwitch" height="55px" :mid-button="true"
 		 inactive-color="#cbcedd" active-color="#fe9503"></tabbar>
 	</view>
@@ -16,7 +18,8 @@
 		isLogin,
 		getCurrectStorg,
 		isApp,
-		getScreenHeight
+		getScreenHeight,
+		getCurrect
 	} from '@/libs/hear-util/index.js'
 	import config from '@/libs/config/baseUrl.js'
 	import tabbar from '@/components/u-tabbar/u-tabbar.vue'
@@ -25,39 +28,47 @@
 		mapActions
 	} from 'vuex'
 	export default {
+
 		components: {
 			tabbar
 		},
+
 		computed: {
-			
+
 			...mapState({
 				tabbarData: state => state.system.tabBarList
 			}),
-			
-			url() {
-				console.log(config.circle,this.token,'圈子地址和token');
-				return config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
-					'&hearEnv=ok&orgId=' + config.orgid
-			},
-			
+
 			// 计算webview 的高度
 			webViewHeight() {
 				return {
 					height: 2 * (getScreenHeight() - 80) + 'rpx'
 				}
 			}
+
 		},
 		
-		onLoad() {
-			let token = getCurrectStorg('token')
-			if (!token) {
-				this.isLogin = false
-				return;
+		onShow() {
+			 getCurrect('token').then(res=>{
+				console.log(res);
+				this.token = res
+			})
+			// console.log(this.url);
+		},
+		
+		watch: {
+			token(newValue, oldValue) {
+				if(!newValue){
+					this.isLogin = false
+				}
+				console.log(config.circle, newValue, oldValue,'圈子地址和token');
+				let url = config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + newValue +
+					'&hearEnv=ok&orgId=' + config.orgid;
+				this.url = url
+				this.isLogin = true
 			}
-			this.token = token
-			this.isLogin = true
 		},
-		
+
 		data() {
 			return {
 				webviewStyles: {
@@ -67,9 +78,11 @@
 					}
 				},
 				isLogin: false,
-				token: ''
+				token: null,
+				url: ''
 			}
 		},
+
 		methods: {
 
 			beforeSwitch(index) {
@@ -87,7 +100,7 @@
 						WebBridgeApi.router({
 							route: 'webapp',
 							params: {
-								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + getCurrectStorg('token') +
 									'&hearEnv=ok&orgId=' + config.orgid
 							}
 						})

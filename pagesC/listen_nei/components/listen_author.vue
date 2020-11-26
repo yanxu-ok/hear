@@ -167,7 +167,7 @@
 					return;
 				} else {
 					uni.showToast({
-						title: 'h5暂时无法录制,请到小程序或微信中录制',
+						title: 'h5暂时无法录制,请到小程序或app中录制',
 						icon: 'none'
 					})
 					return;

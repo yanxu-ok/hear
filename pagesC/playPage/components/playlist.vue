@@ -75,15 +75,21 @@
 		watch: {
 
 			// 监听当前章节 请求当前章节的评论数量
-			async currectPlayIndex(newValue, oldValue) {
-				const obj = {
-					classifyKey: 'hear',
-					orgKey: this.$config.requestComment.orgKey,
-					platformKey: this.$config.requestComment.platformKey,
-					programId: this.zhangjieList[newValue].chapterId
-				}
-				const count = await this.get_comment_total(obj)
-				this.commentCount = count
+			currectPlayIndex: {
+				async handler(newValue, oldValue) {
+					if (typeof newValue == null) {
+						return;
+					}
+					const obj = {
+						classifyKey: 'hear',
+						orgKey: this.$config.requestComment.orgKey,
+						platformKey: this.$config.requestComment.platformKey,
+						programId: this.zhangjieList[newValue].chapterId
+					}
+					const count = await this.get_comment_total(obj)
+					this.commentCount = count
+				},
+				immediate: true
 			}
 
 		},

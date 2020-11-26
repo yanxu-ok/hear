@@ -35,13 +35,13 @@
 			 @confirm="handleQUeding" @cancel="handleQuxiao"></u-picker> -->
 			<!-- <axbCheckBox ref="radio1" :multi="true" :list="selector" @change="radioChangeStatus1"></axbCheckBox> -->
 
-			<view>{{article == 'audio' ? audioInfo.labelName : mLeiBie}}</view>
+			<view style="margin-top: 20rpx;">{{article == 'audio' ? audioInfo.labelName : mLeiBie}}</view>
 
 			<u-line color="#EFEFF1" margin="60rpx 0 0 0" />
 
 			<u-section title="所属圈子:" :right="true" :show-line="showLine" @click="handlePicker1('quanzi')" style="margin-top: 35rpx;">
 			</u-section>
-			<view>{{quanzi}}</view>
+			<view style="margin-top: 20rpx;">{{quanzi}}</view>
 			<u-picker mode="selector" v-model="picker1" :default-selector="[0]" :range="selector1" :mask-close-able="false"
 			 @confirm="handleQUeding" @cancel="handleQuxiao"></u-picker>
 			<u-line color="#EFEFF1" margin="60rpx 0 0 0" />
@@ -140,6 +140,7 @@
 
 		async onLoad(options) {
 			this.article = options.type;
+			console.log(this.audioInfo,this.article);
 			this.isAudio = options.isAudio;
 			this.setFlag = false
 			if (this.article == 'audio') {

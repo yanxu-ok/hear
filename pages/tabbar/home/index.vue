@@ -181,7 +181,7 @@
 						WebBridgeApi.router({
 							route: 'webapp',
 							params: {
-								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + this.token +
+								url: config.circle + '/#/?platformKey=ec3ef837337542bab1bbb31584be3047&token=' + getCurrectStorg('token') +
 									'&hearEnv=ok&orgId=' + config.orgid
 							}
 						})

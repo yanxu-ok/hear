@@ -18,6 +18,28 @@ export const setCurrectStorg = (key, value) => {
 export const getCurrectStorg = (key) => {
 	const value = uni.getStorageSync(key);
 	return value
+	// return new Promise((resolve,reject)=>{
+	// 	uni.getStorage({
+	// 	    key,
+	// 	    success: function (res) {
+	// 	        console.log(res.data);
+	// 					resolve(res.data)
+	// 	    }
+	// 	});
+	// })
+}
+
+export const getCurrect = (key) => {
+	// const value = uni.getStorageSync(key);
+	return new Promise((resolve,reject)=>{
+		uni.getStorage({
+		    key,
+		    success: function (res) {
+		        console.log(res.data);
+						resolve(res.data)
+		    }
+		});
+	})
 }
 
 // 清楚缓存

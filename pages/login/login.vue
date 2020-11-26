@@ -215,10 +215,13 @@
 									url: '/pages/login/components/password'
 								})
 							} else {
+								console.log("登录",res.data.data.token)
 								setCurrectStorg('token', res.data.data.token)
+								console.log('end')
 								uni.switchTab({
 									url: '/pages/tabbar/my/index'
 								})
+								console.log('end1')
 							}
 						} else {
 							uni.showToast({
