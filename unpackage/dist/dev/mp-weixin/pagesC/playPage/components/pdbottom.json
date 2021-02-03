@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-input": "/components/u-input/u-input",
+    "u-image": "/components/u-image/u-image"
+  }
+}

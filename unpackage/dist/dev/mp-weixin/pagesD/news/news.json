@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "消息通知",
+  "disableScroll": true,
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "u-swipe-action": "/components/u-swipe-action/u-swipe-action"
+  }
+}

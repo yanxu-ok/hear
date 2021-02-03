@@ -1,0 +1,14 @@
+{
+  "disableScroll": true,
+  "navigationBarTitleText": "听见",
+  "usingComponents": {
+    "u-image": "/components/u-image/u-image",
+    "tabbar": "/components/u-tabbar/u-tabbar",
+    "tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "tags": "/pages/tabbar/home/components/tabs",
+    "search": "/components/u-search/u-search",
+    "badge": "/components/u-badge/u-badge",
+    "index-content": "/pages/tabbar/home/components/content",
+    "category": "/pages/tabbar/home/components/categoryList"
+  }
+}

@@ -1,0 +1,11 @@
+{
+  "navigationBarTitleText": "书单页",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-image": "/components/u-image/u-image",
+    "u-line": "/components/u-line/u-line",
+    "u-popup": "/components/u-popup/u-popup",
+    "u-input": "/components/u-input/u-input",
+    "shudan": "/components/u-shudan/u-shudan"
+  }
+}

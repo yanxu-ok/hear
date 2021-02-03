@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-section": "/components/u-section/u-section",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "banner": "/pages/tabbar/home/components/banner",
+    "bianji": "/pages/tabbar/home/components/bianji"
+  }
+}

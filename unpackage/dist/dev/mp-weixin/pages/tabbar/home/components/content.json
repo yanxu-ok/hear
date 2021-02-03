@@ -1,0 +1,12 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-section": "/components/u-section/u-section",
+    "banner": "/pages/tabbar/home/components/banner",
+    "new-add": "/pages/tabbar/home/components/newAdd",
+    "middle-content": "/pages/tabbar/home/components/middleContent",
+    "header-title": "/pages/tabbar/home/components/header",
+    "bianji": "/pages/tabbar/home/components/bianji",
+    "paihangbang": "/pages/tabbar/home/components/paihang"
+  }
+}

@@ -1,0 +1,7 @@
+{
+  "navigationBarTitleText": "收支明细",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-line": "/components/u-line/u-line"
+  }
+}

@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "u-image": "/components/u-image/u-image",
+    "u-line": "/components/u-line/u-line",
+    "shudan": "/components/u-shudan/u-shudan"
+  }
+}

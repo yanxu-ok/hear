@@ -1,0 +1,6 @@
+{
+  "navigationBarTitleText": "会员",
+  "usingComponents": {
+    "member-center": "/pagesA/huiyuan/components/memberCenter"
+  }
+}

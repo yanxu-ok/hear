@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "列表页",
+  "disableScroll": true,
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "mescroll-uni": "/components/mescroll-uni/mescroll-uni",
+    "bodan": "/pagesD/list_page_zhang/components/list_zhang",
+    "listheader": "/components/list-header/list-header"
+  }
+}

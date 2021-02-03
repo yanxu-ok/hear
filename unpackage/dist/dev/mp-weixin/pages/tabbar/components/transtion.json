@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-circle-progress": "/components/u-circle-progress/u-circle-progress"
+  }
+}

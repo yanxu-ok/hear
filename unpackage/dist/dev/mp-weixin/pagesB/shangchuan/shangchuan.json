@@ -1,0 +1,14 @@
+{
+  "navigationBarTitleText": "上传",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-input": "/components/u-input/u-input",
+    "u-line": "/components/u-line/u-line",
+    "u-section": "/components/u-section/u-section",
+    "u-picker": "/components/u-picker/u-picker",
+    "u-button": "/components/u-button/u-button",
+    "u-popup": "/components/u-popup/u-popup",
+    "loadshangchuan": "/components/poiuy-uImgUpload/imgUpload",
+    "axb-check-box": "/components/axb-checkbox/axb-checkbox"
+  }
+}

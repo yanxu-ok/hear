@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-image": "/components/u-image/u-image",
+    "ci": "/components/bing-lyric/bing-lyric"
+  }
+}

@@ -1,0 +1,1 @@
+<cover-view class="clock"><cover-view>{{hour+":"}}</cover-view><cover-view>{{minute+":"}}</cover-view><cover-view>{{second}}</cover-view></cover-view>

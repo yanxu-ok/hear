@@ -1,0 +1,15 @@
+{
+  "navigationBarTitleText": "个人主页",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-image": "/components/u-image/u-image",
+    "u-button": "/components/u-button/u-button",
+    "u-tabs-swiper": "/components/u-tabs-swiper/u-tabs-swiper",
+    "guanzhu": "/components/u-guanzhu/u-guanzhu",
+    "mytabs": "/pagesA/myindex/components/mytabs",
+    "drawer": "/pagesC/playPage/components/myp-drawer",
+    "dongtai": "/pagesA/myindex/components/dongtai",
+    "ruzhuzhubo": "/pagesA/myindex/components/ruzhuzhubo",
+    "jigoubodan": "/pagesA/myindex/components/jigoubodan"
+  }
+}

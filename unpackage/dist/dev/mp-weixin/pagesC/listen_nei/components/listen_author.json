@@ -1,0 +1,9 @@
+{
+  "component": true,
+  "usingComponents": {
+    "u-image": "/components/u-image/u-image",
+    "chun-lei-modal": "/components/chunLei-modal/chunLei-modal",
+    "luzhi": "/pagesC/listen_nei/components/luzhi",
+    "drawer": "/pagesC/playPage/components/myp-drawer"
+  }
+}

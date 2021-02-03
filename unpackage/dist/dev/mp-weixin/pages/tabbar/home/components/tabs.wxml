@@ -1,0 +1,1 @@
+<view style="margin-left:20rpx;z-index:888;"><u-image vue-id="8b04fbd2-1" width="35rpx" height="35rpx" src="https://img11.iqilu.com/29/2020/09/30/b3a901342e01f16eff737f34389afef4.png" data-event-opts="{{[['^click',[['handleClick']]]]}}" bind:click="__e" bind:__l="__l"></u-image></view>

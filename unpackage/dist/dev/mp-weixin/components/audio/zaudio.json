@@ -1,0 +1,6 @@
+{
+  "component": true,
+  "usingComponents": {
+    "myslider": "/components/ly-drag-slider/dc-slider"
+  }
+}

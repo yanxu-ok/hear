@@ -1,0 +1,10 @@
+{
+  "navigationBarTitleText": "个人信息",
+  "usingComponents": {
+    "u-navbar": "/components/u-navbar/u-navbar",
+    "u-line": "/components/u-line/u-line",
+    "u-image": "/components/u-image/u-image",
+    "u-button": "/components/u-button/u-button",
+    "biaoqian": "/pagesB/myinfo/components/mybiaoqian"
+  }
+}
