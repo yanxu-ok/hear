@@ -1,3 +1,11 @@
+<!--
+ * @Descripttion: 
+ * @version: 
+ * @Author: 闫旭
+ * @Date: 2021-02-03 16:13:07
+ * @LastEditors: sueRimn
+ * @LastEditTime: 2021-02-03 16:16:07
+-->
 <script>
 	import {
 		mapActions,
