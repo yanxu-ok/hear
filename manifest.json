@@ -93,7 +93,7 @@
             "base" : "/"
         },
         "domain" : "10.0.117.248:9997",
-        "title" : "听见",
+        "title" : "校园广播台",
         "devServer" : {
             "https" : false,
             "proxy" : {
