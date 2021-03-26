@@ -48,7 +48,7 @@ if (process.env.NODE_ENV === 'development') {
 } else {
 	BASE_Url = '' // 登录的测试地址
 	orgid = 3 // test
-	apiUrl = 'https://app-bugoo.iqilu.com/api' // 听见的测试地址
+	apiUrl = 'https://xygb.iqilu.com/api' // 听见的测试地址
 	circle = 'https://app-community.iqilu.com/community/'
 	comment = 'https://app-comment.iqilu.com/api' // 评论的测试地址
 	requestComment = {
