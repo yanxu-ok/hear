@@ -92,7 +92,7 @@
             "mode" : "hash",
             "base" : "/"
         },
-        "domain" : "10.0.117.248:9997",
+        "domain" : "xygb.iqilu.com",
         "title" : "校园广播台",
         "devServer" : {
             "https" : false,
