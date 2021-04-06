@@ -4,7 +4,7 @@
 			"path": "pages/tabbar/home/index",
 			"style": {
 				"disableScroll": true,
-				"navigationBarTitleText": "校园广播台"
+				"navigationBarTitleText": "校园广播"
 			}
 		}, {
 			"path": "pages/tabbar/listen/index",

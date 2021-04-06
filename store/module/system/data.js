@@ -18,7 +18,7 @@ export const tabBarList = [{
 		midButton: true
 	},
 	{
-		text: '圈子',
+		text: '校园',
 		customIcon: true,
 		iconPath: "/static/tabbar/quanzi.png",
 		selectedIconPath: "/static/tabbar/selectquanzi.png",

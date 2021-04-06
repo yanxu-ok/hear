@@ -19,13 +19,13 @@
 		<view class="paihangbang">
 			<scroll-view class="homescroll" :scroll-top="scrollTop" scroll-x="true">
 				<paihangbang :list="reqiList" @quanbu="quanbu" type="人气" @handleClick="handleContentClick"></paihangbang>
-				<paihangbang :list="xiaoliangList" @quanbu="quanbu" type="销量" @handleClick="handleContentClick"></paihangbang>
+				<paihangbang :list="xiaoliangList" @quanbu="quanbu" type="评分" @handleClick="handleContentClick"></paihangbang>
 			</scroll-view>
 		</view>
 
 		<!-- 限时免费  -->
-		<middleContent title="限时免费" :list="mianfeiList" type="mianfei" @handleClick="handleContentClick" @prePage="prePage"
-		 @quanbu="quanbu"></middleContent>
+<!-- 		<middleContent title="限时免费" :list="mianfeiList" type="mianfei" @handleClick="handleContentClick" @prePage="prePage"
+		 @quanbu="quanbu"></middleContent> -->
 
 		<view style="background: white;width: 100%;height: 30rpx;"></view>
 

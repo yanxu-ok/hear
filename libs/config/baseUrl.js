@@ -38,7 +38,7 @@ let BASE_Url,
 if (process.env.NODE_ENV === 'development') {
 	BASE_Url = '' // 登录的地址
 	orgid = 3 // test
-	apiUrl = 'http://10.0.117.184:71'   // 本地听见测试地址
+	apiUrl = 'http://10.0.117.248:71'   // 本地听见测试地址
 	circle = 'http://10.0.117.248:9998' // 圈子的api地址
 	comment = '' // 评论的测试地址
 	requestComment = {

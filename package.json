@@ -7,12 +7,8 @@
     "lib": "lib"
   },
   "dependencies": {
-    "axios": "^0.20.0",
     "ijsbridge": "^1.4.8",
-    "jquery": "^3.5.1",
-    "js-cookie": "^2.2.1",
-    "weixin-js-sdk": "^1.6.0",
-    "yx-drawer": "^1.0.0"
+    "weixin-js-sdk": "^1.6.0"
   },
   "devDependencies": {},
   "scripts": {

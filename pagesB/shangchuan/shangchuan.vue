@@ -5,7 +5,7 @@
 			</u-navbar>
 			<view class="shangchuan_bg_addtext">添加或选择一张封面吧~</view>
 			<view style="display: flex;flex-direction: row;justify-content: center;align-items: center;margin-top: 34rpx;">
-				<loadshangchuan @result="handleResult" uploadImgCount="1" imgCount="1" async="async" :url="Imgurl"></loadshangchuan>
+				<loadshangchuan :imgSize="7" @result="handleResult" uploadImgCount="1" imgCount="1" async="async" :url="Imgurl"></loadshangchuan>
 				<view style="display: flex;margin-left: 41rpx;">
 					<view v-for="(item,index) in imgList" :key="index">
 						<view :style="{border: imgIndex == index ? '#F8A11F solid 3rpx' : 'none'}" class="add">
