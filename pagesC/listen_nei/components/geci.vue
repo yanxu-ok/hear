@@ -103,7 +103,7 @@
 					})
 					return;
 				}
-
+				console.log(this.audioInfo);
 				let obj = {
 					userId: 1,
 					audioId: this.audioInfo.audioId,

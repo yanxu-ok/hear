@@ -66,7 +66,6 @@
 
 			// 是否点赞
 			async handleParse() {
-
 				let isLog = isLogin() // 判断用户是否登录
 				if (!isLog) {
 					uni.navigateTo({
@@ -74,13 +73,13 @@
 					})
 					return;
 				}
-
 				let currectPlay = this.zhangjieList[this.currectPlayIndex]
 				if (currectPlay.isPraise) { // 说明已经点赞，需要取消点赞
 					let result = await this.delete_praise_cancel({
 						userId: 1,
 						audioId: currectPlay.chapterId,
-						praiseType: 1
+						praiseType: 1,
+						topicId:currectPlay.topicId
 					})
 					if (result.success) { // 如果点赞成功 改变 列表对应的值
 						let newList = this.zhangjieList
@@ -92,7 +91,8 @@
 					let result = await this.insert_praise_add({
 						userId: 1,
 						audioId: currectPlay.chapterId,
-						praiseType: 1
+						praiseType: 1,
+						topicId:currectPlay.topicId
 					})
 					if (result.success) { // 如果点赞成功 改变 列表对应的值 并且调用插入信息接口
 						let newList = this.zhangjieList
@@ -102,7 +102,6 @@
 							title: '点赞成功',
 							icon: 'none'
 						})
-						console.log(this.zhangjieObj);
 						const msgRequest = {
 							userInformId: this.zhangjieObj.userId,
 							majorId: this.zhangjieList[this.currectPlayIndex].chapterId,

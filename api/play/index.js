@@ -49,12 +49,14 @@ export const get_introduction_by_topic_id = ({
 export const insert_praise_add = ({
 	audioId,
 	userId,
-	praiseType
+	praiseType,
+	topicId
 }) => {
 	return http.post('/user/insert_praise_add', {
 		audioId,
 		// userId,
-		praiseType
+		praiseType,
+		topicId
 	})
 }
 
@@ -65,12 +67,14 @@ export const insert_praise_add = ({
 export const delete_praise_cancel = ({
 	audioId,
 	userId,
-	praiseType
+	praiseType,
+	topicId
 }) => {
 	return http.delete('/user/delete_praise_cancel', {
 		audioId,
 		// userId,
-		praiseType
+		praiseType,
+		topicId
 	})
 }
 
